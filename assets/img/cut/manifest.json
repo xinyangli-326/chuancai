@@ -259,6 +259,30 @@
   "png": "assets/img/cut/s/yan.png",
   "bgRatio": 0.206
  },
+ "step/gongbao/03.jpg": {
+  "png": "assets/img/cut/step/gongbao/03.png",
+  "bgRatio": 0.366
+ },
+ "step/gongbao/05.jpg": {
+  "png": "assets/img/cut/step/gongbao/05.png",
+  "bgRatio": 0.21
+ },
+ "step/mapo/01.jpg": {
+  "png": "assets/img/cut/step/mapo/01.png",
+  "bgRatio": 0.402
+ },
+ "step/mapo/02.jpg": {
+  "png": "assets/img/cut/step/mapo/02.png",
+  "bgRatio": 0.4
+ },
+ "step/mapo/03.jpg": {
+  "png": "assets/img/cut/step/mapo/03.png",
+  "bgRatio": 0.414
+ },
+ "step/mapo/10.jpg": {
+  "png": "assets/img/cut/step/mapo/10.png",
+  "bgRatio": 0.283
+ },
  "t/11.jpg": {
   "png": "assets/img/cut/t/11.png",
   "bgRatio": 0.738
