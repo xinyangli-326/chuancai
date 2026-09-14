@@ -1068,6 +1068,17 @@ img[data-cut="1"] { object-fit: contain !important; border: none !important; bor
 img[data-cut="1"].item-photo, img[data-cut="1"].food-photo { filter: drop-shadow(0 3px 6px rgba(60,30,10,.3)); }
 img[data-cut="1"].season-photo { width: 82px; height: 82px; }
 img[data-cut="1"].face-photo { padding: 6px; }
+/* 真实步骤图 */
+.step-photo { width: 100%; height: 220px; object-fit: cover; border-radius: 14px;
+  margin-bottom: 12px; box-shadow: 0 12px 26px rgba(96, 72, 48, .22); background: #f4e8d8; }
+.step-photo-cap { position: absolute; left: 10px; bottom: 10px; background: rgba(36,26,22,.72); color: #fff;
+  font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.step-photo-wrap { position: relative; }
+.step-strip { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 8px; margin-bottom: 6px; }
+.step-strip img { width: 60px; height: 60px; object-fit: cover; border-radius: 10px; cursor: pointer;
+  border: 3px solid transparent; flex: none; opacity: .7; transition: transform .2s, opacity .2s, border-color .2s; }
+.step-strip img.on { border-color: #fff; opacity: 1; transform: translateY(-3px) scale(1.04); box-shadow: 0 8px 16px rgba(96,72,48,.25); }
+.step-source { font-size: 11.5px; color: var(--muted); margin-top: -4px; margin-bottom: 8px; }
 
 /* ============ 14e. 餐盘展示：桌布 + 白瓷盘 + 盘边花纹 + 盘中菜（参考图效果） ============ */
 .dish-photo-wrap {
