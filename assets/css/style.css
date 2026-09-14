@@ -998,6 +998,12 @@ body:not(.show-en) .en { display: none !important; }
 /* 真实照片版：锅、词汇卡、厨具 */
 .wok-real { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
 .ui-photo { width: 1.25em; height: 1.25em; object-fit: cover; border-radius: 6px;
+/* 透明抠图：去掉边框和底色，让实物"浮"在界面上 */
+img[data-cut="1"] { object-fit: contain !important; border: none !important; border-radius: 0 !important;
+  background: transparent !important; box-shadow: none !important; }
+img[data-cut="1"].item-photo, img[data-cut="1"].food-photo { filter: drop-shadow(0 3px 6px rgba(60,30,10,.3)); }
+img[data-cut="1"].season-photo { width: 82px; height: 82px; }
+img[data-cut="1"].face-photo { padding: 6px; }
   display: inline-block; vertical-align: -.25em; margin: 0 2px; box-shadow: 0 2px 6px rgba(107,58,46,.22); }
   border-radius: 50%; opacity: .97; box-shadow: inset 0 0 70px rgba(0,0,0,.5); }
 .card-photo { width: 100%; height: 82px; object-fit: cover; border-radius: 12px; margin-bottom: 6px; box-shadow: var(--shadow-s); }
