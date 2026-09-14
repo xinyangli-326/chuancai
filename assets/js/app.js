@@ -1700,19 +1700,22 @@
   /* 透明抠图：有 cut/<同名>.png 就优先用它（依据真实文件，不做猜测） */
   var CUT_SET = null;
   var CUT_BY_NAME = {};   /* 文件名(id) → 抠图路径：跨目录查，避免素材来源目录不同就找不到 */
+  function useManifest(m) {
+    CUT_SET = new Set(Object.keys(m || {}));
+    ['c/', 'cs/', 'i/', 's/', 't/'].forEach(function (dir) {
+      Object.keys(m || {}).forEach(function (rel) {
+        if (rel.indexOf(dir) !== 0) return;
+        var name = rel.slice(dir.length).replace(/\.[a-z]+$/i, '');
+        if (!CUT_BY_NAME[name]) CUT_BY_NAME[name] = m[rel].png;
+      });
+    });
+    sweepPhotos(app);
+  }
+  /* 本地双击打开（file://）时不能 fetch JSON，所以优先用内联清单 */
+  if (window.CUT_MANIFEST) { useManifest(window.CUT_MANIFEST); }
   fetch('assets/img/cut/manifest.json')
     .then(function (r) { return r.ok ? r.json() : {}; })
-    .then(function (m) {
-      CUT_SET = new Set(Object.keys(m));
-      ['c/', 'cs/', 'i/', 's/', 't/'].forEach(function (dir) {
-        Object.keys(m).forEach(function (rel) {
-          if (rel.indexOf(dir) !== 0) return;
-          var name = rel.slice(dir.length).replace(/\.[a-z]+$/i, '');
-          if (!CUT_BY_NAME[name]) CUT_BY_NAME[name] = m[rel].png;
-        });
-      });
-      sweepPhotos(app);
-    })
+    .then(useManifest)
     .catch(function () { CUT_SET = new Set(); });
   function cutPathFor(src) {
     if (!/assets\/img\//.test(src)) return '';
