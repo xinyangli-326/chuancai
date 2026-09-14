@@ -935,7 +935,7 @@
       }
       if (st.type === 'season') pourIn();
       if (st.type === 'wait') Sfx.bubble();
-      if (st.add && st.add.length) addFood(st.add);
+      if (st.add && st.add.length) addFood(st.add, st);
       run.step = i; cookProgress();
       autoCard(d, st, i);
       pandaSay('cook', '<b>' + esc(st.zh) + '</b><span class="en">' + esc(st.en) + '</span>');
@@ -1139,14 +1139,14 @@
       });
     } else if (st.type === 'finish') {
       $('#serveBtn').addEventListener('click', function () {
-        addFood(st.add || []);
+        addFood(st.add || [], st);
         Sfx.sizzle(); completeStep();
       });
     }
   }
   function completeStep() {
     var d = dishById(run.dishId), st = d.steps[run.step];
-    addFood(st.add || []); cookProgress();
+    addFood(st.add || [], st); cookProgress();
     setTimeout(function () {
       run.step++;
       if (run.step >= d.steps.length) finishDish();
@@ -1172,7 +1172,28 @@
     '🎋': 'assets/img/i/dongsun.jpg'    // 冬笋
   };
   function foodVisual(emoji, cls) {
-    var src = EMOJI_IMG[emoji];
+    var A = window.STEP_ASSETS || {};
+    var id = (arguments.length > 2 && arguments[2]) ? (A._opt || {})[arguments[2]] : null;
+    if (!id && run && A[run.dishId]) id = A[run.dishId][emoji];
+    if (id === 'x') return '<span style="display:none"></span>';
+    var src = '';
+    if (id) {
+      src = (CUT_BY_NAME && CUT_BY_NAME[id]) ? CUT_BY_NAME[id] : '';
+      var chain = [];
+      if (src) chain.push(src);
+      ['c/' + id, 'i/' + id, 's/' + id].forEach(function (p) {
+        var f = 'assets/img/cut/' + p + '.png';
+        if (chain.indexOf(f) < 0) chain.push(f);
+      });
+      ['i/' + id + '.jpg', 's/' + id + '.jpg'].forEach(function (f) { chain.push('assets/img/' + f); });
+      src = chain[0];
+      var esc2 = JSON.stringify(chain.slice(1)).replace(/"/g, '&quot;');
+      return '<span class="' + (cls || '') + '" style="display:block">' +
+        '<img class="food-photo" src="' + src + '" data-chain="' + esc2 + '" alt="" loading="lazy" ' +
+        'onerror="var c=JSON.parse(this.dataset.chain||\'[]\');if(c.length){this.src=c.shift();this.dataset.chain=JSON.stringify(c);}' +
+        'else{this.style.display=\'none\';}"></span>';
+    }
+    if (!src) src = EMOJI_IMG[emoji] || '';
     if (!src) return '<span class="' + (cls || '') + '">' + emoji + '</span>';
     return '<span class="' + (cls || '') + '" style="display:block">' +
       '<img class="food-photo" src="' + src + '" alt="" loading="lazy" ' +
@@ -1222,11 +1243,11 @@
     }
     Sfx.sizzle();
   }
-  function dropFx(emoji, i) {
+  function dropFx(emoji, i, optId) {
     var layer = $('#wokFood'); if (!layer) return;
     var el = document.createElement('span');
     el.className = 'drop-item';
-    el.innerHTML = foodVisual(emoji);
+    el.innerHTML = foodVisual(emoji, null, optId);
     el.style.left = (30 + Math.random() * 40) + '%';
     el.style.setProperty('--dx', ((Math.random() - 0.5) * 80).toFixed(0) + 'px');
     el.style.animationDelay = (i * 90) + 'ms';
@@ -1254,10 +1275,11 @@
     ph.style.opacity = Math.min(0.92, (run.step / d.steps.length) * 1.05);
   }
 
-  function addFood(emojis) {
+  function addFood(emojis, st) {
     var layer = $('#wokFood'); if (!layer) return;
     var hasStep = ((window.STEP_IMAGES || {})[run.dishId] || []).length > 0;
-    emojis.forEach(function (e, i) { if (e !== '🥄' && e !== '💨') dropFx(e, i); });
+    var _oa = (st && (st.type === 'order' || st.type === 'season')) ? st.answer : null;
+    emojis.forEach(function (e, i) { if (e !== '🥄' && e !== '💨') dropFx(e, i, _oa); });
     emojis.forEach(function (e) { run.contents.push(e); });
     run.rendered = run.contents.length; splashFx(); return;
     for (var i = run.rendered; i < run.contents.length; i++) {
