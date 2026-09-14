@@ -1239,13 +1239,31 @@
   }
   function cookProgress() {
     var d = dishById(run.dishId), ph = $('#wokPhoto');
-    if (ph) ph.style.opacity = Math.min(0.92, (run.step / d.steps.length) * 1.05);
+    if (!ph) return;
+    /* 锅里直接显示"这一步的真实画面"（有去背版就用去背版） */
+    var imgs = (window.STEP_IMAGES || {})[d.id] || [];
+    if (imgs.length) {
+      var idx = Math.min(run.step, imgs.length - 1);
+      var rel = 'step/' + d.id + '/' + imgs[idx].replace(/\.[a-z]+$/i, '.png');
+      var cut = 'assets/img/cut/' + rel;
+      var plain = 'assets/img/step/' + d.id + '/' + imgs[idx];
+      if (ph.getAttribute('src') !== cut && ph.getAttribute('src') !== plain) {
+        ph.dataset.fallback = plain;
+        ph.onerror = function () { this.onerror = null; if (this.dataset.fallback) this.src = this.dataset.fallback; };
+        ph.setAttribute('src', cut);
+      }
+      ph.style.opacity = 0.96;
+      return;
+    }
+    ph.style.opacity = Math.min(0.92, (run.step / d.steps.length) * 1.05);
   }
 
   function addFood(emojis) {
     var layer = $('#wokFood'); if (!layer) return;
-    emojis.forEach(function (e, i) { if (e !== '🥄' && e !== '💨') dropFx(e, i); });
+    var hasStep = ((window.STEP_IMAGES || {})[run.dishId] || []).length > 0;
+    if (!hasStep) emojis.forEach(function (e, i) { if (e !== '🥄' && e !== '💨') dropFx(e, i); });
     emojis.forEach(function (e) { run.contents.push(e); });
+    if (hasStep) { run.rendered = run.contents.length; splashFx(); return; }
     for (var i = run.rendered; i < run.contents.length; i++) {
       var el = document.createElement('span');
       el.className = 'food-item';
