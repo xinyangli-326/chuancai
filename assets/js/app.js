@@ -1697,11 +1697,49 @@
   /* ============ 启动 ============ */
   /* ---- 全站真实照片化：把界面里的食物类图标自动换成真实照片 ---- */
   var UI_PHOTO = EMOJI_IMG;   /* 只用核对过的白名单，避免张冠李戴 */
+  /* 透明抠图：有 cut/<同名>.png 就优先用它（依据真实文件，不做猜测） */
+  var CUT_SET = null;
+  var CUT_BY_NAME = {};   /* 文件名(id) → 抠图路径：跨目录查，避免素材来源目录不同就找不到 */
+  fetch('assets/img/cut/manifest.json')
+    .then(function (r) { return r.ok ? r.json() : {}; })
+    .then(function (m) {
+      CUT_SET = new Set(Object.keys(m));
+      ['c/', 'cs/', 'i/', 's/', 't/'].forEach(function (dir) {
+        Object.keys(m).forEach(function (rel) {
+          if (rel.indexOf(dir) !== 0) return;
+          var name = rel.slice(dir.length).replace(/\.[a-z]+$/i, '');
+          if (!CUT_BY_NAME[name]) CUT_BY_NAME[name] = m[rel].png;
+        });
+      });
+      sweepPhotos(app);
+    })
+    .catch(function () { CUT_SET = new Set(); });
+  function cutPathFor(src) {
+    if (!/assets\/img\//.test(src)) return '';
+    var rel = src.slice(src.indexOf('assets/img/') + 'assets/img/'.length);
+    if (CUT_SET && CUT_SET.size && CUT_SET.has(rel)) return 'assets/img/cut/' + rel.replace(/\.[a-z]+$/i, '.png');
+    var base = rel.replace(/^.*\//, '').replace(/\.[a-z]+$/i, '');
+    return CUT_BY_NAME[base] || '';
+  }
+  function applyCutouts(root) {
+    if (!CUT_SET || !CUT_SET.size) return;
+    Array.prototype.slice.call(root.querySelectorAll('img')).forEach(function (img) {
+      if (img.dataset.cutDone) return;
+      var cut = cutPathFor(img.getAttribute('src') || '');
+      if (!cut) { img.dataset.cutDone = '1'; return; }
+      var original = img.getAttribute('src');
+      img.dataset.cutDone = '1';
+      img.dataset.cut = '1';
+      img.onerror = function () { this.onerror = null; this.removeAttribute('data-cut'); this.src = original; };
+      img.setAttribute('src', cut);
+    });
+  }
   var EMOJI_RE = new RegExp('(' + Object.keys(UI_PHOTO).map(function (e) {
     return e.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }).join('|') + ')', 'g');
   function sweepPhotos(root) {
     if (!root || current.name === 'cook') return;   /* 上灶页自己处理锅内动画 */
+    applyCutouts(root);
     var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
     var nodes = [];
     while (walker.nextNode()) {
