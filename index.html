@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>川味小厨房 · 留学生的川菜文化课 | Sichuan Flavor Kitchen</title>
+<meta name="description" content="面向来华留学生的川菜文化学习网站：选菜、备菜、认识食材调料、模拟烹饪全过程，附拼音、英文与文化小测，可用于国际中文教育的文化教学。">
+<meta name="keywords" content="川菜,四川菜,国际中文教育,文化教学,来华留学生,学中文,烹饪模拟,川菜文化,Chinese culture, Sichuan cuisine">
+<meta name="author" content="Sichuan Flavor Kitchen">
+<meta property="og:title" content="川味小厨房 · 留学生的川菜文化课">
+<meta property="og:description" content="在网上做一道川菜：认识蔬菜肉类与调料名称，跟着步骤炒、煸、勾芡、淋油，边做菜边学中文。">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#c8102e">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="show-py show-en">
+
+<!-- 背景飘动的辣椒、花椒、熊猫爪印 -->
+<div class="bg-deco" id="bgDeco" aria-hidden="true"></div>
+
+<header class="topbar">
+  <a class="brand" href="#/home" aria-label="回到首页">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="26" height="26" aria-hidden="true">
+        <path d="M6 20h28c0 7.7-6.3 13-14 13S6 27.7 6 20z" fill="#fff8f0"/>
+        <path d="M34 18.5h6v2.2h-6z" fill="#fff8f0"/>
+        <path d="M18 13c0-3 3-3 3-6 1.6 2.4 3 3.6 3 6z" fill="#ffd166"/>
+        <path d="M24 13.2c0-2.4 2.4-2.6 2.4-5 .8 1.6 2 2.6 2 5z" fill="#ffd166" opacity=".85"/>
+      </svg>
+    </span>
+    <span class="brand-text">
+      <b>川味小厨房</b>
+      <i>Sichuan Flavor Kitchen</i>
+    </span>
+  </a>
+
+  <nav class="nav" id="nav" aria-label="主导航"></nav>
+
+  <div class="tools">
+    <button class="chip-toggle on" id="togglePy" title="显示 / 隐藏拼音">拼音 Pinyin</button>
+    <button class="chip-toggle on" id="toggleEn" title="显示 / 隐藏英文">English</button>
+    <button class="icon-btn" id="toggleSound" title="音效开关" aria-label="音效开关">🔊</button>
+  </div>
+</header>
+
+<main id="app" role="main"></main>
+
+<!-- 熊猫助手"胖达" -->
+<div class="panda" id="panda">
+  <div class="panda-avatar" id="pandaAvatar" role="button" tabindex="0" aria-label="点我，熊猫助手会说点什么">🐼</div>
+  <div class="panda-bubble" id="pandaBubble">
+    <span class="name">胖达 · PANDA</span>
+    <span id="pandaText">你好！我是你的川菜小助手胖达，我们一起做饭、学中文吧！</span>
+  </div>
+</div>
+
+<div class="modal-root" id="modalRoot" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="confetti-layer" id="confetti" aria-hidden="true"></div>
+
+<script src="assets/js/data-core.js"></script>
+<script src="assets/js/data-dishes.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
