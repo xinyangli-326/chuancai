@@ -1069,6 +1069,23 @@ img[data-cut="1"].item-photo, img[data-cut="1"].food-photo { filter: drop-shadow
 img[data-cut="1"].season-photo { width: 82px; height: 82px; }
 img[data-cut="1"].face-photo { padding: 6px; }
 /* 真实步骤图 */
+.wok, .wok-food { overflow: hidden !important; }
+.wok-food { border-radius: 50% !important; }
+.wok-photo { object-fit: cover !important; border-radius: 50% !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
+.food-item, .drop-item, .oil-drop, .splash, .steam-puff, .pour-stream { max-width: 100%; }
+.wok-food .food-item { overflow: hidden; }
+/* 味型转盘：标签限制在盘内，避免穿模 */
+.wheel { overflow: hidden !important; }
+.wheel-labels span {
+  font-size: 11px !important;
+  padding-top: 9% !important;
+  max-width: 40% !important;
+  margin: 0 auto;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 0 0 4px #fff;
+}
+.wheel-center { z-index: 5; }
+.wheel-pointer { z-index: 6; }
 .step-photo { width: 100%; height: 220px; object-fit: cover; border-radius: 14px;
   margin-bottom: 12px; box-shadow: 0 12px 26px rgba(96, 72, 48, .22); background: #f4e8d8; }
 .step-photo-cap { position: absolute; left: 10px; bottom: 10px; background: rgba(36,26,22,.72); color: #fff;
