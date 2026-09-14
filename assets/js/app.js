@@ -559,9 +559,18 @@
       for (var i = 1; i <= 5; i++) heatDots += '<i class="heat-dot' + (i <= d.heat ? ' on' : '') + '"></i>';
       return '<div class="dish-card" data-dish="' + d.id + '">' +
         (done ? '<span class="ribbon">已完成 ' + '★'.repeat(done.stars) + '</span>' : '') +
-        '<div class="dish-photo-wrap" style="background:radial-gradient(240px 130px at 50% 120%, ' + d.color + '33, transparent 70%), linear-gradient(160deg,#fff7f0,#ffe9dc)">' +
-        (d.img ? '<img class="dish-photo" src="' + d.img + '" alt="' + esc(d.name) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.classList.add(\'always\')">' : '') +
-        '<span class="emoji-fallback' + (d.img ? '' : ' always') + '">' + d.emoji + '</span><span class="shine"></span></div>' +
+        /* 盘子做成图片素材 + 内联样式叠加：不依赖外部 CSS，保证一定显示 */
+        '<div class="dish-photo-wrap" style="position:relative;height:180px;display:grid;place-items:center;' +
+        'background:repeating-linear-gradient(45deg,#efe3ce 0 8px,#f7efe0 8px 16px),linear-gradient(180deg,#f9f3e8,#eee2cd)">' +
+        '<img src="assets/img/plate.png" alt="" style="position:absolute;width:160px;height:160px;z-index:1;' +
+        'filter:drop-shadow(0 14px 22px rgba(96,72,48,.22))">' +
+        (d.img
+          ? '<img class="dish-photo" src="' + d.img + '" alt="' + esc(d.name) + '" loading="lazy" style="position:relative;z-index:2;' +
+            'width:118px;height:118px;border-radius:50%;object-fit:cover;box-shadow:inset 0 -8px 18px rgba(0,0,0,.20)" ' +
+            'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+            '<span class="emoji-fallback" style="display:none;position:relative;z-index:2;font-size:54px">' + d.emoji + '</span>'
+          : '<span style="position:relative;z-index:2;font-size:54px">' + d.emoji + '</span>') +
+        '</div>' +
         '<div class="dish-body">' +
         '<div class="dish-name">' + esc(d.name) + '</div>' + pyLine(d.py) + enLine(d.en) +
         '<div class="dish-meta"><span class="heat-dots" title="辣度">' + heatDots + '</span><span>⏱ ' + d.minutes + ' 分钟</span><span>难度 ' + '●'.repeat(d.difficulty) + '○'.repeat(3 - d.difficulty) + '</span></div>' +
