@@ -1249,18 +1249,26 @@
   function cookProgress() {
     var d = dishById(run.dishId), ph = $('#wokPhoto');
     if (!ph) return;
-    /* 锅里直接显示"这一步的真实画面"（有去背版就用去背版） */
+    /* 锅里显示"这一步的真实画面"：优先用 AI 去背的透明 PNG */
+    var pngs = (window.STEP_PNG || {})[d.id] || [];
     var imgs = (window.STEP_IMAGES || {})[d.id] || [];
-    if (imgs.length) {
-      var idx = Math.min(run.step, imgs.length - 1);
-      var rel = 'step/' + d.id + '/' + imgs[idx].replace(/\.[a-z]+$/i, '.png');
-      var cut = 'assets/img/cut/' + rel;
-      var plain = 'assets/img/step/' + d.id + '/' + imgs[idx];
-      if (ph.getAttribute('src') !== cut && ph.getAttribute('src') !== plain) {
-        ph.dataset.fallback = plain;
-        ph.onerror = function () { this.onerror = null; if (this.dataset.fallback) this.src = this.dataset.fallback; };
+    if (pngs.length && imgs.length) {
+      var i2 = Math.min(run.step, Math.min(pngs.length, imgs.length) - 1);
+      var cut = 'assets/img/step_png/' + d.id + '/' + pngs[i2];
+      var fallback = 'assets/img/step/' + d.id + '/' + imgs[i2];
+      if (ph.dataset.want !== cut) {
+        ph.dataset.want = cut;
+        ph.dataset.fallback = fallback;
+        ph.onerror = function () { this.onerror = null; if (this.dataset.fallback) this.setAttribute('src', this.dataset.fallback); };
         ph.setAttribute('src', cut);
       }
+      ph.style.opacity = 1;
+      ph.style.filter = 'drop-shadow(0 12px 20px rgba(60,30,10,.38))';
+      return;
+    }
+    if (imgs.length) {
+      var plain = 'assets/img/step/' + d.id + '/' + imgs[Math.min(run.step, imgs.length - 1)];
+      if (ph.getAttribute('src') !== plain) ph.setAttribute('src', plain);
       ph.style.opacity = 0.96;
       return;
     }
