@@ -934,6 +934,70 @@ body:not(.show-en) .en { display: none !important; }
 }
 
 /* ============ 15. 无障碍与打印 ============ */
+/* ============ 14d. 版面参考：奶油燕麦底 + 餐盘展示 + 药丸标签（学习参考图的那套质感） ============ */
+:root {
+  --oat: #f7f1e3;
+  --oat-2: #efe6d3;
+  --ink-soft: #3f4a44;
+  --pine: #3f5f52;      /* 参考图里的深墨绿药丸 */
+  --pine-2: #5b7a6c;
+}
+body {
+  background:
+    radial-gradient(900px 520px at 8% -6%, #fdf7ea 0%, transparent 60%),
+    radial-gradient(760px 480px at 102% 4%, #f3ebdc 0%, transparent 58%),
+    linear-gradient(180deg, #fbf6ea 0%, #f4ecdd 100%) !important;
+  background-attachment: fixed;
+}
+.topbar { background: rgba(250, 246, 237, .9) !important; border-bottom-color: #e7dcc7 !important; }
+.nav-link { color: var(--ink-soft) !important; }
+.nav-link.active {
+  background: linear-gradient(135deg, var(--pine) 0%, var(--pine-2) 100%) !important;
+  box-shadow: 0 8px 20px rgba(63, 95, 82, .28) !important;
+}
+.card, .dish-card, .step-card, .quiz-option, .ingredient-tile, .season-card, .flash-face {
+  background: #fffdf7 !important;
+  border-color: #ece0cb !important;
+}
+h1.h1, h2.h2, .dish-name, .step-instruction { color: var(--ink-soft); }
+.eyebrow { color: var(--pine); }
+.eyebrow::before { background: linear-gradient(90deg, var(--pine), #c9a227); }
+.btn-primary { background: linear-gradient(135deg, var(--pine) 0%, var(--pine-2) 100%) !important; box-shadow: 0 12px 26px rgba(63,95,82,.26) !important; }
+.btn-gold { background: linear-gradient(135deg, #e6c46a 0%, #f0d894 100%) !important; color: #4a3a12 !important; }
+.tag { background: #f6efe0 !important; border-color: #eadfc8 !important; color: var(--ink-soft) !important; }
+
+/* 菜品照片：做成"摆在盘子里"的展示感 —— 白盘边 + 柔和落影 + 桌布底纹 */
+.dish-photo-wrap {
+  height: 148px !important;
+  background:
+    repeating-linear-gradient(45deg, #efe3d0 0 6px, #f5ecdd 6px 12px),
+    linear-gradient(180deg, #f8f2e6, #efe4d1) !important;
+  display: grid; place-items: center;
+}
+.dish-photo {
+  width: 132px !important; height: 132px !important;
+  border-radius: 50% !important;
+  object-fit: cover;
+  border: 7px solid #fff !important;
+  box-shadow: 0 10px 22px rgba(96, 72, 48, .22), inset 0 0 0 1px #f0e6d6 !important;
+  transition: transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.dish-card:hover .dish-photo { transform: scale(1.06) rotate(-2deg); }
+.dish-card { border-radius: 20px !important; }
+.dish-card .dish-body { background: #fffdf7; }
+
+/* 首页大图与弹窗大图也做成圆盘展示 */
+.hero-photo { border-radius: 22px !important; border: 8px solid #fff !important; }
+.modal-photo { height: 190px !important; border-radius: 18px !important; border: 6px solid #fff !important; }
+
+/* 分区标题：手写感的间距与下划线 */
+.culture-section > .view-head h2, .section-title h3 {
+  letter-spacing: .02em;
+}
+.section-title h3::after, .culture-section .view-head h2::after {
+  content: ""; display: block; width: 46px; height: 3px; margin-top: 6px;
+  border-radius: 3px; background: linear-gradient(90deg, var(--pine), #d8c08a);
+}
 /* ============ 14b. 真实菜品照片 ============ */
 /* ============ 14c. 真实烹饪动画 ============ */
 .wok-photo { position: absolute; inset: 7%; border-radius: 50%; object-fit: cover; opacity: 0;
