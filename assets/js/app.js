@@ -897,7 +897,7 @@
       return '<i class="dot' + (k < i ? ' done' : k === i ? ' now' : '') + '"></i>';
     }).join('');
     var label = { heat: '🔥 调火候', order: '🥢 下锅', season: '🥄 调味', stir: '💨 翻炒', wait: '⏳ 烧制', finish: '🍽️ 出锅' }[st.type] || '步骤';
-    $('#stepPanel').innerHTML = '<div class="card step-card">' +
+    $('#stepPanel').innerHTML = stepPhotoBlock(d, i) + '<div class="card step-card">' +
       '<div class="step-dots">' + dots + '</div>' +
       '<span class="step-badge" style="margin-top:10px">' + label + ' · 第 ' + (i + 1) + ' / ' + d.steps.length + ' 步' + (st.heat ? ' · ' + CC.heat[st.heat].zh : '') + '</span>' +
       '<div class="step-instruction">' + esc(st.zh) + '</div>' + pyLine(st.py) + enLine(st.en) +
@@ -948,6 +948,8 @@
     window.__stir = null;
     var d = dishById(run.dishId), st = d.steps[run.step], panel = $('#stepPanel');
     if (!st) return finishDish();
+    panel.innerHTML = stepPhotoBlock(d, run.step) + '<div class="card step-card" id="stepCard"></div><div class="card"><h3 class="h3">🐼 胖达提示</h3><p class="small" id="stepTip"></p></div>';
+    panel = $('#stepCard');
     var dots = d.steps.map(function (_, i) {
       return '<i class="dot' + (i < run.step ? ' done' : i === run.step ? ' now' : '') + '"></i>';
     }).join('');
@@ -985,7 +987,24 @@
       '<div id="stepFeedback"></div></div>' +
       '<div class="card"><h3 class="h3">🐼 胖达提示</h3><p class="small" id="stepTip">' +
       esc(st.tip ? st.tip.zh : '') + (st.tip ? '<span class="en">' + esc(st.tip.en) + '</span>' : '') + '</p></div>';
+    $('#stepPanel').innerHTML = stepPhotoBlock(d, run.step) + panel.innerHTML;
     bindStep(st, d);
+  }
+
+  /* 真实步骤图：显示当前步骤对应的实拍图 + 缩略图条 */
+  function stepPhotoBlock(d, stepIndex) {
+    var imgs = (window.STEP_IMAGES || {})[d.id] || [];
+    if (!imgs.length) return '';
+    var idx = Math.min(stepIndex, imgs.length - 1);
+    var base = 'assets/img/step/' + d.id + '/';
+    var strip = imgs.map(function (f, i) {
+      return '<img src="' + base + f + '" class="' + (i === idx ? 'on' : '') + '" data-jump="' + i + '" alt="第' + (i + 1) + '步" loading="lazy">';
+    }).join('');
+    return '<div class="step-photo-wrap">' +
+      '<img class="step-photo" src="' + base + imgs[idx] + '" alt="' + esc(d.name) + ' 第' + (idx + 1) + '步">' +
+      '<span class="step-photo-cap">真实做法 · 步骤图 ' + (idx + 1) + ' / ' + imgs.length + '</span></div>' +
+      '<div class="step-strip" id="stepStrip">' + strip + '</div>' +
+      '<p class="step-source">步骤图来自公开菜谱分享（小红书），用于课堂演示，版权归原作者。</p>';
   }
   function feedback(ok, zh, en) {
     var box = $('#stepFeedback'); if (!box) return;
