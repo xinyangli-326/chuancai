@@ -562,11 +562,11 @@
         /* 盘子做成图片素材 + 内联样式叠加：不依赖外部 CSS，保证一定显示 */
         '<div class="dish-photo-wrap" style="position:relative;height:180px;display:grid;place-items:center;' +
         'background:repeating-linear-gradient(45deg,#efe3ce 0 8px,#f7efe0 8px 16px),linear-gradient(180deg,#f9f3e8,#eee2cd)">' +
-        '<img src="assets/img/plate.png" alt="" style="position:absolute;width:160px;height:160px;z-index:1;' +
+        '<img src="assets/img/plate.png?v=7" alt="" style="position:absolute;width:174px;height:174px;z-index:1;' +
         'filter:drop-shadow(0 14px 22px rgba(96,72,48,.22))">' +
         (d.img
           ? '<img class="dish-photo" src="' + d.img + '" alt="' + esc(d.name) + '" loading="lazy" style="position:relative;z-index:2;' +
-            'width:118px;height:118px;border-radius:50%;object-fit:cover;box-shadow:inset 0 -8px 18px rgba(0,0,0,.20)" ' +
+            'width:106px;height:106px;border-radius:50%;object-fit:cover;box-shadow:inset 0 -8px 18px rgba(0,0,0,.20)" ' +
             'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
             '<span class="emoji-fallback" style="display:none;position:relative;z-index:2;font-size:54px">' + d.emoji + '</span>'
           : '<span style="position:relative;z-index:2;font-size:54px">' + d.emoji + '</span>') +
