@@ -1,0 +1,278 @@
+{
+ "dish-yuxiang.jpg": {
+  "png": "assets/img/cut/dish-yuxiang.png",
+  "bgRatio": 0.118
+ },
+ "wok.png": {
+  "png": "assets/img/cut/wok.png",
+  "bgRatio": 0.617
+ },
+ "c/dasuan.png": {
+  "png": "assets/img/cut/c/dasuan.png",
+  "bgRatio": 0.874
+ },
+ "c/dongsun.png": {
+  "png": "assets/img/cut/c/dongsun.png",
+  "bgRatio": 0.425
+ },
+ "c/doufu.png": {
+  "png": "assets/img/cut/c/doufu.png",
+  "bgRatio": 0.812
+ },
+ "c/dougan.png": {
+  "png": "assets/img/cut/c/dougan.png",
+  "bgRatio": 0.474
+ },
+ "c/gansuan.png": {
+  "png": "assets/img/cut/c/gansuan.png",
+  "bgRatio": 0.528
+ },
+ "c/houtuirou.png": {
+  "png": "assets/img/cut/c/houtuirou.png",
+  "bgRatio": 0.549
+ },
+ "c/huajiao.png": {
+  "png": "assets/img/cut/c/huajiao.png",
+  "bgRatio": 0.624
+ },
+ "c/huashengmi.png": {
+  "png": "assets/img/cut/c/huashengmi.png",
+  "bgRatio": 0.363
+ },
+ "c/huluobo.png": {
+  "png": "assets/img/cut/c/huluobo.png",
+  "bgRatio": 0.428
+ },
+ "c/jidan.png": {
+  "png": "assets/img/cut/c/jidan.png",
+  "bgRatio": 0.569
+ },
+ "c/jirou.png": {
+  "png": "assets/img/cut/c/jirou.png",
+  "bgRatio": 0.755
+ },
+ "c/jixiongrou.png": {
+  "png": "assets/img/cut/c/jixiongrou.png",
+  "bgRatio": 0.434
+ },
+ "c/miantiao.png": {
+  "png": "assets/img/cut/c/miantiao.png",
+  "bgRatio": 0.514
+ },
+ "c/migao.png": {
+  "png": "assets/img/cut/c/migao.png",
+  "bgRatio": 0.49
+ },
+ "c/muer.png": {
+  "png": "assets/img/cut/c/muer.png",
+  "bgRatio": 0.596
+ },
+ "c/niudu.png": {
+  "png": "assets/img/cut/c/niudu.png",
+  "bgRatio": 0.59
+ },
+ "c/niuliji.png": {
+  "png": "assets/img/cut/c/niuliji.png",
+  "bgRatio": 0.508
+ },
+ "c/niurou.png": {
+  "png": "assets/img/cut/c/niurou.png",
+  "bgRatio": 0.205
+ },
+ "c/niutoupi.png": {
+  "png": "assets/img/cut/c/niutoupi.png",
+  "bgRatio": 0.517
+ },
+ "c/qincai.png": {
+  "png": "assets/img/cut/c/qincai.png",
+  "bgRatio": 0.492
+ },
+ "c/qingjiao.png": {
+  "png": "assets/img/cut/c/qingjiao.png",
+  "bgRatio": 0.493
+ },
+ "c/qingshui.png": {
+  "png": "assets/img/cut/c/qingshui.png",
+  "bgRatio": 0.702
+ },
+ "c/roumo.png": {
+  "png": "assets/img/cut/c/roumo.png",
+  "bgRatio": 0.406
+ },
+ "c/shengjiang.png": {
+  "png": "assets/img/cut/c/shengjiang.png",
+  "bgRatio": 0.525
+ },
+ "c/sijidou.png": {
+  "png": "assets/img/cut/c/sijidou.png",
+  "bgRatio": 0.472
+ },
+ "c/suanmiao.png": {
+  "png": "assets/img/cut/c/suanmiao.png",
+  "bgRatio": 0.584
+ },
+ "c/wosun.png": {
+  "png": "assets/img/cut/c/wosun.png",
+  "bgRatio": 0.403
+ },
+ "c/wuhuarou.png": {
+  "png": "assets/img/cut/c/wuhuarou.png",
+  "bgRatio": 0.547
+ },
+ "c/xiangcai.png": {
+  "png": "assets/img/cut/c/xiangcai.png",
+  "bgRatio": 0.676
+ },
+ "c/xiaocong.png": {
+  "png": "assets/img/cut/c/xiaocong.png",
+  "bgRatio": 0.853
+ },
+ "c/yacai.png": {
+  "png": "assets/img/cut/c/yacai.png",
+  "bgRatio": 0.526
+ },
+ "c/zhuliji.png": {
+  "png": "assets/img/cut/c/zhuliji.png",
+  "bgRatio": 0.527
+ },
+ "c/zhurou.png": {
+  "png": "assets/img/cut/c/zhurou.png",
+  "bgRatio": 0.556
+ },
+ "cs/baitang.png": {
+  "png": "assets/img/cut/cs/baitang.png",
+  "bgRatio": 0.419
+ },
+ "cs/conghua.png": {
+  "png": "assets/img/cut/cs/conghua.png",
+  "bgRatio": 0.691
+ },
+ "cs/doushi.png": {
+  "png": "assets/img/cut/cs/doushi.png",
+  "bgRatio": 0.602
+ },
+ "cs/ganlajiao.png": {
+  "png": "assets/img/cut/cs/ganlajiao.png",
+  "bgRatio": 0.528
+ },
+ "cs/hongyou.png": {
+  "png": "assets/img/cut/cs/hongyou.png",
+  "bgRatio": 0.611
+ },
+ "cs/huajiao.png": {
+  "png": "assets/img/cut/cs/huajiao.png",
+  "bgRatio": 0.624
+ },
+ "cs/jiangmo.png": {
+  "png": "assets/img/cut/cs/jiangmo.png",
+  "bgRatio": 0.722
+ },
+ "cs/lajiaoyou.png": {
+  "png": "assets/img/cut/cs/lajiaoyou.png",
+  "bgRatio": 0.117
+ },
+ "cs/laochou.png": {
+  "png": "assets/img/cut/cs/laochou.png",
+  "bgRatio": 0.802
+ },
+ "cs/liaojiu.png": {
+  "png": "assets/img/cut/cs/liaojiu.png",
+  "bgRatio": 0.58
+ },
+ "cs/shengchou.png": {
+  "png": "assets/img/cut/cs/shengchou.png",
+  "bgRatio": 0.756
+ },
+ "cs/shiyongyou.png": {
+  "png": "assets/img/cut/cs/shiyongyou.png",
+  "bgRatio": 0.55
+ },
+ "cs/suanmo.png": {
+  "png": "assets/img/cut/cs/suanmo.png",
+  "bgRatio": 0.569
+ },
+ "cs/xiangcu.png": {
+  "png": "assets/img/cut/cs/xiangcu.png",
+  "bgRatio": 0.728
+ },
+ "cs/yacai.png": {
+  "png": "assets/img/cut/cs/yacai.png",
+  "bgRatio": 0.526
+ },
+ "cs/zhima.png": {
+  "png": "assets/img/cut/cs/zhima.png",
+  "bgRatio": 0.445
+ },
+ "i/doufu.jpg": {
+  "png": "assets/img/cut/i/doufu.png",
+  "bgRatio": 0.484
+ },
+ "i/houtuirou.jpg": {
+  "png": "assets/img/cut/i/houtuirou.png",
+  "bgRatio": 0.561
+ },
+ "i/huluobo.jpg": {
+  "png": "assets/img/cut/i/huluobo.png",
+  "bgRatio": 0.484
+ },
+ "i/niuliji.jpg": {
+  "png": "assets/img/cut/i/niuliji.png",
+  "bgRatio": 0.491
+ },
+ "i/paojiao.jpg": {
+  "png": "assets/img/cut/i/paojiao.png",
+  "bgRatio": 0.507
+ },
+ "i/roumo.jpg": {
+  "png": "assets/img/cut/i/roumo.png",
+  "bgRatio": 0.174
+ },
+ "i/sijidou.jpg": {
+  "png": "assets/img/cut/i/sijidou.png",
+  "bgRatio": 0.267
+ },
+ "i/wosun.jpg": {
+  "png": "assets/img/cut/i/wosun.png",
+  "bgRatio": 0.356
+ },
+ "i/yacai.jpg": {
+  "png": "assets/img/cut/i/yacai.png",
+  "bgRatio": 0.203
+ },
+ "s/conghua.jpg": {
+  "png": "assets/img/cut/s/conghua.png",
+  "bgRatio": 0.588
+ },
+ "s/laochou.jpg": {
+  "png": "assets/img/cut/s/laochou.png",
+  "bgRatio": 0.802
+ },
+ "s/paojiao.jpg": {
+  "png": "assets/img/cut/s/paojiao.png",
+  "bgRatio": 0.399
+ },
+ "s/pixiandouban.jpg": {
+  "png": "assets/img/cut/s/pixiandouban.png",
+  "bgRatio": 0.403
+ },
+ "s/yan.jpg": {
+  "png": "assets/img/cut/s/yan.png",
+  "bgRatio": 0.206
+ },
+ "t/11.jpg": {
+  "png": "assets/img/cut/t/11.png",
+  "bgRatio": 0.738
+ },
+ "t/2.jpg": {
+  "png": "assets/img/cut/t/2.png",
+  "bgRatio": 0.882
+ },
+ "t/5.jpg": {
+  "png": "assets/img/cut/t/5.png",
+  "bgRatio": 0.547
+ },
+ "t/8.jpg": {
+  "png": "assets/img/cut/t/8.png",
+  "bgRatio": 0.408
+ }
+}
