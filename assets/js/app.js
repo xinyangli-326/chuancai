@@ -1193,11 +1193,12 @@
         'else{this.style.display=\'none\';}"></span>';
     }
     if (!src) src = EMOJI_IMG[emoji] || '';
-    if (!src) return '<span class="' + (cls || '') + '">' + emoji + '</span>';
+    /* 找不到真实素材就"不显示"，绝不退回 emoji 图标 */
+    if (!src) return '<span style="display:none"></span>';
     return '<span class="' + (cls || '') + '" style="display:block">' +
       '<img class="food-photo" src="' + src + '" alt="" loading="lazy" ' +
-      'onerror="this.parentNode.textContent=\'' + emoji + '\'">' +
-      '<span class="food-photo-fb" style="display:none">' + emoji + '</span></span>';
+      'onerror="this.parentNode.style.display=\'none\'">' +
+      '</span>';
   }
   function steamLevel() {
     var lv = ($('#fireRow') ? $$('#fireRow .flame.on').length : 0);
