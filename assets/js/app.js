@@ -869,7 +869,6 @@
       '<button class="btn btn-gold btn-sm" id="autoBtn" style="position:absolute;top:10px;right:104px;z-index:3">▶ 自动演示全流程</button>' +
       '<button class="btn btn-sm" id="videoBtn" style="position:absolute;top:10px;right:14px;z-index:3">🎬 真人做法</button>' +
       '<div class="wok" id="wok">' + wokFace() +
-      '<img class="wok-real" src="assets/img/wok.png" alt="炒锅" onerror="this.remove()">' +
       '<div class="wok-food" id="wokFood">' +
       (d.img ? '<img class="wok-photo" id="wokPhoto" src="' + d.img + '" alt="' + esc(d.name) + '">' : '') +
       '<span class="wok-sheen"></span></div>' +
