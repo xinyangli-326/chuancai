@@ -12,7 +12,8 @@ window.STEP_ASSETS = {
     baitang: 'baitang', none: 'x', much: 'x', bowl: 'x', jiang: 'dianfen',
     shangjiang: 'dianfen', gaotang: 'gaotang', mian: 'lajiaomian', shucai: 'muer',
     paojiao: 'paojiao', yacai: 'yacai', lin: 'hongyou', hongyou: 'hongyou',
-    hui: 'baitang', tian: 'x', wu: 'x', xiang: 'ganlajiao', shao: 'shengchou', duo: 'x'
+    hui: 'baitang', tian: 'x', wu: 'x', xiang: 'ganlajiao', shao: 'shengchou', duo: 'x',
+    pao: 'gansuan', tiao: 'ziranfen', zhijie: 'x', leng: 'x'
   },
   mapo: {
     '🫗': 'shiyongyou', '⚪': 'roumo', '🥫': 'pixiandouban', '🌶️': 'lajiaomian',
@@ -36,15 +37,15 @@ window.STEP_ASSETS = {
     '🥩': 'niuliji', '🌶️': 'lajiaomian', '🧄': 'dasuan', '🌱': 'xiaocong',
     '🫘': 'huajiaofen'
   },
-  dandan: {
-    '🫗': 'shiyongyou', '⚪': 'roumo', '🥬': 'yacai', '🥣': 'zhimajiang',
-    '💧': 'qingshui', '🍜': 'miantiao', '🥜': 'huashengmi', '🌱': 'xiaocong',
-    '🥢': 'x', '💨': 'x'
+  wanzamian: {
+    '🫗': 'shiyongyou', '🥩': 'roumo', '🫛': 'wandou', '🥣': 'tianmianjiang',
+    '💧': 'qingshui', '🍜': 'miantiao', '🥬': 'xiangcai', '🌱': 'xiaocong',
+    '🧄': 'dasuan', '🫚': 'shengjiang', '🥜': 'huashengmi', '🥢': 'x', '💨': 'x'
   },
-  feipian: {
-    '🍲': 'gaotang', '🥩': 'niurou', '🫙': 'hongyou', '🍬': 'baitang',
-    '🥬': 'qincai', '🫗': 'hongyou', '🥜': 'huashengmi', '⚪': 'zhima',
-    '🥢': 'x', '🥄': 'x'
+  lengchi: {
+    '🥩': 'niurou', '💧': 'qingshui', '🍶': 'shengchou', '🦪': 'haoyou',
+    '🌶️': 'gansuan', '🫘': 'huajiao', '🟢': 'majiao', '🫗': 'shiyongyou',
+    '🧂': 'yan', '🍬': 'baitang', '⚪': 'zhima', '🥄': 'ziranfen', '💨': 'x'
   },
   ganbian: {
     '🫗': 'shiyongyou', '🫛': 'sijidou', '🌶️': 'ganlajiao', '🫘': 'huajiao',

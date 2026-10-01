@@ -1,0 +1,619 @@
+/* 最后一层覆盖：首页比例修正 + 文化弹窗翻书样式 */
+
+/* ① 首页：左 Hero + 右导航，两栏撑满屏幕宽度，右侧不再留白 */
+#app { max-width: 1560px !important; }
+.home-split { width: 100% !important; display: flex !important; gap: 22px !important; align-items: stretch !important; }
+.home-split { flex: 1 1 auto !important; height: 100% !important; min-height: 0 !important; }
+.home-split .hero { flex: 1 1 auto !important; min-width: 0 !important; }
+.home-split .hero { height: 100% !important; display: flex !important; flex-direction: column !important; justify-content: center !important; }
+.home-nav { flex: 0 0 250px !important; gap: 14px !important; display: flex !important; flex-direction: column !important; }
+.home-nav {
+  height: 100% !important;
+  justify-content: space-between !important;   /* 沿整列均匀散开（像原型里那 4 个小方框） */
+  align-items: flex-end !important;
+  gap: 10px !important;
+  flex: 0 0 200px !important;
+}
+/* 导航键保持"小"：固定高度、靠顶部排列，不再被拉伸撑满整列 */
+.home-nav .hnav-card {
+  flex: 0 0 auto !important;
+  width: 110px !important;         /* 按红框：小方框尺寸 */
+  height: 78px !important;
+  min-height: 78px !important;
+  max-height: 78px !important;
+  border-radius: 14px !important;
+  justify-content: center !important;
+}
+.home-nav .hnav-card .hnav-ico { font-size: 20px !important; }
+.home-nav .hnav-card .hnav-txt b { font-size: 13px !important; }
+.home-nav .hnav-card .hnav-ico { font-size: 22px !important; }
+.home-nav .hnav-card .hnav-txt b { font-size: 14px !important; }
+@media (max-width: 1100px) {
+  .home-split { flex-direction: column !important; }
+  .home-nav { flex: 1 1 auto !important; width: 100% !important; flex-direction: row !important; }
+  .home-nav .hnav-card { flex: 1 1 0 !important; min-height: 64px !important; }
+}
+
+/* ② 文化弹窗：书本样式（纸感 + 书脊 + 顶部配图） */
+.modal-card {
+  background: #fffdf6 !important;
+  border: 3px solid #f0e4cf !important;
+  box-shadow: 0 22px 48px rgba(120, 90, 50, .26) !important;
+}
+.modal-card::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 12px;
+  background: linear-gradient(90deg, rgba(120, 90, 50, .18), rgba(120, 90, 50, .04), rgba(0,0,0,0));
+  border-radius: 24px 0 0 24px;
+}
+.book-photo {
+  width: 100%; height: 170px; object-fit: cover; border-radius: 14px;
+  border: 4px solid #fff; box-shadow: 0 12px 24px rgba(120, 90, 50, .20); margin-bottom: 12px;
+}
+/* 翻页方向动画（原来已有，这里加大幅度） */
+@keyframes flipRightBig {
+  0% { opacity: 0; transform: perspective(1500px) rotateY(-70deg) translateX(70px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes flipLeftBig {
+  0% { opacity: 0; transform: perspective(1500px) rotateY(70deg) translateX(-70px); }
+  100% { opacity: 1; transform: none; }
+}
+.modal-card.flip-right { animation: flipRightBig .55s cubic-bezier(.2,.8,.2,1) both !important; }
+.modal-card.flip-left  { animation: flipLeftBig .55s cubic-bezier(.2,.8,.2,1) both !important; }
+
+/* 右侧：一个完整的导航菜单栏（不是四个分散方块） */
+/* ============ 字体切换：4 套可选（本地字体，离线可用） ============ */
+/* 首页 Hero：文字在左、图在右；图固定尺寸，绝不压住文字 */
+.hero { grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr) !important; align-items: center !important; }
+.hero .hero-copy { order: 1 !important; position: relative !important; z-index: 3 !important; }
+.hero .hero-art { order: 2 !important; position: relative !important; z-index: 1 !important; display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; }
+.hero .hero-art > div { max-width: 100% !important; width: auto !important; }
+.hero .hero-photo {
+  width: 100% !important; max-width: 430px !important; height: 290px !important;
+  object-fit: cover !important; border-width: 8px !important; margin: 0 auto !important;
+}
+.hero .floating-ing.cut-float { width: 56px !important; height: 56px !important; }
+/* 文字撑满整个框：文字区占更大比例、标题更大、正文不再缩在角落 */
+.hero { grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr) !important; gap: 18px !important; }
+.hero .hero-copy { display: flex !important; flex-direction: column !important; justify-content: center !important; gap: 4px; }
+.hero .hero-copy h1 { font-size: clamp(38px, 4.6vw, 64px) !important; line-height: 1.16 !important; margin: 6px 0 8px !important; }
+.hero .hero-copy .lead { font-size: 17px !important; max-width: none !important; }
+.hero .hero-actions { margin-top: 14px !important; }
+.hero .hero-stats { margin-top: 16px !important; }
+/* 文字居中 */
+.hero .hero-copy { text-align: center !important; align-items: center !important; }
+.hero .hero-copy .eyebrow { align-self: center !important; }
+.hero .hero-copy .lead { margin-left: auto !important; margin-right: auto !important; }
+.hero .hero-actions, .hero .hero-stats { justify-content: center !important; }
+/* 标题保持一行，不折行；字号随宽度自适应 */
+.hero .hero-copy h1 {
+  white-space: nowrap !important;
+  font-size: clamp(24px, 3.05vw, 44px) !important;
+  line-height: 1.2 !important;
+}
+@media (max-width: 900px) { .hero .hero-copy h1 { white-space: normal !important; font-size: clamp(24px, 5vw, 34px) !important; } }
+/* 选菜页：标题区整体居中，去掉左侧色条 */
+body[data-page="dishes"] .view-head { text-align: center !important; align-items: center !important; }
+body[data-page="dishes"] .view-head .eyebrow { align-self: center !important; margin: 0 auto !important; }
+body[data-page="dishes"] .view-head::after { display: none !important; }
+body[data-page="dishes"] .view-head h1.h1::after { margin-left: auto !important; margin-right: auto !important; }
+/* 选菜页：4×2 一屏八张卡，分页 */
+.pager { display: flex !important; align-items: center !important; justify-content: center !important; gap: 14px !important; margin-top: 10px !important; }
+/* ============ 所有标题居中（全站统一） ============ */
+.view-head { text-align: center !important; align-items: center !important; }
+.view-head .eyebrow { align-self: center !important; margin: 0 auto !important; }
+.view-head::after { display: none !important; }              /* 去掉左侧竖色条，居中更干净 */
+.view-head h1.h1::after, .view-head h2.h2::after { margin-left: auto !important; margin-right: auto !important; }
+.section-title { justify-content: center !important; text-align: center !important; }
+.section-title h3::after, .culture-section .view-head h2::after { margin-left: auto !important; margin-right: auto !important; }
+.card h3.h3, .culture-section h2.h2, .culture-section h3.h3 { text-align: center !important; }
+.step-instruction, .quiz-question { text-align: center !important; }
+/* 备菜页：每页 6 个，一屏放下 */
+#ingGrid { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; grid-auto-rows: minmax(0, 1fr) !important; }
+#ingGrid .ingredient-tile { padding: 10px !important; }
+#ingGrid .ing-note { font-size: 11.5px !important; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+#ingGrid .ing-name { font-size: 14px !important; }
+#ingGrid .item-photo { width: 34px !important; height: 34px !important; }
+#ingGrid .action-btn { padding: 5px 9px !important; font-size: 11.5px !important; }
+@media (max-width: 1200px) { #ingGrid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; } }
+
+/* ============ 全站版面统一收口（一屏放得下 + 比例一致 + 内容内滚/分页） ============ */
+@media (min-width: 981px) {
+  /* 所有页：页壳不滚动，内容区在内部滚动，避免"页面很长" */
+  .view { height: 100% !important; min-height: 0 !important; display: flex !important; flex-direction: column !important; }
+  .view > .grid, .view > section, .view > .culture-section, .view > .dish-grid, .view > .flash-grid {
+    overflow: auto !important; min-height: 0 !important;
+  }
+  /* 卡片网格：行高自适应、等分、比例统一 */
+  .dish-grid, .flash-grid, .season-grid, .badge-wall, .culture-grid {
+    grid-auto-rows: minmax(0, 1fr) !important;
+    align-content: stretch !important;
+  }
+  /* 统一卡片内边距与圆角，避免各页松紧不一 */
+  .card, .dish-card, .step-card, .ingredient-tile, .season-card, .flash-face, .quiz-option {
+    border-radius: 18px !important;
+  }
+  /* 词汇卡：每行 6 张，一屏两行 */
+  .flash-grid { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
+  .flash-grid { min-height: 330px !important; grid-auto-rows: 158px !important; }   /* 修复词汇卡被压扁 */
+  .flash-card { height: auto !important; min-height: 0 !important; }
+  .flash-face { padding: 6px !important; }
+  .flash-face .word { font-size: 17px !important; }
+  .flash-face .big { font-size: 22px !important; }
+  .step-photo { height: 22vh !important; }
+  /* 分页条统一 */
+  .pager, .pager-row { display: flex !important; align-items: center !important; justify-content: center !important; gap: 14px !important; }
+}
+@media (max-width: 1200px) {
+  .flash-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 980px) {
+  .flash-grid { min-height: 0 !important; grid-auto-rows: 140px !important; }
+}
+
+/* 备菜页：菜品卡居中 + 进度条放到卡片下方（上下两行，不再左右挤） */
+.board-head {
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+}
+.board-head .board-dish { margin: 0 auto !important; text-align: center !important; }
+.board-head .board-dish .dish-name { text-align: center !important; }
+.board-head .prep-progress { width: min(720px, 100%) !important; min-width: 0 !important; flex: 0 0 auto !important; }
+.board-head .prep-progress .small { text-align: center !important; }
+
+/* ============ 全站字号放大（提高可读性） ============ */
+body { font-size: 17px !important; }
+body .lead { font-size: 16.5px !important; }
+body .small, body .muted.small, body .fact, body .hint-box { font-size: 14.5px !important; }
+body .py { font-size: 13.5px !important; }
+body .en { font-size: 13px !important; }
+body .tag, body .taste-chip { font-size: 13.5px !important; }
+body .btn { font-size: 15px !important; }
+body .dish-name { font-size: 18px !important; }
+body .hnav-txt b { font-size: 16.5px !important; }
+body .belt-name { font-size: 19px !important; }
+body .border, body .quiz-option { font-size: 16px !important; }
+body .step-instruction { font-size: 18px !important; }
+body .flash-face .word { font-size: 19px !important; }
+body .flash-face .big { font-size: 24px !important; }
+body .ing-name, body #ingGrid .ing-name { font-size: 16px !important; }
+body .ing-note, body #ingGrid .ing-note { font-size: 13.5px !important; -webkit-line-clamp: 4 !important; }
+body .action-btn, body #ingGrid .action-btn { font-size: 13px !important; }
+body[data-page="dishes"] .dish-name { font-size: 17.5px !important; }
+body[data-page="dishes"] .dish-card .py { font-size: 13px !important; }
+body[data-page="dishes"] .dish-card .en { font-size: 12.5px !important; }
+@media (max-width: 980px) {
+  .view { height: auto !important; }
+  .flash-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+body[data-page="dishes"] .dish-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-auto-rows: minmax(0, 1fr) !important;
+  flex: 1 1 auto !important; min-height: 0 !important; overflow: hidden !important;
+}
+body[data-page="dishes"] .dish-card { min-height: 0 !important; display: flex; flex-direction: column; }
+body[data-page="dishes"] .dish-photo-wrap { height: 34% !important; }
+body[data-page="dishes"] .dish-card .dish-photo { width: 86px !important; height: 86px !important; }
+body[data-page="dishes"] .dish-card .dish-body { padding: 8px 10px 10px !important; }
+body[data-page="dishes"] .dish-name { font-size: 16px !important; }
+body[data-page="dishes"] .dish-card .py { font-size: 11.5px !important; }
+body[data-page="dishes"] .dish-card .en { font-size: 11px !important; }
+body[data-page="dishes"] .dish-tags { display: none !important; }
+body[data-page="dishes"] .dish-card .card-cta { margin-top: 6px !important; }
+body[data-page="dishes"] .dish-card .btn { padding: 6px 12px !important; font-size: 12.5px !important; }
+@media (max-width: 980px) {
+  .hero { grid-template-columns: 1fr !important; }
+  .hero .hero-art { order: 0 !important; }
+  .hero .hero-copy { order: 1 !important; }
+}
+@font-face { font-family: "WenYuan Light Local"; src: url("../fonts/wenyuan-light.woff2") format("woff2"); font-weight: 300; font-display: swap; }
+@font-face { font-family: "WenYuan Local"; src: url("../fonts/wenyuan-bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+
+/* 字体已固定为文渊圆体，不再提供切换 */
+body[data-font="wenyuan"] h1.h1, body[data-font="wenyuan"] h2.h2, body[data-font="wenyuan"] .cc-title,
+body[data-font="wenyuan"] .belt-name, body[data-font="wenyuan"] .dish-name, body[data-font="wenyuan"] .hnav-txt b,
+body[data-font="wenyuan"] .btn, body[data-font="wenyuan"] .nav-link {
+  font-family: "WenYuan Local", "Microsoft YaHei UI", sans-serif !important;
+  font-weight: 700 !important;
+}
+/* 正文统一用文渊圆体 Light（300），标题保持 Bold（700） */
+body[data-font="wenyuan"] {
+  font-family: "WenYuan Light Local", "Microsoft YaHei UI", sans-serif !important;
+  font-weight: 300 !important;
+}
+body[data-font="wenyuan"] p, body[data-font="wenyuan"] li, body[data-font="wenyuan"] .lead,
+body[data-font="wenyuan"] .small, body[data-font="wenyuan"] .fact, body[data-font="wenyuan"] .muted,
+body[data-font="wenyuan"] .step-instruction, body[data-font="wenyuan"] .quiz-question,
+body[data-font="wenyuan"] .flash-face, body[data-font="wenyuan"] .tag, body[data-font="wenyuan"] .filter-chip {
+  font-family: "WenYuan Light Local", "Microsoft YaHei UI", sans-serif !important;
+  font-weight: 300 !important;
+}
+body[data-font="wenyuan"] h1.h1, body[data-font="wenyuan"] h2.h2, body[data-font="wenyuan"] h3.h3,
+body[data-font="wenyuan"] .cc-title, body[data-font="wenyuan"] .belt-name, body[data-font="wenyuan"] .dish-name,
+body[data-font="wenyuan"] .hnav-txt b, body[data-font="wenyuan"] .eyebrow, body[data-font="wenyuan"] .btn {
+  font-family: "WenYuan Local", "Microsoft YaHei UI", sans-serif !important;
+  font-weight: 700 !important;
+}
+.home-nav {
+  flex: 0 0 126px !important;
+  width: 126px !important;
+  height: auto !important;
+  align-self: center !important;          /* 垂直居中：对上你红框所在的中间高度 */
+  justify-content: flex-start !important;
+  gap: 6px !important;
+  padding: 8px !important;
+  background: #fffdf6 !important;
+  border: 3px solid #fff !important;
+  border-radius: 18px !important;
+  box-shadow: 0 12px 26px rgba(160, 130, 90, .22) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.home-nav .hnav-card {
+  width: 100% !important;
+  height: 100px !important;               /* 按红框比例：约 110×100 */
+  min-height: 100px !important;
+  max-height: 100px !important;
+  flex: 0 0 auto !important;
+  border: none !important;
+  border-radius: 14px !important;
+  background: var(--a1, #ffe9a8) !important;
+  box-shadow: none !important;
+  padding: 8px 6px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  text-align: center !important;
+}
+.home-nav .hnav-card:nth-of-type(1) { background: var(--a1, #ffe9a8) !important; }
+.home-nav .hnav-card:nth-of-type(2) { background: var(--a2, #cfe3b0) !important; }
+.home-nav .hnav-card:nth-of-type(3) { background: var(--a3, #f0a24a) !important; }
+.home-nav .hnav-card:nth-of-type(4) { background: var(--a4, #e0533d) !important; }
+.home-nav .hnav-card:hover { filter: brightness(1.04); transform: translateY(-2px); }
+.home-nav .hnav-ico { font-size: 32px !important; }
+.home-nav .hnav-txt { display: flex !important; flex-direction: column !important; align-items: center !important; }
+.home-nav .hnav-txt b { font-size: 17px !important; line-height: 1.25 !important; }
+.home-nav .hnav-txt i { display: none !important; }
+.home-nav .hnav-go { display: none !important; }
+
+/* 熊猫助手挪到左下角（按你圈的位置） */
+.panda { right: auto !important; left: 18px !important; }
+.panda .panda-bubble { border-radius: 18px 18px 6px 18px !important; }
+@media (max-width: 720px) {
+  .panda { left: 10px !important; right: auto !important; }
+}
+
+/* ============ 词汇页：卡片改成横向滚动的"传菜带"（和选菜页同款） ============ */
+/* 点图片看大图的弹窗 */
+.photo-modal { display: grid; place-items: center; gap: 10px; }
+.photo-modal img {
+  width: 100%; max-height: 66vh; object-fit: contain; border-radius: 16px;
+  background: repeating-linear-gradient(45deg, #fdf8ef 0 14px, #f7f0e3 14px 28px);
+}
+.photo-modal-cap { font-size: 14px; color: var(--muted, #8a7860); text-align: center; margin: 0; }
+.step-photo { cursor: zoom-in; }
+/* 没有干净抠图的，统一放进"白瓷圆盘"里，看上去整齐干净 */
+.photo-round {
+  border-radius: 50% !important; object-fit: cover; background: #fff;
+  border: 3px solid #fff !important;
+  box-shadow: 0 6px 14px rgba(120,90,60,.20), inset 0 -6px 14px rgba(120,90,60,.10);
+}
+.menu-txt { min-width: 0; max-width: 100%; }
+.menu-txt .en { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; margin: 0 auto; }
+
+.ingredient-tile { cursor: pointer; }
+.ing-modal-photo {
+  position: relative; display: grid; place-items: center; gap: 4px; padding: 12px;
+  border-radius: 20px; cursor: zoom-in;
+  background: repeating-linear-gradient(45deg, #fdf8ef 0 14px, #f7f0e3 14px 28px);
+  border: 2px dashed rgba(150,120,90,.28);
+}
+.ing-modal-photo .ing-big-photo { max-height: 210px; max-width: 100%; width: auto; object-fit: contain; }
+.ing-modal-photo .zoom-tip {
+  position: absolute; right: 10px; bottom: 10px; font-size: 12.5px; color: #7c6a55;
+  background: rgba(255,255,255,.86); border-radius: 999px; padding: 3px 10px; pointer-events: none;
+}
+.ing-modal-photo.zoom {
+  position: fixed; inset: 0; z-index: 90; padding: 3vh 3vw; border: none; border-radius: 0;
+  background: rgba(24,18,12,.9); cursor: zoom-out;
+}
+.ing-modal-photo.zoom .ing-big-photo { max-height: 90vh; max-width: 92vw; }
+.ing-modal-photo.zoom .zoom-tip { display: none; }
+
+.belt-row { position: relative; margin: 8px 0 18px; }
+.belt-row::before {
+  content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 84px; transform: translateY(-50%);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #a06a45 0%, #7c4a2d 42%, #5c3520 100%);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.22), inset 0 -10px 18px rgba(0,0,0,.22), 0 10px 22px rgba(90,55,25,.22);
+  border: 1px solid rgba(255,255,255,.12);
+}
+.flash-grid.belt-scroll, .pattern-row, .tag-row {
+  position: relative; display: flex !important; flex-wrap: nowrap !important;
+  gap: 18px; overflow-x: auto; padding: 18px 26px 22px;
+  scroll-snap-type: none; scrollbar-width: thin;
+}
+.flash-grid.belt-scroll { grid-template-columns: none !important; min-height: 0 !important; grid-auto-rows: auto !important; }
+.flash-grid.belt-scroll::-webkit-scrollbar, .pattern-row::-webkit-scrollbar, .tag-row::-webkit-scrollbar { height: 8px; }
+.flash-grid.belt-scroll::-webkit-scrollbar-thumb, .pattern-row::-webkit-scrollbar-thumb, .tag-row::-webkit-scrollbar-thumb {
+  background: rgba(120,80,50,.35); border-radius: 999px;
+}
+.flash-grid.belt-scroll .flash-card { flex: 0 0 176px !important; width: 176px !important; height: 158px !important; }
+.pattern-row .pattern-card { flex: 0 0 340px; }
+.tag-row { padding: 6px 2px 8px; gap: 8px; }
+.tag-row .tag { flex: 0 0 auto; }
+
+/* 词汇卡：上图下字（菜单样式） */
+
+/* ============ 词汇 · 厨房与味道：词表矩阵（一次铺开、不横向滚动） ============ */
+/* ============ 备菜页：菜品条不再被压扁，整页可滚（内容不再被挤成 0 高） ============ */
+/* ============ 熊猫可以拖着走 ============ */
+.panda { touch-action: none; cursor: grab; }
+.panda.dragging { cursor: grabbing; }
+.panda.dragging, .panda.dragging * { user-select: none !important; }
+.panda.dragging .panda-avatar { animation-play-state: paused; }
+.panda.panda-moved .panda-avatar { animation: none; }   /* 拖动过以后就别在原地晃了 */
+.panda.hide-bubble .panda-bubble { display: none !important; }   /* 点熊猫头收起气泡 */
+.panda.hide-bubble .panda-avatar::before {
+  content: '💬'; position: absolute; right: -6px; top: -6px; font-size: 15px; line-height: 1;
+  background: #fff; border: 1px solid var(--line); border-radius: 50%; padding: 3px 4px;
+  box-shadow: var(--shadow-s); z-index: 2;
+}
+
+.view > .dish-strip { flex: 0 0 auto !important; }
+body[data-page="prep"] .view { overflow-y: auto !important; }
+body[data-page="prep"] .view > .culture-section { flex: 0 0 auto !important; min-height: auto !important; overflow: visible !important; }
+#ingGrid { grid-auto-rows: auto !important; }   /* 否则底部翻页条会被拉成一整行高，白占 250px */
+
+.vocab-menu.vm-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.vocab-menu.vm-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.vocab-menu.vm-2 .vm-card { aspect-ratio: auto; min-height: 320px; }
+@media (max-width: 980px) { .vocab-menu.vm-2 { grid-template-columns: 1fr; } }
+
+/* 首页·文化的子页（怎么做菜 / 味型与时间 / 流派与餐桌）：内容不再被挤成小窗口，整页可滚 */
+/* 三大流派：三张卡当导航菜单用（点开弹窗看详细介绍 + 文化故事） */
+.school-card {
+  display: flex !important; flex-direction: column; align-items: center; text-align: center;
+  gap: 8px; font: inherit; cursor: pointer; padding: 24px 18px !important;
+  aspect-ratio: 1 / 0.87;                       /* 和词汇/我的厨房菜单卡同一个拉长比例 */
+}
+.school-card .school-ico { margin-top: 8px; }
+.school-card .school-ico { font-size: 40px; line-height: 1; }
+.school-card .school-name { font-size: 20px; font-weight: 800; color: #4a3a26; }
+.school-card .school-area { line-height: 1.5; }
+.school-card .school-taste { color: #9a5a3a; font-weight: 700; line-height: 1.6; }
+.school-card .school-dishes { line-height: 1.5; }
+.school-card .school-more { margin-top: auto; padding-top: 10px; font-weight: 700; color: #c0392b; font-size: 15px; }
+
+body[data-page="guide"] .view,
+body[data-page="flavor"] .view,
+body[data-page="table"] .view { overflow-y: auto !important; }
+body[data-page="guide"] .view > .culture-section,
+body[data-page="flavor"] .view > .culture-section,
+body[data-page="table"] .view > .culture-section { flex: 0 0 auto !important; min-height: auto !important; overflow: visible !important; }
+.vocab-menu.vm-4 .vm-ico { font-size: 50px; }
+.vocab-menu.vm-4 .vm-title { font-size: 20px; }
+.vocab-menu.vm-4 .vm-sub { font-size: 13px; }
+@media (max-width: 1200px) { .vocab-menu.vm-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* 我的厨房 · 菜单进度：八道菜两列四行，一屏排下（也不被熊猫气泡压住） */
+.dish-rows { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; align-content: start !important; gap: 10px !important; overflow: visible !important; }
+.dish-rows .dish-progress-row { min-height: 74px; }
+@media (max-width: 1200px) { .dish-rows { grid-template-columns: 1fr !important; } }
+.dish-rows .dish-progress-row { margin-bottom: 0 !important; padding: 5px 12px !important; min-height: 0; }
+.dish-rows .dish-progress-row b { font-size: 15px !important; line-height: 1.2; }
+.dish-rows .dish-progress-row .py { font-size: 12px !important; line-height: 1.25; }
+.dish-rows .dish-progress-row .small { font-size: 11px !important; line-height: 1.3; }
+
+.tag-row.tag-matrix {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)) !important;
+  gap: 8px !important;
+  overflow: visible !important;
+  align-content: start !important;
+  padding: 6px 2px 8px !important;
+}
+.tag-row.tag-matrix .tag { flex: 1 1 auto !important; justify-content: flex-start !important; min-width: 0 !important; }
+.tag-row.tag-matrix .tag-zh { font-weight: 800; }
+.tag-btn { font: inherit !important; text-align: left; cursor: pointer; transition: transform .16s, box-shadow .2s, border-color .2s; }
+.tag-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(120,80,50,.18); border-color: #f0c49f !important; }
+.tag-btn:active { transform: translateY(0); }
+.tag-btn:focus-visible { outline: 2px solid #c0392b; outline-offset: 2px; }
+@media (max-width: 1200px) { .tag-row.tag-matrix { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important; } }
+@media (max-width: 700px) { .tag-row.tag-matrix { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)) !important; } }
+.flash-grid.belt-scroll::-webkit-scrollbar { height: 0 !important; }
+.pattern-row::-webkit-scrollbar, .tag-row::-webkit-scrollbar { height: 0 !important; }
+.flash-grid.belt-scroll, .pattern-row, .tag-row { scrollbar-width: none; }
+.flash-card.menu-card {
+  flex: 0 0 168px !important; width: 168px !important; height: 236px !important;
+  display: flex !important; flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: 6px; padding: 12px 10px 12px !important; border-radius: 20px !important;
+  background: #fffdf8 !important; box-shadow: 0 8px 18px rgba(120,90,60,.16) !important;
+  transition: transform .2s, box-shadow .2s;
+}
+.flash-card.menu-card:hover { transform: translateY(-4px); box-shadow: 0 14px 26px rgba(120,90,60,.22) !important; }
+.flash-card.menu-card.pulse { animation: menuPulse .32s ease; }
+@keyframes menuPulse { 50% { transform: translateY(-4px) scale(1.05); } }
+.menu-photo { width: 96px; height: 96px; display: grid; place-items: center; flex: none; }
+.menu-photo .menu-img { width: 100%; height: 100%; object-fit: contain; }
+.menu-photo .menu-img.menu-round { border-radius: 50%; object-fit: cover; box-shadow: 0 4px 10px rgba(120,90,60,.18); background: #fff; }
+.menu-photo .menu-emoji { font-size: 56px; line-height: 1; }
+.menu-txt { text-align: center; line-height: 1.3; }
+.menu-txt .word { font-size: 16.5px !important; font-weight: 700 !important; color: var(--ink, #4a3a26); }
+.menu-txt .py { display: block; font-size: 12px; color: #c0503c; }
+.menu-txt .en { display: block; font-size: 11px; color: var(--muted, #8a7860); }
+.flash-card.menu-card .speak { position: absolute; right: 8px; bottom: 8px; }
+@media (max-width: 720px) {
+  .flash-grid.belt-scroll .flash-card { flex: 0 0 150px !important; width: 150px !important; height: 140px !important; }
+  .pattern-row .pattern-card { flex: 0 0 270px; }
+}
+
+/* ============ 上灶页：步骤拆解（滚动步骤菜单 + 左边文字 / 右边实拍图） ============ */
+/* ============ 上灶页：步骤拆解（左边文字 / 右边实拍图） ============ */
+/* 步骤卡片：左文字 / 右实拍图，内容自适应高度（不拉伸图片） */
+#stepView { margin-top: 3.5vh; }         /* 整块内容略微下移，框内上下留白更匀 */
+.sbs-step {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 340px); gap: 18px;
+  align-items: stretch; padding: 14px 18px; border-radius: var(--r-l, 22px);
+  background: var(--card, #fffdf6); box-shadow: 0 8px 20px rgba(150,120,90,.16);
+}
+.sbs-text { min-width: 0; text-align: left !important; }
+.sbs-text .step-instruction, .sbs-text .py, .sbs-text .en { text-align: left !important; }
+.step-answer {
+  display: inline-block; margin: 8px 0 6px; padding: 6px 15px; border-radius: 999px;
+  background: linear-gradient(180deg, #fff2cc, #ffe0a3); color: #8a4b06 !important;
+  font-size: 16px !important; font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(200,150,60,.24);
+}
+.sbs-photo { position: relative; display: flex; }
+.sbs-photo .step-photo {
+  width: 100%; height: 100% !important; min-height: 190px; max-height: 270px; object-fit: cover;
+  border-radius: 16px; box-shadow: 0 12px 24px rgba(96,72,48,.20); margin: 0 !important;
+}
+.sbs-photo .step-photo-cap { left: 12px; top: 12px; bottom: auto; }
+.sbs-photo-empty {
+  min-height: 190px; width: 100%; display: grid; place-items: center; gap: 6px; border-radius: 16px;
+  background: repeating-linear-gradient(45deg, #f8f1e6 0 12px, #f2e8da 12px 24px);
+  border: 2px dashed rgba(150,120,90,.35);
+}
+.sbs-photo-empty > span { font-size: 56px; }
+.step-foot {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  margin: 20px 0 auto; flex-wrap: wrap;
+}
+@media (max-width: 900px) { .sbs-step { grid-template-columns: 1fr; } }
+
+/* ============ 语言标注：点一下展开下拉，选显示哪些语言 ============ */
+.lang-pick { position: relative; }
+.lang-pick .chip-toggle { white-space: nowrap; }
+.lang-drop {
+  position: absolute; right: 0; top: calc(100% + 8px);
+  min-width: 172px; padding: 6px; z-index: 80;
+  display: grid; gap: 3px;
+  background: #fffdf8;
+  border: 2px solid #f2d9bf; border-radius: 16px;
+  box-shadow: 0 16px 32px rgba(120, 90, 60, .26);
+  animation: langDropIn .18s ease;
+}
+.lang-drop[hidden] { display: none; }
+@keyframes langDropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.lang-opt {
+  display: flex; align-items: center; gap: 6px; width: 100%;
+  padding: 8px 10px; border: none; border-radius: 12px; cursor: pointer;
+  background: transparent; font: inherit; font-size: 14px; font-weight: 600;
+  color: var(--ink, #4a3a26); text-align: left; transition: background .18s, color .18s;
+}
+.lang-opt:hover { background: #fff2e2; }
+.lang-opt.on { background: #ffe9d6; color: var(--red, #c0392b); font-weight: 800; }
+.lang-opt .tick { width: 14px; flex: none; opacity: 0; color: var(--red, #c0392b); }
+.lang-opt.on .tick { opacity: 1; }
+.lang-opt .lg-flag { font-size: 15px; line-height: 1; }
+.lang-tip {
+  margin: 4px 6px 2px; padding-top: 6px; border-top: 1px dashed #f0dcc6;
+  font-size: 11.5px; color: var(--muted, #8a7860); line-height: 1.4;
+}
+.lang-drop { max-height: 70vh; overflow-y: auto; }
+/* 阿拉伯语等从右往左的语言，标注行跟着改方向 */
+body.lang-rtl .en[dir="rtl"] { direction: rtl; text-align: right; display: block; }
+/* 熊猫气泡里的外语标注行（中文原文保留，译文另起一行） */
+#pandaText .panda-tr {
+  display: block; margin-top: 5px; padding-top: 5px; border-top: 1px dashed #f0dcc6;
+  font-size: 12.5px; font-style: normal; color: var(--muted, #8a7860); line-height: 1.5;
+}
+body.lang-rtl #pandaText .panda-tr { direction: rtl; text-align: right; }
+/* 词汇卡详解弹窗（点卡片打开，可翻页） */
+.vocab-modal .vm-top { display: flex; gap: 14px; align-items: center; }
+.vocab-modal .vm-photo {
+  width: 118px; height: 118px; flex: none; display: grid; place-items: center;
+  background: #fff; border: 3px solid #f3e6d4; border-radius: 18px; overflow: hidden;
+}
+.vocab-modal .vm-img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.vocab-modal .vm-img-round { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.vocab-modal .vm-emoji { font-size: 46px; line-height: 1; }
+.vocab-modal .vm-meta { min-width: 0; }
+.vocab-modal .vm-meta .h3 { margin: 0 0 4px; }
+.vocab-modal .vm-cat {
+  display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 999px;
+  background: #fff3e3; color: #8a7860; font-size: 12px;
+}
+.vocab-modal .vm-sec { margin-top: 14px; padding-top: 12px; border-top: 1px dashed #f0dcc6; }
+.vocab-modal .vm-sec h4 { margin: 0 0 6px; font-size: 14px; color: #b1442c; }
+.vocab-modal .vm-sec p { margin: 0; }
+.vocab-modal .vm-ex {
+  margin-top: 8px; padding: 10px 12px; border-radius: 12px;
+  background: #fff8ee; border-left: 4px solid #f3c98b;
+}
+.vocab-modal .vm-ex .zh { font-size: 15.5px; font-weight: 700; color: #4a3a26; }
+.vocab-modal .vm-ex .en { display: block; font-size: 12.5px; font-style: italic; color: #8a7860; }
+.vocab-modal .vm-pager {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  margin-top: 16px; padding-top: 12px; border-top: 1px dashed #f0dcc6;
+}
+.vocab-modal .vm-count { font-size: 13px; color: #8a7860; }
+.vocab-modal .vm-pager .btn[disabled] { opacity: .38; cursor: default; }
+/* 长词（如"一菜一格，百菜百味"）最多两行，别压到下面的拼音 */
+.menu-txt .word {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; line-height: 1.22 !important; word-break: break-word;
+}
+.menu-txt .word.w-long { font-size: 13px !important; }
+.menu-card .menu-txt { overflow: hidden; }
+.flash-card.menu-card .menu-txt { flex: 0 0 auto; }   /* 别被 flex 压扁，否则文字会被裁掉 */
+.menu-txt .py { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.menu-card.w-long-card .py { font-size: 10.5px; }
+.menu-card.w-long-card .en { font-size: 10px; }
+/* 横向卡片带下面那根可以手动拖动的进度条 */
+.belt-bar {
+  position: relative; height: 18px; margin: 2px 26px 10px; border-radius: 999px;
+  background: #efe0cd; box-shadow: inset 0 1px 3px rgba(120, 90, 60, .28), 0 1px 0 rgba(255,255,255,.6);
+  cursor: pointer; touch-action: none; user-select: none;
+}
+.belt-bar[hidden] { display: none; }
+.belt-bar .belt-thumb {
+  position: absolute; top: 3px; height: 12px; border-radius: 999px;
+  background: linear-gradient(180deg, #e0a55f, #c9843f);
+  box-shadow: 0 2px 6px rgba(120, 80, 40, .35);
+  cursor: grab;
+}
+.belt-bar .belt-thumb:active { cursor: grabbing; background: linear-gradient(180deg, #d99a52, #bb7736); }
+.belt-bar:hover { background: #ebd9c3; }
+.card > .belt-bar { margin: 10px 0 2px; }
+/* 词汇页的卡片菜单（先选板块，再展开那一页） */
+.vocab-menu { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 6px; }
+.vocab-menu .vm-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px; text-align: left;
+  padding: 26px; border-radius: 24px; text-decoration: none; color: inherit;
+  aspect-ratio: 1 / 0.87;                       /* 用户定的比例：接近正方形的大卡 */
+  background: #fffdf8; border: 2px solid #f2e3cf;
+  box-shadow: 0 8px 18px rgba(120, 90, 60, .14);
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+}
+.vocab-menu .vm-card:hover {
+  transform: translateY(-4px); border-color: #f0c98f;
+  box-shadow: 0 14px 26px rgba(120, 90, 60, .22);
+}
+.vocab-menu .vm-ico { font-size: 58px; line-height: 1; }
+.vocab-menu .vm-title { font-size: 22px; font-weight: 800; color: #4a3a26; }
+.vocab-menu .vm-sub { font-size: 14px; color: #8a7860; line-height: 1.6; }
+.vocab-menu .vm-meta {
+  font-size: 12px; color: #b1442c; background: #fff3e3;
+  border-radius: 999px; padding: 4px 11px;
+}
+.vocab-menu .vm-go { margin-top: auto; padding-top: 10px; font-weight: 700; color: #c0392b; font-size: 15px; }
+.vocab-back {
+  display: inline-block; margin-bottom: 6px; padding: 6px 14px; border-radius: 999px;
+  background: #fff3e3; color: #b1442c !important; font-size: 13.5px; font-weight: 700;
+  text-decoration: none; border: 1px solid #f2d9b8;
+}
+.vocab-back:hover { background: #ffe9d6; }
+@media (max-width: 900px) {
+  .vocab-menu { grid-template-columns: 1fr; }
+  .vocab-menu .vm-card { aspect-ratio: auto; min-height: 0; }
+}

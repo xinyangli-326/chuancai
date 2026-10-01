@@ -64,47 +64,48 @@ CC.dishes = [
     flavorId: 'hula', flavor: '糊辣味 + 荔枝味', flavorPy: 'húlà wèi', heat: 2, difficulty: 2, minutes: 25,
     region: '成都 · 官府菜', tags: ['国际知名', '甜酸微辣', '宴客菜'],
     story: {
-      zh: '清朝光绪年间，贵州人丁宝桢任四川总督，官衔是"太子少保"（尊称"宫保"）。相传这道菜出自他家的厨师：鸡丁配上干辣椒、花椒和花生米，甜酸里带着糊辣香。后来人们就用他的尊称叫它"宫保鸡丁"。它属于"糊辣荔枝味"：干辣椒炒到棕红，糖和醋的比例大约是 1 : 1.5，吃起来先酸后甜，像荔枝。',
+      zh: '清朝光绪年间，贵州人丁宝桢任四川总督，官衔是"太子少保"（尊称"宫保"）。相传这道菜出自他家的厨师：鸡丁配上干辣椒、花椒和花生米，甜酸里带着糊辣香。后来人们就用他的尊称叫它"宫保鸡丁"。它属于"糊辣荔枝味"：干辣椒炒到棕红，吃起来先酸后甜，像荔枝。',
       py: 'Qīngcháo guānyuán Dīng Bǎozhēn dāngguo Sìchuān zǒngdū, guānxián shì "Tàizǐ Shǎobǎo", rén chēng "Dīng Gōngbǎo".',
-      en: 'In the Guangxu reign of the Qing dynasty, Ding Baozhen — a native of Guizhou — served as governor of Sichuan. His honorary title was "Gongbao" (Guardian of the Heir Apparent). The dish is said to come from his household kitchen: diced chicken with dried chili, Sichuan pepper and peanuts, sweet-sour with a toasted-chili aroma. It became "Gongbao Chicken". Its flavour is "toasted chili + lychee": chili fried deep red, sugar to vinegar roughly 1 : 1.5, sour first, then sweet.'
+      en: 'In the Guangxu reign of the Qing dynasty, Ding Baozhen — a native of Guizhou — served as governor of Sichuan. His honorary title was "Gongbao" (Guardian of the Heir Apparent). The dish is said to come from his household kitchen: diced chicken with dried chili, Sichuan pepper and peanuts, sweet-sour with a toasted-chili aroma. It became "Gongbao Chicken". Its flavour is "toasted chili + lychee": chili fried deep red, sour first, then sweet, like a lychee.'
     },
     prep: [
-      { ing: 'jiwing', qty: '300 克', prep: 'qieding', note: { zh: '先切条再切丁，大小像骰子。', en: 'Cut into strips, then into dice.' } },
-      { ing: 'dacong', qty: '1 根', prep: 'qieduan', note: { zh: '切成 1.5 厘米的"葱丁"。', en: 'Cut into 1.5 cm "scallion dice".' } },
-      { ing: 'gansuan', qty: '10 个', prep: 'qieduan', note: { zh: '干辣椒剪成段，抖掉辣椒籽免得发苦。', en: 'Snip chili into sections and shake out the seeds.' } },
-      { ing: 'huajiao', qty: '1 小勺', prep: 'chaoxiang', note: { zh: '和干辣椒一起下油，炸出香味。', en: 'Goes into the oil with the chili.' } },
-      { ing: 'dasuan', qty: '3 瓣', prep: 'qiepian', note: { zh: '切片备用。', en: 'Slice and set aside.' } },
-      { ing: 'shengjiang', qty: '1 小块', prep: 'qiepian', note: { zh: '切片，和蒜一起下锅。', en: 'Slice; goes in with the garlic.' } },
-      { ing: 'huashengmi', qty: '50 克', prep: 'chaoxiang', note: { zh: '油炸或干炒到酥脆，最后才下锅。', en: 'Fry or toast until crisp; it goes in at the very end.' } },
-      { ing: 'dianfen', qty: '1 大勺', prep: 'tiaozhi', note: { zh: '和糖、醋、生抽调成"碗汁"。', en: 'Mix with sugar, vinegar and soy sauce into a sauce bowl.' } }
+      { ing: 'jiwing', qty: '300 克', prep: 'qieding', note: { zh: '一定要用鸡腿肉，去骨切丁，比鸡胸肉嫩很多。', en: 'Use chicken thigh — deboned and diced; far more tender than breast.' } },
+      { ing: 'dasuan', qty: '4 瓣', prep: 'qiepian', note: { zh: '切片，一半腌肉、一半下锅。', en: 'Slice; some for the marinade, some for the wok.' } },
+      { ing: 'shengjiang', qty: '1 小块', prep: 'qiepian', note: { zh: '切片，和蒜片一起腌肉。', en: 'Slice and marinate with the garlic.' } },
+      { ing: 'dacong', qty: '1 根', prep: 'qieduan', note: { zh: '切成葱段，最后和花生一起下锅。', en: 'Cut into sections; goes in last with the peanuts.' } },
+      { ing: 'gansuan', qty: '10 个', prep: 'qieduan', note: { zh: '干辣椒剪成段，先用油激出香味再捞出。', en: 'Snip the dried chilli into sections; fry briefly for aroma, then lift out.' } },
+      { ing: 'huajiao', qty: '1 小勺', prep: 'chaoxiang', note: { zh: '油热后先炸花椒，微微变色就捞出。', en: 'Fry the Sichuan pepper first; take it out as soon as it colours.' } },
+      { ing: 'huashengmi', qty: '50 克', prep: 'chaoxiang', note: { zh: '保持酥脆，最后和葱段一起放。', en: 'Keep them crunchy — they go in last with the scallion.' } },
+      { ing: 'dianfen', qty: '2 大勺', prep: 'tiaozhi', note: { zh: '和糖醋一起调成"灵魂碗汁"。', en: 'Mix into the "soul sauce" with the sugar and vinegar.' } }
     ],
-    seasonings: ['ganlajiao', 'huajiao', 'shengchou', 'xiangcu', 'baitang', 'liaojiu', 'dianfen', 'shiyongyou', 'huashengmi'],
-    seasonQty: { ganlajiao: '10 个，剪段去籽', huajiao: '1 小勺', shengchou: '2 勺', xiangcu: '1.5 勺', baitang: '1 勺（糖醋约 1 : 1.5）', liaojiu: '1 勺', dianfen: '半勺，碗汁里用', shiyongyou: '30 毫升', huashengmi: '50–80 克，关火后下' },
+    seasonings: ['ganlajiao', 'huajiao', 'baitang', 'xiangcu', 'shengchou', 'laochou', 'liaojiu', 'dianfen', 'yan', 'shiyongyou'],
+    seasonQty: { ganlajiao: '10 个，剪段', huajiao: '1 小勺', baitang: '3 大勺（碗汁）', xiangcu: '3 大勺（碗汁）', shengchou: '1 勺', laochou: '半勺', liaojiu: '1 勺（碗汁）+ 1.5 勺腌肉', dianfen: '2 勺（碗汁）+ 腌肉适量', yan: '少许', shiyongyou: '30 毫升，腌肉再加 1 勺' },
     flavorTask: {
-      question: { zh: '"荔枝味"的碗汁，最重要的是哪两样？', en: 'The "lychee" sauce bowl needs which two?' },
+      question: { zh: '"酸甜微辣"的碗汁，糖和醋大概是什么比例？', en: 'For the sweet-sour sauce, roughly what ratio of sugar to vinegar?' },
       options: [
-        { zh: '白糖 + 香醋', emoji: '🍬🫙', correct: true },
-        { zh: '花椒 + 孜然', emoji: '🫘' },
-        { zh: '豆豉 + 甜面酱', emoji: '🫘🥫' }
+        { zh: '白糖 3 大勺 : 香醋 3 大勺，大约 1 : 1', emoji: '🍬🫙', correct: true },
+        { zh: '糖 1 勺 : 醋 5 勺，酸为主', emoji: '🫙' },
+        { zh: '糖 5 勺 : 醋 1 勺，甜为主', emoji: '🍬' }
       ],
-      explain: { zh: '糖和醋的比例是 1 : 1 左右，先酸后甜，就像吃荔枝。', en: 'Roughly equal sugar and vinegar: sour first, sweet after — like a lychee.' }
+      explain: { zh: '这份做法是糖醋各 3 大勺，酸甜平衡，再靠干辣椒和花椒补"微辣"。', en: 'This version uses three spoons of each — balanced sweet and sour, with chilli and pepper for the gentle heat.' }
     },
     tips: [
-      { zh: '"碗汁"要提前调好，川菜爆炒很快，来不及一样一样加。', en: 'Mix the sauce beforehand — Sichuan stir-frying is too fast for one-by-one seasoning.' },
-      { zh: '花生米最后放，才能保持又香又脆。', en: 'Peanuts go in last, so they stay crunchy.' }
+      { zh: '黄酒是去腥关键：腌肉放一点，碗汁里也放一点。', en: 'Rice wine is the key: a little in the marinade, a little in the sauce.' },
+      { zh: '腌肉时加一勺油锁住水分，鸡丁才嫩到弹牙。', en: 'A spoon of oil in the marinade seals in moisture and keeps the chicken springy.' },
+      { zh: '花生米最后和葱段一起放，不然就不脆了。', en: 'Peanuts go in last with the scallion, or they lose their crunch.' },
+      { zh: '料汁要大火收浓，裹满鸡丁才够香。', en: 'Reduce the sauce over high heat so it clings to every piece.' }
     ],
     steps: [
-      { type: 'heat', heat: 'zhong', zh: '中火下油，先炸香干辣椒和花椒。', py: 'Zhōng huǒ xià yóu, zhà xiāng gān làjiāo hé huājiāo.', en: 'Add oil over medium heat, then bloom the dried chili and pepper.', add: ['🫗'], tip: { zh: '中火慢炸，辣椒变成棕红色就好，黑了就苦。', en: 'Medium heat: chili should turn deep red, never black.' } },
-      { type: 'order', zh: '先下锅的是……', py: 'Xiān xià guō de shì…', en: 'First into the wok…', options: [{ id: 'lajiao', zh: '干辣椒 + 花椒', emoji: '🌶️🫘' }, { id: 'ji', zh: '鸡丁', emoji: '🍗' }, { id: 'huasheng', zh: '花生米', emoji: '🥜' }], answer: 'lajiao', add: ['🌶️', '🫘'], tip: { zh: '糊辣香是这道菜的"灵魂香味"。', en: 'Toasted chili fragrance is the soul of this dish.' } },
-      { type: 'heat', heat: 'da', zh: '现在把火开大，下鸡丁爆炒！', py: 'Xiànzài bǎ huǒ kāi dà, xià jīdīng bàochǎo!', en: 'Turn up the heat and add the chicken.', add: ['🍗'], tip: { zh: '大火才能"锁住"肉里的水分，鸡肉才嫩。', en: 'High heat seals in moisture — that is how the chicken stays tender.' } },
-      { type: 'stir', target: 14, seconds: 11, word: '翻炒', zh: '快速翻炒，鸡丁变色就差不多熟了。', py: 'Kuàisù fānchǎo.', en: 'Stir fast until the chicken changes colour.', add: ['🥄'], tip: { zh: '手要快，锅气就是这么炒出来的。', en: 'Move fast — that is where "wok breath" comes from.' } },
-      { type: 'order', zh: '鸡肉变色了，接着下……', py: 'Jīròu biànsè le, jiēzhe xià…', en: 'The chicken has changed colour — add…', options: [{ id: 'cong', zh: '葱丁 + 姜蒜片', emoji: '🌱' }, { id: 'huasheng', zh: '花生米', emoji: '🥜' }, { id: 'cu', zh: '香醋', emoji: '🫙' }], answer: 'cong', add: ['🌱'], tip: { zh: '葱姜蒜是川菜的"三香"，去腥增香。', en: 'Scallion, ginger and garlic are the "three aromatics".' } },
-      { type: 'season', zh: '该调味了，倒进哪一样？', py: 'Gāi tiáowèi le, dào jìn nǎ yí yàng?', en: 'Time to season — pour in what?', options: [{ id: 'wanzhi', zh: '提前调好的碗汁', emoji: '🥣' }, { id: 'shui', zh: '一碗清水', emoji: '💧' }, { id: 'hongyou', zh: '半瓶红油', emoji: '🫙' }], answer: 'wanzhi', add: ['🥣'], tip: { zh: '碗汁要沿锅边淋一圈，香气一下就起来了。', en: 'Pour it around the rim of the wok — the aroma jumps immediately.' } },
-      { type: 'wait', seconds: 5, label: '大火收汁 30 秒', zh: '大火收汁，看到汁变少、油变亮就好了。', py: 'Dà huǒ shōu zhī.', en: 'Reduce the sauce over high heat until it turns glossy.', add: ['💨'], tip: { zh: '川菜讲"亮油"，盘子里油亮但不腻。', en: 'Sichuan chefs aim for a glossy, not greasy, finish.' } },
-      { type: 'finish', zh: '关火，倒入花生米，快速拌匀，出锅！', py: 'Guān huǒ, dào rù huāshēngmǐ, kuàisù bàn yún, chū guō!', en: 'Turn off the heat, add peanuts, toss and plate.', add: ['🥜'], tip: { zh: '花生米最后放，脆！', en: 'Peanuts last — crunch guaranteed.' } }
+      { type: 'prep', zh: '备料：鸡腿肉去骨切丁；蒜片、姜片、葱段、干辣椒段、花椒、花生米分开放；再调一碗料汁（白糖 3 勺、香醋 3 勺、蚝油 1 勺、生抽 1 勺、黄酒 1 勺、老抽半勺、淀粉 2 勺、清水 3 勺、白胡椒和盐各少许）。', py: 'Bèi liào: jītuǐròu qù gǔ qiè dīng, xiǎoliào fēn kāi fàng, zài tiáo yì wǎn liàozhī.', en: 'Mise en place: debone and dice the chicken thigh; keep garlic, ginger, scallion, dried chilli, Sichuan pepper and peanuts separate; then mix the sauce (3 spoons sugar, 3 vinegar, 1 oyster sauce, 1 light soy, 1 rice wine, half a spoon dark soy, 2 starch, 3 water, white pepper and salt).', add: ['🍗', '🌶️', '🥜'], tip: { zh: '小料先摆齐，锅热起来才不会手忙脚乱。', en: 'Lay everything out first — the wok goes fast.' } },
+      { type: 'prep', zh: '腌肉：鸡腿肉加 1.5 勺黄酒、1 勺盐、适量淀粉和清水，抓到发黏，再倒一勺油锁住水分，放入蒜片姜片腌 5 分钟。', py: 'Yān ròu: jītuǐròu jiā huángjiǔ, yán, diànfěn, qīngshuǐ zhuā yún, zài jiā yì sháo yóu, yān wǔ fēnzhōng.', en: 'Marinate: mix the diced thigh with rice wine, salt, starch and water until sticky, add a spoon of oil to seal in the moisture, then the garlic and ginger; rest 5 minutes.', add: ['🍗'], tip: { zh: '黄酒去腥、油锁水，这两步别省。', en: 'The rice wine and the oil are the two steps you should not skip.' } },
+      { type: 'heat', heat: 'zhong', zh: '炸花椒油：油热后下花椒，微微变色就捞出来。', py: 'Zhà huājiāo yóu: yóu rè hòu xià huājiāo, wēiwēi biànsè jiù lāo chūlái.', en: 'Fry the Sichuan pepper in the hot oil and lift it out as soon as it changes colour.', add: ['🫗', '🫘'], tip: { zh: '花椒一糊就发苦，变色就捞。', en: 'Burnt pepper turns bitter — take it out early.' } },
+      { type: 'heat', heat: 'zhong', zh: '放辣椒：下干辣椒段，微微变色就捞出，和花椒放在一起备用。', py: 'Fàng làjiāo: xià gān làjiāo duàn, wēiwēi biànsè jiù lāo chū.', en: 'Add the dried chilli sections and lift them out as soon as they colour, keeping them with the pepper.', add: ['🌶️'], tip: { zh: '辣椒和花椒最后还要回锅，现在只取香味。', en: 'The chilli and pepper come back at the end — here you only want their fragrance.' } },
+      { type: 'heat', heat: 'da', zh: '下鸡丁：转大火，把腌好的鸡丁和姜蒜一起下锅翻炒。', py: 'Xià jīdīng: zhuǎn dà huǒ, xià yān hǎo de jīdīng hé jiāng suàn yìqǐ fānchǎo.', en: 'Turn the heat up and add the marinated chicken together with its garlic and ginger.', add: ['🍗'], tip: { zh: '大火快炒，鸡丁才嫩。', en: 'High heat and speed keep the chicken tender.' } },
+      { type: 'stir', target: 14, seconds: 11, word: '翻炒', zh: '炒到两面焦黄：不停翻炒，鸡丁表面金黄。', py: 'Chǎo dào liǎng miàn jiāohuáng.', en: 'Keep tossing until the chicken is golden on both sides.', add: ['💨'], tip: { zh: '表面金黄、里面还嫩，这时候最香。', en: 'Golden outside, still juicy inside — that is the moment.' } },
+      { type: 'season', zh: '倒料汁：倒入调好的料汁，再放葱段、花生米和炸好的辣椒花椒，一起翻炒。', py: 'Dào liàozhī: dào rù liàozhī, zài fàng cōngduàn, huāshēngmǐ hé zhà hǎo de làjiāo huājiāo.', en: 'Pour in the sauce, then add the scallion, peanuts and the fried chilli and pepper, and toss everything together.', options: [{ id: 'wanzhi', zh: '调好的碗汁', emoji: '🥣' }, { id: 'shui', zh: '一碗清水', emoji: '💧' }, { id: 'cu', zh: '半碗香醋', emoji: '🫙' }], answer: 'wanzhi', add: ['🥣', '🌱', '🥜'], tip: { zh: '花生最后和葱一起放，不然就不脆了。', en: 'Peanuts go in last with the scallion so they stay crunchy.' } },
+      { type: 'finish', zh: '收浓出锅：大火把汁收浓，裹满鸡丁就关火装盘。', py: 'Shōu nóng chū guō: dà huǒ bǎ zhī shōu nóng, guǒ mǎn jīdīng jiù chū guō.', en: 'Reduce the sauce over high heat until it coats every piece, then serve.', add: ['🍽️'], tip: { zh: '汁要裹住鸡丁才够香，趁热吃。', en: 'The sauce should cling to the chicken — serve it hot.' } }
     ]
   },
-
   /* ==================== 3. 回锅肉 ==================== */
   {
     id: 'huiguo', name: '回锅肉', py: 'Huíguōròu', en: 'Twice-cooked Pork',
@@ -156,8 +157,8 @@ CC.dishes = [
   {
     id: 'yuxiang', name: '鱼香肉丝', py: 'Yúxiāng ròusī', en: 'Fish-fragrant Pork Slivers',
     emoji: '🥘', plate: '🍛', color: '#c2185b',
-    flavorId: 'yuxiang', flavor: '鱼香味', flavorPy: 'yúxiāng wèi', heat: 2, difficulty: 3, minutes: 30,
-    region: '四川 · 家常菜', tags: ['没有鱼', '酸甜微辣', '考刀工'],
+    flavorId: 'yuxiang', flavor: '鱼香味', flavorPy: 'yúxiāng wèi', heat: 2, difficulty: 3, minutes: 25,
+    region: '四川 · 家常菜', tags: ['没有鱼', '酸甜微辣', '20 分钟快手'],
     story: {
       zh: '第一次听到"鱼香肉丝"的留学生都会问：鱼在哪里？其实"鱼香"不是鱼的香味，而是四川人做鱼时用的那一套调料——泡椒、姜、葱、蒜、糖、醋。后来有人用同样的调料来炒肉丝，就叫"鱼香肉丝"。所以这道菜里有咸、甜、酸、辣，还有浓浓的姜葱蒜香，是一条鱼都没有的"鱼香"。',
       py: '"Yúxiāng" bú shì yú de xiāngwèi, ér shì Sìchuān rén zuò yú shí yòng de nà tào tiáoliào.',
@@ -165,38 +166,42 @@ CC.dishes = [
     },
     prep: [
       { ing: 'zhuliji', qty: '300 克', prep: 'qiesi', note: { zh: '先冻硬一点再切，能切得更细更匀。', en: 'Chill it slightly first for even, fine shreds.' } },
-      { ing: 'paojiao', qty: '6 个', prep: 'duosui', note: { zh: '泡椒剁碎，这是鱼香味的灵魂。', en: 'Chop the pickled chili — the soul of this flavour.' } },
-      { ing: 'muer', qty: '一小把', prep: 'qiesi', note: { zh: '泡发后切丝。', en: 'Soak until soft, then shred.' } },
-      { ing: 'dongsun', qty: '100 克', prep: 'qiesi', note: { zh: '切丝，和木耳一样粗细。', en: 'Shred to the same width as the wood ear.' } },
-      { ing: 'shengjiang', qty: '1 小块', prep: 'duomo', note: { zh: '剁成姜末。', en: 'Mince.' } },
-      { ing: 'dasuan', qty: '4 瓣', prep: 'duomo', note: { zh: '剁成蒜末。', en: 'Mince.' } },
-      { ing: 'xiaocong', qty: '2 根', prep: 'duomo', note: { zh: '切葱花（葱白葱绿分开更好）。', en: 'Chop; separating white and green is even better.' } },
-      { ing: 'dianfen', qty: '1 大勺', prep: 'tiaozhi', note: { zh: '糖、醋、生抽、淀粉调成鱼香碗汁。', en: 'Mix sugar, vinegar, soy sauce and starch into the sauce bowl.' } }
+      { ing: 'muer', qty: '一小把', prep: 'qiesi', note: { zh: '提前泡发，切成和肉丝一样细的丝。', en: 'Soak ahead, then shred as finely as the pork.' } },
+      { ing: 'huluobo', qty: '1 根', prep: 'qiesi', note: { zh: '切丝——图上三样配菜都是丝，粗细跟肉丝差不多。', en: 'Shred it — all three vegetables are shredded to match the pork.' } },
+      { ing: 'qingjiao', qty: '2 个', prep: 'qiesi', note: { zh: '去籽切丝，脆口又好看。', en: 'Seed and shred for crunch and colour.' } },
+      { ing: 'dasuan', qty: '4 瓣', prep: 'duomo', note: { zh: '剁成蒜末，和葱花一起爆香。', en: 'Mince; it fries with the scallion.' } },
+      { ing: 'xiaocong', qty: '2 根', prep: 'duomo', note: { zh: '切成葱花。', en: 'Chop into scallion flowers.' } }
     ],
-    seasonings: ['paojiao', 'shengchou', 'xiangcu', 'baitang', 'liaojiu', 'dianfen', 'jiangmo', 'suanmo', 'conghua', 'shiyongyou'],
-    seasonQty: { paojiao: '6 个，剁碎', shengchou: '2 勺', xiangcu: '1.5 勺', baitang: '1 勺', liaojiu: '1 勺（腌肉用）', dianfen: '1 大勺（上浆 + 碗汁）', jiangmo: '1 小勺', suanmo: '1 大勺', conghua: '2 根', shiyongyou: '30 毫升' },
+    seasonings: ['shengchou', 'laochou', 'xiangcu', 'haoyou', 'baitang', 'dianfen', 'liaojiu', 'shiyongyou'],
+    seasonQty: {
+      shengchou: '腌肉 1 勺 + 料汁 2 勺', laochou: '料汁 1 勺', xiangcu: '料汁 1 勺',
+      haoyou: '料汁 1 勺', baitang: '料汁 大半勺', dianfen: '腌肉 1 勺 + 料汁 1 勺',
+      liaojiu: '腌肉 1 勺', shiyongyou: '炒菜用'
+    },
     flavorTask: {
-      question: { zh: '调一碗"鱼香味汁"，需要哪几样？', en: 'To build a fish-fragrant sauce, which set do you need?' },
+      question: { zh: '按图调这碗"鱼香料汁"，放了哪几样？', en: 'Which set builds this fish-fragrant sauce?' },
       options: [
-        { zh: '泡椒 + 糖 + 醋 + 姜葱蒜', emoji: '🌶️🍬🫙', correct: true },
+        { zh: '生抽 + 老抽 + 醋 + 蚝油 + 糖 + 淀粉 + 清水', emoji: '🍶🫙🍬', correct: true },
         { zh: '花椒 + 芝麻酱 + 香油', emoji: '🫘🥫' },
         { zh: '牛油 + 豆瓣 + 孜然', emoji: '🧈' }
       ],
-      explain: { zh: '泡椒给辣、糖醋给酸甜、姜葱蒜给香——这就是"鱼香"。', en: 'Pickled chili for heat, sugar-vinegar for sweet-sour, aromatics for fragrance — that is fish-fragrant.' }
+      explain: { zh: '酸来自醋，甜来自糖，鲜来自生抽和蚝油，颜色来自老抽，稠度来自淀粉——一条鱼都没有，却有鱼香味。', en: 'Vinegar for sour, sugar for sweet, soy and oyster sauce for savour, dark soy for colour, starch for body.' }
     },
     tips: [
-      { zh: '肉丝切得越匀，炒的时候熟得越一致。', en: 'Even shreds cook evenly.' },
-      { zh: '给肉丝上浆（料酒+盐+淀粉），炒出来又滑又嫩。', en: 'Velvet the pork with wine, salt and starch for a silky texture.' }
+      { zh: '三样配菜都切丝，粗细跟肉丝差不多，下锅才能一起熟。', en: 'Shred everything to a similar width so it all cooks together.' },
+      { zh: '肉丝先腌 10 分钟：一勺生抽、一勺料酒、一勺淀粉，抓匀。', en: 'Marinate the pork 10 minutes with one spoon each of soy sauce, cooking wine and starch.' },
+      { zh: '料汁提前调好（两勺生抽、一勺老抽、一勺醋、一勺蚝油、大半勺糖、一勺淀粉、半碗清水），下锅后一次倒完。', en: 'Mix the sauce beforehand and pour it in one go.' },
+      { zh: '全程大火快炒，肉丝滑散就下配菜，别炒太久。', en: 'Work over high heat; once the pork separates, add the vegetables.' }
     ],
     steps: [
-      { type: 'season', zh: '肉丝要先"上浆"，放什么？', py: 'Ròusī yào xiān "shàng jiāng", fàng shénme?', en: 'First velvet the pork — with what?', options: [{ id: 'jiang', zh: '料酒 + 盐 + 水淀粉', emoji: '🥣' }, { id: 'cu', zh: '香醋 + 糖', emoji: '🫙' }, { id: 'shui', zh: '只用清水', emoji: '💧' }], answer: 'jiang', add: ['🥣'], tip: { zh: '抓匀腌 10 分钟，肉会变得又滑又嫩。', en: 'Mix and rest 10 minutes for a silky texture.' } },
-      { type: 'heat', heat: 'da', zh: '油温六成热（筷子下去有小泡泡），下肉丝快速划散。', py: 'Yóuwēn liù chéng rè, xià ròusī kuàisù huásàn.', en: 'When the oil is ready, add the pork and separate the shreds fast.', add: ['🫗', '🥩'], tip: { zh: '油太凉肉粘锅，油太热肉就老了。', en: 'Cold oil sticks; too-hot oil toughens the meat.' } },
-      { type: 'stir', target: 12, seconds: 10, word: '划散', zh: '用筷子或锅铲快速划散，肉丝变白就先盛出来。', py: 'Yòng kuàizi kuàisù huásàn.', en: 'Separate quickly; take the pork out once it turns pale.', add: ['🥄'], tip: { zh: '先盛出、后回锅，肉才嫩。', en: 'Out first, back in later — that keeps it tender.' } },
-      { type: 'order', zh: '锅里留一点油，先下哪样炒香？', py: 'Guō lǐ liú yìdiǎn yóu, xiān xià nǎ yàng chǎo xiāng?', en: 'Leave a little oil — what goes in to build aroma?', options: [{ id: 'paojiao', zh: '泡椒 + 姜蒜末', emoji: '🌶️' }, { id: 'muer', zh: '木耳丝', emoji: '🍄' }, { id: 'cong', zh: '葱花', emoji: '🌱' }], answer: 'paojiao', add: ['🌶️'], tip: { zh: '炒到油变红，鱼香味就出来了。', en: 'Fry until the oil turns red — there is your fish-fragrant aroma.' } },
-      { type: 'order', zh: '接着下配料……', py: 'Jiēzhe xià pèiliào…', en: 'Then the vegetables…', options: [{ id: 'shucai', zh: '木耳丝 + 冬笋丝', emoji: '🍄🎋' }, { id: 'tang', zh: '白糖', emoji: '🍬' }, { id: 'cu', zh: '香醋', emoji: '🫙' }], answer: 'shucai', add: ['🍄', '🎋'], tip: { zh: '一黑一白，颜色好看，口感也脆。', en: 'Black and white for colour, and both stay crunchy.' } },
-      { type: 'season', zh: '把肉丝倒回锅里，加入……', py: 'Bǎ ròusī dào huí guō lǐ, jiārù…', en: 'Return the pork and add…', options: [{ id: 'wanzhi', zh: '鱼香碗汁', emoji: '🥣' }, { id: 'shui', zh: '清水', emoji: '💧' }, { id: 'jiangyou', zh: '老抽', emoji: '🍶' }], answer: 'wanzhi', add: ['🥩', '🥣'], tip: { zh: '碗汁下锅后会马上变稠，动作要快。', en: 'The sauce thickens instantly — work fast.' } },
-      { type: 'wait', seconds: 5, label: '大火收汁 20 秒', zh: '大火翻炒收汁，让每根肉丝都裹上汁。', py: 'Dà huǒ shōu zhī.', en: 'Reduce over high heat so every shred is coated.', add: ['💨'], tip: { zh: '汁要"亮、匀、不多"，盘底不能一汪水。', en: 'The sauce should be glossy and even, with no puddle on the plate.' } },
-      { type: 'finish', zh: '撒上葱花，出锅！尝尝有没有鱼的香味？', py: 'Sǎ shàng cōnghuā, chū guō!', en: 'Sprinkle the scallion and serve — can you smell the "fish"?', add: ['🌱'], tip: { zh: '记住：鱼香肉丝里没有鱼，只有做鱼的方法。', en: 'Remember: no fish inside, only the method for cooking fish.' } }
+      { type: 'season', zh: '胡萝卜、青椒、木耳怎么处理？', py: 'Húluóbo, qīngjiāo, mù\'ěr zěnme chǔlǐ?', en: 'How do you cut the vegetables?', options: [{ id: 'si', zh: '都切丝', emoji: '🔪' }, { id: 'kuai', zh: '切大块', emoji: '🧱' }, { id: 'mo', zh: '剁成末', emoji: '🥣' }], answer: 'si', add: ['🥕', '🫑', '🍄'], tip: { zh: '图上第 1 张：三样都是丝，跟肉丝差不多粗细。', en: 'Image 1: all three are shredded to match the pork.' } },
+      { type: 'season', zh: '腌肉丝要放哪三样（各一勺）？', py: 'Yān ròusī yào fàng nǎ sān yàng?', en: 'What goes into the pork marinade?', options: [{ id: 'san', zh: '生抽 + 料酒 + 淀粉', emoji: '🥣' }, { id: 'tangcu', zh: '醋 + 糖', emoji: '🫙' }, { id: 'yan', zh: '只放盐', emoji: '🧂' }], answer: 'san', add: ['🥩', '🥣'], tip: { zh: '抓匀腌 10 分钟——图上第 2 张。', en: 'Mix and rest 10 minutes — that is image 2.' } },
+      { type: 'order', zh: '调鱼香料汁：两勺生抽、一勺老抽、一勺醋、一勺蚝油、大半勺白糖、一勺淀粉，最后还要加……', py: 'Diào yúxiāng liàozhī…', en: 'Building the sauce: six seasonings, then what?', options: [{ id: 'shui', zh: '半碗清水', emoji: '💧' }, { id: 'you', zh: '半碗油', emoji: '🫗' }, { id: 'cu', zh: '半碗醋', emoji: '🫙' }], answer: 'shui', add: ['🥣', '💧'], tip: { zh: '图上第 3 张写得很清楚：六样 + 半碗清水，搅匀备用。', en: 'Image 3: six seasonings plus half a bowl of water.' } },
+      { type: 'heat', heat: 'zhong', zh: '锅烧热倒油，先下蒜末和葱花炒香。', py: 'Guō shāo rè dào yóu, xiān xià suànmò hé cōnghuā.', en: 'Heat the oil and fry the garlic and scallion first.', add: ['🧄', '🌱'], tip: { zh: '图上第 4 张：油热放入蒜末葱，闻到香味就下一步。', en: 'Image 4: garlic and scallion go in first — do not let them burn.' } },
+      { type: 'stir', target: 12, seconds: 10, word: '划散', zh: '放入腌制好的肉丝，快速划散，肉丝变白。', py: 'Fàng rù yānzhì hǎo de ròusī, kuàisù huásàn.', en: 'Add the marinated pork and separate the shreds fast.', add: ['🥩'], tip: { zh: '图上第 5 张：肉丝下锅就划散，别让它粘成一坨。', en: 'Image 5: separate the shreds as soon as they hit the wok.' } },
+      { type: 'order', zh: '接着倒入哪三样？', py: 'Jiēzhe dào rù nǎ sān yàng?', en: 'Which three go in next?', options: [{ id: 'cai', zh: '胡萝卜 + 青椒 + 木耳', emoji: '🥕🫑🍄' }, { id: 'tang', zh: '白糖', emoji: '🍬' }, { id: 'cu', zh: '香醋', emoji: '🫙' }], answer: 'cai', add: ['🥕', '🫑', '🍄'], tip: { zh: '图上第 6 张：红、绿、黑三色一起下锅，炒到断生。', en: 'Image 6: red, green and black together, fried until just tender.' } },
+      { type: 'season', zh: '最后倒入……', py: 'Zuìhòu dào rù…', en: 'Finally, pour in…', options: [{ id: 'liaozhi', zh: '调好的鱼香料汁', emoji: '🥣' }, { id: 'shui', zh: '清水', emoji: '💧' }, { id: 'jiangyou', zh: '老抽', emoji: '🍶' }], answer: 'liaozhi', add: ['🥣'], tip: { zh: '图上第 7 张：沿锅边倒入料汁，马上就会变稠。', en: 'Image 7: pour the sauce down the side; it thickens at once.' } },
+      { type: 'finish', zh: '大火翻炒均匀即可，装盘开吃！', py: 'Dà huǒ fānchǎo jūnyún jí kě.', en: 'Stir-fry over high heat until evenly coated, then serve.', add: ['💨'], tip: { zh: '图上第 8 张：翻炒均匀即可——汁要亮、匀，盘底不汪水。', en: 'Image 8: just toss until everything is coated — glossy, not soupy.' } }
     ]
   },
 
@@ -237,108 +242,111 @@ CC.dishes = [
       { zh: '垫底的菜可以换：豆芽、莴笋、白菜都行。', en: 'The vegetable bed is flexible: bean sprouts, celtuce, cabbage.' }
     ],
     steps: [
-      { type: 'season', zh: '牛肉片要先怎么处理？', py: 'Niúròupiàn yào xiān zěnme chǔlǐ?', en: 'How do we prepare the beef first?', options: [{ id: 'shangjiang', zh: '料酒 + 盐 + 水淀粉，抓匀腌制', emoji: '🥣' }, { id: 'shuizhu', zh: '直接用水煮 10 分钟', emoji: '💧' }, { id: 'cu', zh: '先用醋泡', emoji: '🫙' }], answer: 'shangjiang', add: ['🥣'], tip: { zh: '上浆是牛肉嫩不嫩的关键。', en: 'Velveting decides whether the beef is tender.' } },
-      { type: 'heat', heat: 'zhong', zh: '中火下油，炒香豆瓣酱、泡椒和姜蒜。', py: 'Zhōng huǒ xià yóu, chǎo xiāng dòubànjiàng, pàojiao hé jiāngsuàn.', en: 'Medium heat: fry the bean paste, pickled chili, ginger and garlic.', add: ['🫗', '🥫'], tip: { zh: '中火慢慢炒，红油才会红亮。', en: 'Medium heat gives a bright red oil.' } },
-      { type: 'order', zh: '炒出红油后，加什么煮汤？', py: 'Chǎo chū hóngyóu hòu, jiā shénme zhǔ tāng?', en: 'After the red oil appears, what do we add?', options: [{ id: 'gaotang', zh: '高汤或清水', emoji: '🍲' }, { id: 'cu', zh: '香醋', emoji: '🫙' }, { id: 'tang', zh: '白糖', emoji: '🍬' }], answer: 'gaotang', add: ['🍲'], tip: { zh: '汤要多一点，牛肉要在汤里"游泳"。', en: 'Use plenty of stock — the beef should swim in it.' } },
-      { type: 'wait', seconds: 5, label: '下莴笋片垫底，煮 1 分钟', zh: '把莴笋片放进汤里煮一下，捞出来铺在碗底。', py: 'Bǎ wōsǔn piàn fàng jìn tāng lǐ zhǔ yíxià.', en: 'Cook the celtuce in the broth, then lay it in the bowl.', add: ['🥬'], tip: { zh: '垫底的菜吸了汤汁最好吃。', en: 'The vegetable bed soaks up the broth — the best bite.' } },
-      { type: 'heat', heat: 'zhong', zh: '转中火，把牛肉片一片片放进汤里，煮到变色就关火。', py: 'Zhuǎn zhōng huǒ, bǎ niúròupiàn yí piàn piàn fàng jìn tāng lǐ.', en: 'Medium heat: slide in the beef slices and stop when they change colour.', add: ['🥩'], tip: { zh: '千万别煮久，牛肉一老就"柴"了。', en: 'Do not overcook — beef turns tough fast.' } },
-      { type: 'order', zh: '牛肉盛进碗里，上面撒什么？', py: 'Niúròu chéng jìn wǎn lǐ, shàngmiàn sǎ shénme?', en: 'Beef in the bowl — what goes on top?', options: [{ id: 'mian', zh: '辣椒面 + 花椒粉 + 蒜末', emoji: '🌶️🧄' }, { id: 'tang', zh: '白糖', emoji: '🍬' }, { id: 'cu', zh: '香醋', emoji: '🫙' }], answer: 'mian', add: ['🌶️', '🧄'], tip: { zh: '这三样等着被热油"激"香。', en: 'These three are waiting for the hot oil.' } },
-      { type: 'heat', heat: 'da', zh: '另起锅，大火把油烧到冒烟，然后淋在辣椒面上！', py: 'Lìng qǐ guō, dà huǒ bǎ yóu shāo dào mào yān, ránhòu lín zài làjiāomiàn shang!', en: 'In another pan, heat oil until it smokes, then pour it over the chili flakes!', add: ['🫗'], tip: { zh: '"滋——"的一声，就是水煮牛肉的高光时刻。', en: 'That sizzle is the star moment of the dish.' } },
-      { type: 'finish', zh: '撒上葱花和花椒粉，端上桌，趁热吃！', py: 'Sǎ shàng cōnghuā hé huājiāofěn, duān shàng zhuō, chèn rè chī!', en: 'Sprinkle scallion and pepper, take it to the table and eat it hot.', add: ['🌱', '🫘'], tip: { zh: '这道菜要"烫"着吃，凉了香味就少一半。', en: 'Eat it scalding hot — half the aroma fades when cold.' } }
+      { type: 'prep', zh: '备料：牛肉、叶子菜、葱姜蒜、刀口辣椒和豆瓣酱。', py: 'Bèi liào: niúròu, yèzi cài, cōng jiāng suàn, dāokǒu làjiāo hé dòubànjiàng.', en: 'Mise en place: beef, leafy greens, scallion-ginger-garlic, knife-cut chili and Pixian bean paste.', add: ['🥩', '🥬'], tip: { zh: '先把料摆齐，炒的时候才不手忙脚乱。', en: 'Lay everything out first — stir-frying goes fast.' } },
+      { type: 'prep', zh: '腌肉：350 克牛肉加盐、生抽、红薯淀粉和适量清水，抓匀腌 10 分钟。', py: 'Yān ròu: 350 kè niúròu jiā yán, shēngchōu, hóngshǔ diànfěn hé shìliàng qīngshuǐ, zhuā yún yān shí fēnzhōng.', en: 'Marinate 350 g beef with salt, light soy, sweet-potato starch and a splash of water; mix well and rest 10 minutes.', add: ['🥩'], tip: { zh: '淀粉把水分锁在肉里，牛肉才嫩。', en: 'The starch traps moisture so the beef stays tender.' } },
+      { type: 'heat', heat: 'zhong', zh: '炒料：锅里倒 120 毫升菜籽油，油温五成热，下葱姜蒜、一半刀口辣椒和豆瓣酱炒香（可加 50 克火锅底料）。', py: 'Chǎo liào: guō lǐ dào 120 háoshēng càizǐyóu, yóu wēn wǔ chéng rè, xià cōng jiāng suàn, yíbàn dāokǒu làjiāo hé dòubànjiàng chǎo xiāng.', en: 'Heat 120 ml rapeseed oil to medium, then fry scallion-ginger-garlic, half the knife-cut chili and the bean paste until fragrant (optional: 50 g hot-pot base).', add: ['🫗', '🥫'], tip: { zh: '小火慢炒，红油才红亮不发苦。', en: 'Fry gently so the red oil comes out bright, not bitter.' } },
+      { type: 'wait', seconds: 5, label: '熬汤 3—5 分钟', zh: '加汤：炒香后加入 1 升清水，熬煮 3—5 分钟。', py: 'Jiā tāng: chǎo xiāng hòu jiārù 1 shēng qīngshuǐ, áo zhǔ sān dào wǔ fēnzhōng.', en: 'Add 1 litre of water and simmer for 3–5 minutes.', add: ['💧'], tip: { zh: '汤要多一点，牛肉才能在汤里"游泳"。', en: 'Use plenty of broth — the beef should swim in it.' } },
+      { type: 'wait', seconds: 6, label: '菜炒断生垫底', zh: '垫菜：叶子菜加盐炒断生，捞出来垫在碗底。', py: 'Diàn cài: yèzi cài jiā yán chǎo duànshēng, lāo chūlái diàn zài wǎn dǐ.', en: 'Stir-fry the leafy greens with a pinch of salt until just done, then lay them in the bottom of the bowl.', add: ['🥬'], tip: { zh: '垫底的菜吸了汤汁最好吃。', en: 'The vegetable bed soaks up the broth — the best bite.' } },
+      { type: 'heat', heat: 'xiao', zh: '下牛肉：转小火，把牛肉片一片片依次下进汤里，变色就关火。', py: 'Xià niúròu: zhuǎn xiǎo huǒ, bǎ niúròupiàn yí piàn piàn yīcì xià jìn tāng lǐ, biàn sè jiù guān huǒ.', en: 'Turn the heat low and slide the beef slices in one by one; stop as soon as they change colour.', add: ['🥩'], tip: { zh: '一片片下不会粘，变色就停，久了就柴。', en: 'One by one so they do not stick; stop early or they turn tough.' } },
+      { type: 'heat', heat: 'da', zh: '淋油：另起锅把油烧到冒烟，淋在刀口辣椒和蒜末上。', py: 'Lín yóu: lìng qǐ guō bǎ yóu shāo dào mào yān, lín zài dāokǒu làjiāo hé suànmò shang.', en: 'Heat oil in another pan until it smokes, then pour it over the knife-cut chili and minced garlic.', add: ['🫗'], tip: { zh: '"滋——"的一声，香味被热油激出来。', en: 'That sizzle is where the aroma is released.' } },
+      { type: 'finish', zh: '出锅：撒上葱花，连汤倒进碗里，趁热端上桌。', py: 'Chū guō: sǎ shàng cōnghuā, lián tāng dào jìn wǎn lǐ, chèn rè duān shàng zhuō.', en: 'Scatter scallion, pour the beef and broth into the bowl and serve scalding hot.', add: ['🌱'], tip: { zh: '这道菜要"烫"着吃，凉了香味就少一半。', en: 'Eat it scalding hot — half the aroma fades when cold.' } }
     ]
   },
 
-  /* ==================== 6. 担担面 ==================== */
+  /* ==================== 6. 豌杂面 ==================== */
   {
-    id: 'dandan', name: '担担面', py: 'Dàndàn miàn', en: 'Dan Dan Noodles',
+    id: 'wanzamian', name: '豌杂面', py: 'Wān zá miàn', en: 'Pea & Pork Noodles',
     emoji: '🍜', plate: '🍜', color: '#e08a1e',
-    flavorId: 'mala', flavor: '麻辣味（面食）', flavorPy: 'málà wèi', heat: 3, difficulty: 1, minutes: 30,
-    region: '自贡 · 街头小吃', tags: ['小吃', '一碗面', '吃前要拌'],
+    flavorId: 'mala', flavor: '麻辣味（面食）', flavorPy: 'málà wèi', heat: 3, difficulty: 2, minutes: 60,
+    region: '重庆 · 街头小面', tags: ['小吃', '一碗面', '吃前要拌'],
     story: {
-      zh: '据《成都通览》记载，担担面最早出现在 1841 年，由自贡小贩陈包包创制（也有说法认为它起源于川东达州一带）。他用一根扁担挑着面摊走街串巷：一头是炉子和锅，一头是面条和碗料，边走边喊"担担面咯"。担担面是"干拌"的，红油、酱油、醋、花椒粉都藏在碗底，上面还有宜宾芽菜和肉臊子，所以吃之前一定要拌一拌。',
-      py: 'Yì bǎi duō nián qián, Zìgòng yǒu ge jiào Chén Bāobāo de rén, yòng yì gēn biǎndan tiāo zhe miàntān mài miàn.',
-      en: 'According to "Chengdu Tonglan", dan dan noodles first appeared in 1841, created by a Zigong street vendor named Chen Baobao (some accounts place its origin in eastern Sichuan instead). He carried his stall on a shoulder pole — stove on one end, noodles and bowls on the other. The noodles are served "dry-tossed": chili oil, soy, vinegar and pepper hide at the bottom of the bowl with Yibin preserved sprout and pork topping, so mix well before eating.'
+      zh: '豌杂面是重庆小面里最典型的一碗。名字里的"豌"是耙豌豆：干豌豆提前泡开，再用锅压到软烂沙糯——四川话说"耙"就是软烂；"杂"是猪肉炒的杂酱。一碗面里，豌豆泥负责沙糯，杂酱负责咸香，猪油、香醋和辣椒油藏在碗底，所以端上来先拌再吃。',
+      py: 'Wān zá miàn shì Chóngqìng xiǎomiàn de yì zhǒng: "wān" shì pá wāndòu, "zá" shì ròu zájiàng.',
+      en: 'Wanza noodles are one of Chongqing\'s signature noodle bowls. "Wan" is pa wandou — dried peas soaked and then cooked until soft and sandy (pa means "mushy-soft" in Sichuanese); "za" is the pork topping, zajiang. The pea mash brings a sandy creaminess, the pork brings salt and savour, and lard, vinegar and chilli oil hide at the bottom of the bowl — so mix well before eating.'
     },
     prep: [
-      { ing: 'miantiao', qty: '200 克', prep: 'xi', note: { zh: '细面条最好，也可以用碱水面。', en: 'Thin noodles are best, ideally alkaline noodles.' } },
-      { ing: 'roumo', qty: '100 克', prep: 'duomo', note: { zh: '猪肉剁成末，炒成"臊子"。', en: 'Mince the pork to make the "saozi" topping.' } },
-      { ing: 'yacai', qty: '1 大勺', prep: 'duosui', note: { zh: '芽菜剁碎，川味小吃的秘密武器。', en: 'Chop the preserved mustard sprout — the secret weapon.' } },
-      { ing: 'huashengmi', qty: '30 克', prep: 'paisui', note: { zh: '炒香后拍碎，撒在面上。', en: 'Toast then crush to sprinkle on top.' } },
-      { ing: 'xiaocong', qty: '2 根', prep: 'duomo', note: { zh: '切成葱花。', en: 'Chop into scallion flowers.' } },
-      { ing: 'dasuan', qty: '3 瓣', prep: 'duomo', note: { zh: '蒜剁成末，放进碗底。', en: 'Mince and put in the bottom of the bowl.' } },
-      { ing: 'zhimajiang', qty: '1 大勺', prep: 'tiaozhi', note: { zh: '用香油或温水慢慢调开。', en: 'Loosen with sesame oil or warm water.' } }
+      { ing: 'wandou', qty: '200 克', prep: 'paofa', note: { zh: '干豌豆提前泡一整晚，再压到完全软烂。', en: 'Soak the dried peas overnight, then cook until completely soft.' } },
+      { ing: 'roumo', qty: '150 克', prep: 'duomo', note: { zh: '猪肉剁成肉沫，用来炒杂酱。', en: 'Mince the pork for the zajiang topping.' } },
+      { ing: 'miantiao', qty: '200 克', prep: 'xi', note: { zh: '手擀面最好，买现成鲜面条也行。', en: 'Hand-rolled noodles are best; fresh ones work too.' } },
+      { ing: 'xiaocong', qty: '3 根', prep: 'duomo', note: { zh: '切成葱花：碗底要放，面上也要撒。', en: 'Chop into scallion flowers for the bowl base and the top.' } },
+      { ing: 'xiangcai', qty: '2 根', prep: 'qieduan', note: { zh: '香菜切段，最后撒在面上。', en: 'Cut the coriander into sections for the top.' } },
+      { ing: 'dasuan', qty: '4 瓣', prep: 'duomo', note: { zh: '蒜末和姜末一起爆香。', en: 'Minced garlic fries with the ginger.' } },
+      { ing: 'shengjiang', qty: '1 块', prep: 'duomo', note: { zh: '姜末下冷油爆香，杂酱的香味从这里开始。', en: 'Ginger goes into cold oil first — where the aroma starts.' } }
     ],
-    seasonings: ['hongyou', 'zhimajiang', 'shengchou', 'xiangcu', 'baitang', 'huajiaofen', 'yacai', 'suanmo', 'conghua', 'huashengmi'],
-    seasonQty: { hongyou: '1 勺', zhimajiang: '15 克，先用温水或香油调开', shengchou: '1 勺', xiangcu: '5 毫升', baitang: '半小勺', huajiaofen: '1 小勺', yacai: '30 克，炒进肉臊里', suanmo: '1 小勺（碗底）', conghua: '少许', huashengmi: '10 克，拍碎撒面' },
+    seasonings: ['tianmianjiang', 'laochou', 'shengchou', 'xiangcu', 'lajiaoyou', 'hongyou', 'shiyongyou', 'yan', 'conghua', 'suanmo', 'jiangmo'],
+    seasonQty: { tianmianjiang: '4 勺（调酱汁）', laochou: '1 勺（调酱汁）', shengchou: '1 勺', xiangcu: '1 勺（碗底）', lajiaoyou: '1 勺（碗底）', hongyou: '1 勺', shiyongyou: '2 勺', yan: '少许', conghua: '碗底 + 面上', suanmo: '1 小勺', jiangmo: '1 小勺' },
     flavorTask: {
-      question: { zh: '担担面的调料在哪里？', en: 'Where do the seasonings hide in dan dan noodles?' },
+      question: { zh: '豌杂面里的"豌"和"杂"分别是什么？', en: 'What do "wan" and "za" stand for?' },
       options: [
-        { zh: '在碗底，吃前要拌一拌', emoji: '🥣', correct: true },
-        { zh: '在面条上面，直接吃', emoji: '🍜' },
-        { zh: '在旁边的碟子里', emoji: '🍽️' }
+        { zh: '"豌"是耙豌豆，"杂"是猪肉杂酱', emoji: '🍜', correct: true },
+        { zh: '"豌"是碗，"杂"是杂菜', emoji: '🥣' },
+        { zh: '"豌"是豌豆，"杂"是肉丝', emoji: '🥩' }
       ],
-      explain: { zh: '把面条拌起来，碗底的麻辣、蒜香、芝麻酱才能裹住每一根面。', en: 'Toss it so the chili, garlic and sesame paste at the bottom coat every strand.' }
+      explain: { zh: '两样都是浇头：豌豆要压到沙糯，杂酱要炒到干香，合在一起才叫豌杂面。', en: 'Both are toppings: peas cooked until sandy, pork fried until dry and fragrant.' }
     },
     tips: [
-      { zh: '面条煮到"断生"就行，太软不好吃。', en: 'Cook until just done — soft noodles lose the point.' },
-      { zh: '臊子要炒到干香，才有担担面的味道。', en: 'Fry the pork topping until dry and fragrant.' }
+      { zh: '豌豆一定要泡够时间，压得越烂越好吃。', en: 'Soak the peas properly — the softer, the better.' },
+      { zh: '杂酱多炒一会儿，水分收干，香味才浓。', en: 'Fry the topping longer to drive off the water — that is where the aroma is.' }
     ],
     steps: [
-      { type: 'heat', heat: 'zhong', zh: '中火下油，炒肉末，炒到干香。', py: 'Zhōng huǒ xià yóu, chǎo ròumò, chǎo dào gān xiāng.', en: 'Medium heat: fry the pork mince until dry and fragrant.', add: ['🫗', '⚪'], tip: { zh: '肉末炒干一点，才像"臊子"。', en: 'Dry it out — that is what makes a proper "saozi".' } },
-      { type: 'order', zh: '肉末干了，加入……', py: 'Ròumò gān le, jiārù…', en: 'The pork is dry — now add…', options: [{ id: 'yacai', zh: '芽菜', emoji: '🥬' }, { id: 'tang', zh: '白糖', emoji: '🍬' }, { id: 'cu', zh: '香醋', emoji: '🫙' }], answer: 'yacai', add: ['🥬'], tip: { zh: '芽菜让臊子咸香有味，这是川味小吃的"隐藏队友"。', en: 'The preserved sprout gives that salty depth — the hidden teammate.' } },
-      { type: 'season', zh: '碗底要先放什么？', py: 'Wǎndǐ yào xiān fàng shénme?', en: 'What goes into the bottom of the bowl first?', options: [{ id: 'diaoli', zh: '红油、生抽、醋、糖、花椒粉、蒜末、芝麻酱', emoji: '🥣' }, { id: 'shui', zh: '一碗清水', emoji: '💧' }, { id: 'yan', zh: '半碗盐', emoji: '🧂' }], answer: 'diaoli', add: ['🥣'], tip: { zh: '这碗"底料"才是担担面的灵魂。', en: 'This base is the soul of the dish.' } },
-      { type: 'heat', heat: 'da', zh: '水烧开，下面条，保持大火。', py: 'Shuǐ shāo kāi, xià miàntiáo, bǎochí dà huǒ.', en: 'Boil the water and add the noodles over high heat.', add: ['💧', '🍜'], tip: { zh: '水一定要大开，面条才不会粘。', en: 'A rolling boil keeps the noodles from sticking.' } },
-      { type: 'wait', seconds: 6, label: '煮面 2 分钟', zh: '煮到面条刚熟（断生），中间留一点点白心最好。', py: 'Zhǔ dào miàntiáo gāng shú (duàn shēng).', en: 'Cook until just done — a faint white core is ideal.', add: ['💨'], tip: { zh: '面条煮过头就"坨"了。', en: 'Overcooked noodles clump.' } },
-      { type: 'stir', target: 8, seconds: 8, word: '挑面', zh: '用筷子把面条挑散，抖掉多余的水。', py: 'Yòng kuàizi bǎ miàntiáo tiāo sàn.', en: 'Lift and shake the noodles to drain.', add: ['🥢'], tip: { zh: '水太多会冲淡碗底的味汁。', en: 'Too much water dilutes the sauce base.' } },
-      { type: 'finish', zh: '面条放进碗里，加臊子、花生碎和葱花，拌一拌再吃！', py: 'Miàntiáo fàng jìn wǎn lǐ, jiā sàozi, huāshēng suì hé cōnghuā, bàn yí bàn zài chī!', en: 'Put the noodles in the bowl, add the topping, peanuts and scallion. Mix before eating!', add: ['🥜', '🌱'], tip: { zh: '拌均匀，这碗面才算完成。', en: 'Only when it is fully mixed is the bowl complete.' } }
+      { type: 'wait', seconds: 8, label: '炖豌豆 30 分钟', zh: '炖耙豌豆：200 克干豌豆提前泡一整晚，放进电饭煲加水没过豌豆，压到完全软烂，出锅加一小勺盐拌匀。', py: 'Dùn pá wāndòu: 200 kè gān wāndòu tíqián pào yì zhěng wǎn, yā dào wánquán ruǎnlàn.', en: 'Soak 200 g dried peas overnight, then cook them in a rice cooker with water to cover until completely soft; stir in a pinch of salt.', add: ['🫛'], tip: { zh: '豌豆是这碗面的灵魂，压得越烂越好吃。', en: 'The peas are the soul of this bowl — cook them until really soft.' } },
+      { type: 'prep', zh: '备小料：葱花、香菜、小米辣、蒜末、姜末提前切好，分盘放着。', py: 'Bèi xiǎoliào: cōnghuā, xiāngcài, xiǎomǐlà, suànmò, jiāngmò qiè hǎo fēn pán.', en: 'Prep the aromatics: chop scallion, coriander, small chilli, garlic and ginger, and keep them in separate little dishes.', add: ['🌱', '🧄', '🫚'], tip: { zh: '先切好摆齐，炒酱的时候才不手忙脚乱。', en: 'Get everything cut first — frying the sauce goes fast.' } },
+      { type: 'season', zh: '调酱汁：碗里放 4 勺黄豆酱、4 勺甜面酱、半勺蚝油、1 勺老抽和少许盐，搅匀备用。', py: 'Tiáo jiàngzhī: wǎn lǐ fàng huángdòujiàng, tiánmiànjiàng, háoyóu, lǎochōu hé yán, jiǎo yún.', en: 'Mix the sauce: 4 spoons of yellow bean paste, 4 of sweet wheat paste, half a spoon of oyster sauce, 1 of dark soy and a pinch of salt.', options: [{ id: 'jiangzhi', zh: '黄豆酱 + 甜面酱 + 蚝油 + 老抽', emoji: '🥣' }, { id: 'cu', zh: '香醋 + 白糖', emoji: '🫙' }, { id: 'shui', zh: '一碗清水', emoji: '💧' }], answer: 'jiangzhi', add: ['🥣'], tip: { zh: '先把酱汁调好再下锅，肉沫才不会炒过头。', en: 'Mix the sauce first so the pork does not overcook.' } },
+      { type: 'heat', heat: 'zhong', zh: '炒杂酱：冷油下姜末蒜末爆香，倒入肉沫翻炒到变色出油，淋上调好的酱汁，中小火慢慢炒干水分。', py: 'Chǎo zájiàng: lěng yóu xià jiāngmò suànmò bàoxiāng, dào rù ròumò chǎo dào biànsè chū yóu, lín shàng jiàngzhī chǎo gān.', en: 'Fry the topping: garlic and ginger in cool oil until fragrant, add the pork and fry until it colours and releases oil, then pour in the sauce and fry gently until dry.', add: ['🫗', '🥩', '🥣'], tip: { zh: '水分收干，杂酱才香、才放得久。', en: 'Drive off the water — that keeps it fragrant and keeps longer.' } },
+      { type: 'prep', zh: '擀面：500 克面粉加 3 克盐和 200—250 克清水，揉成偏硬的面团，醒一会儿再擀开切窄面。', py: 'Gǎn miàn: 500 kè miànfěn jiā 3 kè yán hé 200—250 kè qīngshuǐ, róu chéng piānyìng de miàntuán.', en: 'Make the noodles: 500 g flour, 3 g salt, 200–250 g water; knead into a firm dough, rest, roll out and cut into narrow strips.', add: ['🍜'], tip: { zh: '嫌麻烦直接买现成鲜面条也完全可以。', en: 'Short on time? Fresh shop-bought noodles are perfectly fine.' } },
+      { type: 'season', zh: '碗底打底：碗里放半小勺猪油、葱花、1 勺香醋、1 勺辣椒油和一点十三香。', py: 'Wǎndǐ dǎdǐ: wǎn lǐ fàng zhūyóu, cōnghuā, xiāngcù, làjiāoyóu hé shísānxiāng.', en: 'Build the base: half a spoon of lard, scallion, 1 spoon of vinegar, 1 of chilli oil and a touch of thirteen-spice in the bottom of the bowl.', options: [{ id: 'diaoli', zh: '猪油、葱花、香醋、辣椒油、十三香', emoji: '🥣' }, { id: 'shui', zh: '一碗清水', emoji: '💧' }, { id: 'yan', zh: '半碗盐', emoji: '🧂' }], answer: 'diaoli', add: ['🥣'], tip: { zh: '猪油是香味关键，别省略。', en: 'The lard is the key to the aroma — do not skip it.' } },
+      { type: 'order', zh: '组装：水烧开把面条煮熟，捞进调好味的碗里，铺上一大勺耙豌豆和一大勺肉杂酱。', py: 'Zǔzhuāng: shuǐ shāo kāi zhǔ shú miàntiáo, lāo jìn wǎn lǐ, pū shàng pá wāndòu hé ròu zájiàng.', en: 'Assemble: boil the noodles, lift them into the seasoned bowl, then spoon over the pea mash and the pork topping.', options: [{ id: 'wandou', zh: '耙豌豆 + 肉杂酱', emoji: '🥣' }, { id: 'tang', zh: '白糖', emoji: '🍬' }, { id: 'cu', zh: '香醋', emoji: '🫙' }], answer: 'wandou', add: ['🫛', '🥩', '🍜'], tip: { zh: '豌豆要够烂，才能"沙沙"地挂在面条上。', en: 'The peas must be soft enough to cling to the noodles.' } },
+      { type: 'finish', zh: '开吃：撒上葱花和香菜，从底下往上拌匀，每根面条都裹上酱香和豌豆泥。', py: 'Kāi chī: sǎ shàng cōnghuā hé xiāngcài, bàn yún, měi gēn miàntiáo dōu guǒ shàng jiàng xiāng hé wāndòu ní.', en: 'To serve: scatter scallion and coriander, then toss from the bottom up so every strand is coated in sauce and pea mash.', add: ['🌱', '🥢'], tip: { zh: '先拌再吃——味道都藏在碗底。', en: 'Mix first: the flavour is hiding at the bottom of the bowl.' } }
     ]
   },
 
-  /* ==================== 7. 夫妻肺片 ==================== */
+  /* ==================== 7. 冷吃牛肉 ==================== */
+
   {
-    id: 'feipian', name: '夫妻肺片', py: 'Fūqī fèipiàn', en: 'Couple\'s Delight (Chili-oil Beef)',
-    emoji: '🥗', plate: '🥗', color: '#8e2440',
-    flavorId: 'hongyou', flavor: '红油味', flavorPy: 'hóngyóu wèi', heat: 3, difficulty: 3, minutes: 60,
-    region: '成都 · 凉菜', tags: ['凉菜', '红油', '夫妻的故事'],
+    id: 'lengchi', name: '冷吃牛肉', py: 'Lěng chī niúròu', en: 'Cold-eaten Beef (Sichuan spiced strips)',
+    emoji: '🥩', plate: '🍽️', color: '#8e2440',
+    flavorId: 'mala', flavor: '麻辣味', flavorPy: 'málà wèi', heat: 3, difficulty: 2, minutes: 70,
+    region: '自贡 · 盐帮菜', tags: ['下酒菜', '麻辣干香', '放凉更好吃'],
     story: {
-      zh: '20 世纪 30 年代，成都长顺街一带有一对小夫妻摆摊卖凉拌牛杂：郭朝华和张田政。他们用牛头皮、牛心、牛舌、牛肚这些便宜的"边角料"，卤好以后切成薄片，淋上红油、花椒粉、芝麻和花生碎拌一拌，麻辣鲜香、价钱便宜，很快就出了名。因为最初叫"肺片"，又是夫妻俩卖的，大家就叫它"夫妻肺片"——不过现在这道菜里已经不放牛肺了。',
-      py: '1930 niándài de Chéngdū jiētóu, Guō Cháohuá hé Zhāng Tiánzhèng fūqī liǎ bǎile yí ge xiǎotān.',
-      en: 'In the 1930s, a young couple — Guo Chaohua and Zhang Tianzheng — sold dressed beef offal from a stall around Changshun Street in Chengdu. They braised cheap cuts (beef head skin, heart, tongue, tripe), sliced them thin and tossed them with chili oil, ground Sichuan pepper, sesame and crushed peanuts. Hot, numbing, fragrant and cheap, it soon became famous. Originally called "lung slices" and sold by a couple, it became "Couple\'s Delight" — today there is no lung in it at all.'
+      zh: '冷吃牛肉出自自贡——一座靠井盐兴旺起来的城市。盐场里干活的人出力多、出汗多，需要又咸又辣、顶饱又放得住的吃食，于是把牛肉顺着纹理切成条，下油慢慢把水分煸干，再用辣椒和花椒把味道收进去。自贡最有名的"冷吃"本来是冷吃兔，后来同门的冷吃牛肉、冷吃鸡尖也一起出了名。这道菜最特别的一点是：凉了以后香味更浓、味道更好，所以叫"冷吃"——刚出锅还不算最好吃，放凉才是它的高光时刻。',
+      py: 'Lěng chī niúròu chū zì Zìgòng, yí zuò kào jǐngyán xīngwàng qǐlái de chéngshì.',
+      en: 'Cold-eaten beef comes from Zigong, a city that grew rich on salt wells. Workers in the salt fields sweated hard and needed something salty, spicy, filling and long-lasting — so beef was cut into strips along the grain, slowly dried out in oil, then locked in with chilli and Sichuan pepper. Zigong\'s most famous "cold-eaten" dish was cold-eaten rabbit; beef, chicken wing tips and dried tofu followed the same path. What makes this dish special: it smells and tastes even better once it has cooled — which is exactly why it is called "cold-eaten". Straight from the wok is not its best moment.'
     },
     prep: [
-      { ing: 'niurou', qty: '200 克', prep: 'qiepian', note: { zh: '卤好后切薄片，越薄越入味。', en: 'Braise first, then slice thin so it absorbs the dressing.' } },
-      { ing: 'niudu', qty: '200 克', prep: 'qiepian', note: { zh: '牛肚卤好后切片，口感脆。', en: 'Braise the tripe, then slice — it stays crisp.' } },
-      { ing: 'niutoupi', qty: '150 克', prep: 'qiepian', note: { zh: '牛头皮卤到软糯再切片。', en: 'Braise the head skin until soft, then slice.' } },
-      { ing: 'huashengmi', qty: '30 克', prep: 'paisui', note: { zh: '花生炒香拍碎，撒在最上面。', en: 'Toast and crush the peanuts for the topping.' } },
-      { ing: 'qincai', qty: '2 根', prep: 'qieduan', note: { zh: '芹菜切段，增加清香和脆感。', en: 'Cut celery into sections for freshness and crunch.' } },
-      { ing: 'xiaocong', qty: '2 根', prep: 'duomo', note: { zh: '切葱花。', en: 'Chop into scallion flowers.' } },
-      { ing: 'dasuan', qty: '3 瓣', prep: 'duomo', note: { zh: '蒜末，和红油一起拌。', en: 'Mince; mixed with the chili oil.' } },
-      { ing: 'zhima', qty: '1 小勺', prep: 'chaoxiang', note: { zh: '芝麻炒香，最后撒上。', en: 'Toast the sesame for the finish.' } }
+      { ing: 'niurou', qty: '500 克（牛后腿肉或牛里脊）', prep: 'qiesi', note: { zh: '泡净血水，冷水下锅煮 30–40 分钟；放凉后顺着纹理切成条。', en: 'Soak out the blood, simmer in cold water 30–40 minutes, cool, then cut along the grain into strips.' } },
+      { ing: 'gansuan', qty: '20 个', prep: 'qieduan', note: { zh: '剪成段，和花椒、麻椒一起用热水泡一下。', en: 'Snip into sections; soak with the peppercorns in hot water.' } },
+      { ing: 'huajiao', qty: '1 大勺', prep: 'paofa', note: { zh: '先用热水泡过再下锅，不容易糊。', en: 'Soaked first, so it will not burn in the wok.' } },
+      { ing: 'majiao', qty: '1 小勺', prep: 'paofa', note: { zh: '麻椒负责"麻"，和花椒一起泡。', en: 'Green pepper brings the numbing tingle — soak it with the rest.' } }
     ],
-    seasonings: ['hongyou', 'huajiaofen', 'shengchou', 'xiangcu', 'baitang', 'zhima', 'zhimajiang', 'suanmo', 'qincai'],
-    seasonQty: { hongyou: '半杯（约 100 毫升）', huajiaofen: '2 小勺，现磨更香', shengchou: '3 大勺', xiangcu: '1 勺', baitang: '1 小勺（回甜）', zhima: '1 大勺', zhimajiang: '1 勺', suanmo: '1 勺', qincai: '2 根，切细段' },
+    seasonings: ['shengchou', 'haoyou', 'yan', 'baitang', 'jijing', 'zhima', 'ziranfen', 'shiyongyou'],
+    seasonQty: {
+      shengchou: '2 勺（拌牛肉条）', haoyou: '1 勺（拌牛肉条）', yan: '适量，出锅前放', baitang: '1 小勺',
+      jijing: '少许', zhima: '1 大勺（白芝麻）', ziranfen: '1 小勺', shiyongyou: '多放一点，要能没过牛肉条'
+    },
     flavorTask: {
-      question: { zh: '"红油味"是哪几样的组合？', en: 'What makes a "chili-oil flavour"?' },
+      question: { zh: '"麻辣味"里的麻和辣，分别是谁给的？', en: 'In a numbing-and-hot flavour, who brings the numb and who brings the heat?' },
       options: [
-        { zh: '红油 + 生抽 + 糖 + 花椒粉', emoji: '🫙🍶', correct: true },
-        { zh: '牛油 + 豆瓣 + 高汤', emoji: '🧈' },
-        { zh: '芝麻酱 + 芥末 + 醋', emoji: '🥫' }
+        { zh: '花椒、麻椒给麻，干辣椒给辣', emoji: '🫘🌶️', correct: true },
+        { zh: '白糖给麻，生抽给辣', emoji: '🍬🍶' },
+        { zh: '蚝油给麻，孜然给辣', emoji: '🥫' }
       ],
-      explain: { zh: '红油给香辣、生抽给咸鲜、糖给回甜、花椒粉给麻，拌出来红亮亮。', en: 'Chili oil for fragrance and heat, soy for saltiness, sugar for a sweet echo, pepper for numbness.' }
+      explain: { zh: '花椒和麻椒在舌尖上"跳"，干辣椒负责辣，再加一点糖回甜，麻辣才不冲。', en: 'Peppercorns make the tongue tingle, chilli brings the heat, a pinch of sugar rounds it off.' }
     },
     tips: [
-      { zh: '这是一道"拌"菜，不是炒菜——"拌"也是川菜的重要做法。', en: 'This is a tossed dish, not a stir-fry — tossing is a technique in itself.' },
-      { zh: '卤好的肉要放凉再切，才能切得又薄又整齐。', en: 'Cool the braised meat before slicing — thin, neat slices.' }
+      { zh: '一定要放凉了再吃：凉的比热的更香，这就是"冷吃"两个字的意思。', en: 'Eat it cool — it smells better cold. That is exactly what "cold-eaten" means.' },
+      { zh: '油要多放一点，油少了炒不干、也挂不住辣味。', en: 'Be generous with the oil — too little and the strips never dry out or hold the chilli.' },
+      { zh: '牛肉顺着纹理切条，吃的时候才有撕扯感、也不容易碎。', en: 'Cut along the grain so the strips hold together and shred as you chew.' },
+      { zh: '辣椒和花椒先用热水泡一下，下锅不容易糊，香味反而更足。', en: 'Soak the chilli and peppers in hot water first — no burning, more aroma.' }
     ],
     steps: [
-      { type: 'heat', heat: 'xiao', zh: '卤水用小火保持微沸，把牛肉和牛肚卤到软糯。', py: 'Lǔshuǐ yòng xiǎo huǒ bǎochí wēifèi, bǎ niúròu hé niúdǔ lǔ dào ruǎnnuò.', en: 'Keep the braising liquid barely simmering and cook the beef and tripe until tender.', add: ['🍲'], tip: { zh: '大火会把肉卤散，小火才能慢慢入味。', en: 'High heat shreds the meat; low heat builds flavour.' } },
-      { type: 'wait', seconds: 9, label: '卤 1 小时（课堂快进）', zh: '卤一小时后，捞出来放凉。', py: 'Lǔ yì xiǎoshí hòu, lāo chūlái fàng liáng.', en: 'After an hour, lift it out and let it cool.', add: ['🥩'], tip: { zh: '卤味是四川人过年过节的味道。', en: 'Braised dishes are holiday flavours in Sichuan.' } },
-      { type: 'season', zh: '调一碗红油味汁，先放哪一样打底？', py: 'Tiáo yì wǎn hóngyóu wèizhī, xiān fàng nǎ yí yàng dǎdǐ?', en: 'To build the chili-oil dressing, what goes in first?', options: [{ id: 'hongyou', zh: '红油 + 蒜末', emoji: '🫙🧄' }, { id: 'shui', zh: '清水', emoji: '💧' }, { id: 'cu', zh: '半碗香醋', emoji: '🫙' }], answer: 'hongyou', add: ['🫙'], tip: { zh: '红油是川菜凉菜的"底色"。', en: 'Chili oil is the base colour of Sichuan cold dishes.' } },
-      { type: 'season', zh: '再放生抽、香醋、糖和花椒粉，猜猜糖的作用是什么？', py: 'Zài fàng shēngchōu, xiāngcù, táng hé huājiāofěn.', en: 'Then soy sauce, vinegar, sugar and pepper. What does the sugar do?', options: [{ id: 'hui', zh: '让味道回甜、更柔和', emoji: '🍬' }, { id: 'tian', zh: '让菜变成甜点', emoji: '🍰' }, { id: 'wu', zh: '没有作用', emoji: '❌' }], answer: 'hui', add: ['🍬'], tip: { zh: '"回甜"是川菜平衡麻辣的小秘密。', en: 'That sweet echo is Sichuan\'s trick for balancing heat.' } },
-      { type: 'order', zh: '开始装盘，先放什么？', py: 'Kāishǐ zhuāngpán, xiān fàng shénme?', en: 'Plating time — what goes down first?', options: [{ id: 'rou', zh: '牛肉片 + 牛肚片', emoji: '🥩' }, { id: 'huasheng', zh: '花生碎', emoji: '🥜' }, { id: 'zhima', zh: '芝麻', emoji: '⚪' }], answer: 'rou', add: ['🥩'], tip: { zh: '肉片铺平，味汁才能均匀淋到每一片。', en: 'Lay the slices flat so the dressing reaches every piece.' } },
-      { type: 'season', zh: '现在最重要的动作是……', py: 'Xiànzài zuì zhòngyào de dòngzuò shì…', en: 'The most important action now is…', options: [{ id: 'lin', zh: '淋上红油味汁', emoji: '🫗' }, { id: 'chao', zh: '再炒 5 分钟', emoji: '🔥' }, { id: 'zhǔ', zh: '再煮 10 分钟', emoji: '💧' }], answer: 'lin', add: ['🫗'], tip: { zh: '凉菜不放锅，淋和拌就够了。', en: 'Cold dishes never see the wok — just pour and toss.' } },
-      { type: 'stir', target: 6, seconds: 9, word: '拌匀', zh: '用筷子轻轻"拌"，让每片肉都沾上红油。', py: 'Yòng kuàizi qīng qīng bàn, ràng měi piàn ròu dōu zhān shàng hóngyóu.', en: 'Toss gently so every slice is coated in red oil.', add: ['🥢'], tip: { zh: '"拌"是川菜凉菜最重要的动作。', en: '"Bàn" (tossing) is the key move for Sichuan cold dishes.' } },
-      { type: 'finish', zh: '撒上花生碎、芝麻、芹菜和葱花，上桌！', py: 'Sǎ shàng huāshēng suì, zhīma, qíncài hé cōnghuā, shàng zhuō!', en: 'Sprinkle peanuts, sesame, celery and scallion, then serve.', add: ['🥜', '⚪', '🥬'], tip: { zh: '一红一绿，先看颜色就饿了。', en: 'Red and green — appetising before the first bite.' } }
+      { type: 'heat', heat: 'xiao', zh: '牛肉泡净血水，冷水下锅，小火煮 30–40 分钟。', py: 'Niúròu pào jìng xuèshuǐ, lěngshuǐ xià guō, xiǎohuǒ zhǔ sānshí dào sìshí fēnzhōng.', en: 'Soak out the blood, put the beef into cold water and simmer for 30–40 minutes.', add: ['🥩', '💧'], tip: { zh: '图上第 3 张：冷水下锅，煮 30–40 分钟，筷子能扎透就好。', en: 'Image 3: cold water, 30–40 minutes — until a chopstick slides through.' } },
+      { type: 'wait', seconds: 9, label: '煮 30–40 分钟（课堂快进）', zh: '煮好捞出来放凉，顺着纹理切成条。', py: 'Zhǔ hǎo lāo chūlái fàng liáng, shùnzhe wénlǐ qiē chéng tiáo.', en: 'Lift it out, let it cool, then cut into strips along the grain.', add: ['🥩'], tip: { zh: '图上第 5 张：凉了才切得整齐，顺着纹理切不容易碎。', en: 'Image 5: cool first for neat strips, and cut along the grain so they hold.' } },
+      { type: 'order', zh: '切好的牛肉条，先加哪两样拌一拌？', py: 'Qiē hǎo de niúròu tiáo, xiān jiā nǎ liǎng yàng bàn yi bàn?', en: 'What goes onto the strips first?', options: [{ id: 'shao', zh: '生抽 + 蚝油', emoji: '🍶🦪' }, { id: 'shui', zh: '一碗清水', emoji: '💧' }, { id: 'cu', zh: '半碗香醋', emoji: '🫙' }], answer: 'shao', add: ['🥩', '🍶'], tip: { zh: '图上第 6 张：生抽和蚝油各一点，抓匀就行。', en: 'Image 6: a little light soy and oyster sauce — just toss it through.' } },
+      { type: 'season', zh: '辣椒、花椒、麻椒先做什么？', py: 'Làjiāo, huājiāo, májiāo xiān zuò shénme?', en: 'What happens to the chilli and peppers first?', options: [{ id: 'pao', zh: '用热水泡一下', emoji: '💧' }, { id: 'zhijie', zh: '直接下油锅', emoji: '🔥' }, { id: 'leng', zh: '用冷水冲一冲', emoji: '🚰' }], answer: 'pao', add: ['🌶️', '🫘'], tip: { zh: '图上第 7 张：热水泡一下，下锅不糊、香味更足。', en: 'Image 7: a hot-water soak keeps them from burning and brings out the aroma.' } },
+      { type: 'heat', heat: 'zhong', zh: '锅里多放油，下牛肉条翻炒，把水分炒干。', py: 'Guō lǐ duō fàng yóu, xià niúròu tiáo fānchǎo, bǎ shuǐfèn chǎo gān.', en: 'Pour in plenty of oil, add the strips and fry until the moisture is gone.', add: ['🫗', '🥩'], tip: { zh: '图上第 8 张：油要能没过牛肉条，中火慢慢把水分炒走。', en: 'Image 8: enough oil to cover the strips; medium heat drives the water out.' } },
+      { type: 'stir', target: 8, seconds: 9, word: '翻炒', zh: '炒到七八分干，加入泡好的辣椒和花椒一起翻炒。', py: 'Chǎo dào qī bā fēn gān, jiārù pào hǎo de làjiāo hé huājiāo yìqǐ fānchǎo.', en: 'When the strips are about 70–80% dry, add the soaked chilli and peppers and keep tossing.', add: ['🌶️', '🫘'], tip: { zh: '图上第 9 张：七八分干就下辣椒花椒丝，一起炒到干香。', en: 'Image 9: at 70–80% dry, add the chilli and pepper threads and toss until fragrant.' } },
+      { type: 'season', zh: '出锅前调味，要放哪几样？', py: 'Chū guō qián tiáowèi, yào fàng nǎ jǐ yàng?', en: 'Before serving, what goes in?', options: [{ id: 'tiao', zh: '盐 + 白糖 + 鸡精 + 白芝麻 + 孜然粉', emoji: '🧂🍬' }, { id: 'cu', zh: '香醋 + 香油', emoji: '🫙' }, { id: 'shui', zh: '半碗清水', emoji: '💧' }], answer: 'tiao', add: ['🧂', '🍬', '⚪'], tip: { zh: '图上第 1 张：盐、白糖、鸡精、白芝麻、孜然粉一起放，翻匀就出锅。', en: 'Image 1: salt, sugar, chicken essence, sesame and cumin together — toss and serve.' } },
+      { type: 'finish', zh: '盛出来彻底放凉，越凉越香——开吃！', py: 'Chéng chūlái chèdǐ fàng liáng, yuè liáng yuè xiāng.', en: 'Tip it out and let it cool completely — the cooler it gets, the better it tastes.', add: ['💨'], tip: { zh: '图上第 2 张：放凉以后又香又耐嚼，配酒一绝。', en: 'Image 2: cooled down it is fragrant and chewy — perfect with a drink.' } }
     ]
   },
 
@@ -346,44 +354,46 @@ CC.dishes = [
   {
     id: 'ganbian', name: '干煸四季豆', py: 'Gānbiān sìjìdòu', en: 'Dry-fried Green Beans',
     emoji: '🫛', plate: '🍽️', color: '#3f7d3a',
-    flavorId: 'jiachang', flavor: '家常味（不辣版可选）', flavorPy: 'jiācháng wèi', heat: 1, difficulty: 1, minutes: 15,
+    flavorId: 'jiachang', flavor: '家常味', flavorPy: 'jiācháng wèi', heat: 2, difficulty: 1, minutes: 20,
     region: '四川 · 家常素菜', tags: ['素菜', '安全第一', '认识"煸"'],
     story: {
-      zh: '"煸"是川菜很特别的一个做法：锅里放不多的油，用中小火慢慢炒，把食材里的水分一点点炒走，表面就会起皱、变得干香，行话叫"虎皮"。干煸四季豆就是这样做的，再加芽菜、干辣椒和花椒，又香又下饭。家庭做法有两种：直接中火干煸 4—5 分钟，或者先焯水煮到七八成熟再炒，两种都可以。要记住一件事：四季豆含有皂甙和红细胞凝集素，必须彻底加热熟透，半生的四季豆会让人中毒，所以这道菜也是"厨房安全"最好的教材。',
+      zh: '"煸"是川菜很特别的一个做法：锅里放不多的油，用中小火慢慢炒，把食材里的水分一点点炒走，表面就会起皱、变得干香，行话叫"虎皮"。干煸四季豆就是这样做的，再用干辣椒、花椒、蒜瓣爆香，最后加生抽、辣椒面和白芝麻，又香又下饭。要记住一件事：四季豆含有皂甙和红细胞凝集素，必须彻底加热熟透，半生的四季豆会让人中毒，所以这道菜也是"厨房安全"最好的教材。',
       py: '"Biān" shì chuāncài hěn tèbié de yí ge zuòfǎ.',
-      en: '"Biān" is a distinct Sichuan technique: a little oil, medium-low heat, slowly driving out moisture until the surface wrinkles and turns fragrant — chefs call it "tiger skin". Dry-fried green beans are the classic example, finished with preserved sprout, dried chili and pepper. Home cooks do it two ways: dry-fry straight in the wok for 4–5 minutes, or blanch first until nearly cooked. One rule never changes: green beans contain saponins and phytohaemagglutinin, so they must be fully cooked — half-raw beans can make people ill.'
+      en: '"Biān" is a distinct Sichuan technique: a little oil, medium-low heat, slowly driving out moisture until the surface wrinkles and turns fragrant — chefs call it "tiger skin". Dry-fried green beans are the classic example, finished with dried chilli, Sichuan pepper, garlic, soy sauce, chilli powder and sesame. One rule never changes: green beans contain saponins and phytohaemagglutinin, so they must be fully cooked — half-raw beans can make people ill.'
     },
     prep: [
-      { ing: 'sijidou', qty: '400 克', prep: 'qieduan', note: { zh: '掐掉两头和筋，掰成 5 厘米左右的段，洗净擦干。', en: 'Snap off both ends, break into 5 cm sections, wash and dry.' } },
-      { ing: 'yacai', qty: '1 大勺', prep: 'duosui', note: { zh: '芽菜剁碎，香味一下就上来了。', en: 'Chop the preserved sprout for instant aroma.' } },
-      { ing: 'gansuan', qty: '4 个', prep: 'qieduan', note: { zh: '干辣椒剪段，怕辣可以少放。', en: 'Snip the chili; use less if you dislike heat.' } },
-      { ing: 'dasuan', qty: '3 瓣', prep: 'duomo', note: { zh: '蒜剁成末。', en: 'Mince.' } },
-      { ing: 'huajiao', qty: '1 小勺', prep: 'chaoxiang', note: { zh: '花椒备用，和干辣椒一起下锅。', en: 'Ready to go in with the chili.' } },
-      { ing: 'shengchou', qty: '1 小勺', prep: 'tiaozhi', note: { zh: '（生抽按口味用，别多）', en: 'Use sparingly, to taste.' } }
+      { ing: 'sijidou', qty: '400 克', prep: 'qieduan', note: { zh: '掐掉两头和筋，掰成 5 厘米左右的段，洗净后一定要晾干。', en: 'Snap off both ends, break into 5 cm sections, wash and dry well.' } },
+      { ing: 'dasuan', qty: '4 瓣', prep: 'paisui', note: { zh: '拍碎，蒜香才出得来。', en: 'Smash the cloves so the aroma comes out.' } },
+      { ing: 'ganlajiao', qty: '5 个', prep: 'qieduan', note: { zh: '剪成段，怕辣可以少放。', en: 'Snip into sections; use fewer if you dislike heat.' } },
+      { ing: 'huajiao', qty: '1 小勺', prep: 'chaoxiang', note: { zh: '和干辣椒、蒜瓣一起下锅炒香。', en: 'Goes into the wok with the chilli and garlic.' } }
     ],
-    seasonings: ['yacai', 'ganlajiao', 'huajiao', 'suanmo', 'shengchou', 'yan', 'shiyongyou'],
-    seasonQty: { yacai: '1 大勺', ganlajiao: '4 个，怕辣可少放', huajiao: '1 小勺', suanmo: '3 瓣', shengchou: '1 小勺', yan: '2 克（芽菜本身有咸味）', shiyongyou: '20 毫升，油不用多' },
+    seasonings: ['ganlajiao', 'huajiao', 'suanmo', 'shengchou', 'yan', 'jijing', 'lajiaomian', 'zhima', 'shiyongyou'],
+    seasonQty: {
+      ganlajiao: '5 个，剪段', huajiao: '1 小勺', suanmo: '4 瓣，拍碎', shengchou: '2 勺',
+      yan: '少许', jijing: '少许', lajiaomian: '1 勺', zhima: '1 勺', shiyongyou: '适量（炸豆角用）'
+    },
     flavorTask: {
-      question: { zh: '"干煸"是什么意思？', en: 'What does "gān biān" mean?' },
+      question: { zh: '按图：倒入豆角以后，加的是哪一组？', en: 'After the beans go back in, which set is added?' },
       options: [
-        { zh: '慢慢炒，把水分炒干、表面起皱', emoji: '🔥', correct: true },
-        { zh: '放进水里煮干', emoji: '💧' },
-        { zh: '用大火油炸', emoji: '🍟' }
+        { zh: '两勺生抽 + 少许盐 + 鸡精', emoji: '🍶🧂', correct: true },
+        { zh: '两勺白糖 + 一勺醋', emoji: '🍬🫙' },
+        { zh: '半碗清水 + 一勺淀粉', emoji: '💧🥣' }
       ],
-      explain: { zh: '煸的秘诀是"油不多、火不大、时间够"。', en: 'The secret: not much oil, not high heat, enough time.' }
+      explain: { zh: '生抽给咸鲜，盐和鸡精各少许；最后再撒一勺辣椒面和白芝麻。', en: 'Soy sauce for savour, a touch of salt and chicken essence — then chilli powder and sesame at the end.' }
     },
     tips: [
-      { zh: '安全提醒：四季豆必须炒到熟透（表皮起皱、颜色变深），半生的四季豆不能吃。', en: 'Safety: green beans must be fully cooked — wrinkled skin, darker colour. Never serve them half-raw.' },
-      { zh: '洗好的四季豆要擦干，带水下锅会"炸油"，也会变成水煮。', en: 'Dry them well — wet beans splatter and steam instead of frying.' }
+      { zh: '四季豆必须彻底熟透！半生的四季豆含皂甙，会让人不舒服。', en: 'Green beans must be fully cooked — half-raw beans can make you ill.' },
+      { zh: '豆角洗过一定要晾干再下锅，不然油会溅。', en: 'Dry the beans before they hit the oil, or it will spit.' },
+      { zh: '炸到虎皮状先捞出，最后再回锅调味，豆角才外皱里嫩。', en: 'Lift the beans out once wrinkled, then return them at the end for seasoning.' },
+      { zh: '辣椒面和白芝麻最后放，颜色红、香味足。', en: 'Chilli powder and sesame go in last, for colour and aroma.' }
     ],
     steps: [
-      { type: 'heat', heat: 'zhong', zh: '中火下油，油不用多，先下四季豆。', py: 'Zhōng huǒ xià yóu, yóu bú yòng duō, xiān xià sìjìdòu.', en: 'Medium heat, modest oil, add the green beans.', add: ['🫗', '🫛'], tip: { zh: '中火最好：火太大会外糊内生。', en: 'Medium heat: too hot burns outside and leaves the inside raw.' } },
-      { type: 'wait', seconds: 10, label: '煸 4 分钟，等表面起皱', zh: '慢慢煸，看到四季豆表皮起皱、颜色变深，才算熟透。', py: 'Màn man biān, kàn dào sìjìdòu biǎopí qǐ zhòu.', en: 'Dry-fry until the skins wrinkle and darken — that means fully cooked.', add: ['💨'], tip: { zh: '这一步不能省时间，安全第一！', en: 'Never rush this step. Safety first!' } },
-      { type: 'order', zh: '四季豆起皱了，把它们先盛出来，锅里下……', py: 'Sìjìdòu qǐ zhòu le, chéng chūlái, guō lǐ xià…', en: 'Set the beans aside — into the wok goes…', options: [{ id: 'xiang', zh: '干辣椒 + 花椒 + 蒜末', emoji: '🌶️🫘' }, { id: 'shui', zh: '一碗水', emoji: '💧' }, { id: 'cu', zh: '香醋', emoji: '🫙' }], answer: 'xiang', add: ['🌶️', '🫘', '🧄'], tip: { zh: '香料炒香，但别炒糊。', en: 'Bloom the aromatics, but do not burn them.' } },
-      { type: 'order', zh: '接着放……', py: 'Jiēzhe fàng…', en: 'Then add…', options: [{ id: 'yacai', zh: '芽菜', emoji: '🥬' }, { id: 'tang', zh: '白糖', emoji: '🍬' }, { id: 'cu', zh: '香醋', emoji: '🫙' }], answer: 'yacai', add: ['🥬'], tip: { zh: '芽菜的咸香是这道菜的"底味"。', en: 'The preserved sprout provides the savoury base.' } },
-      { type: 'season', zh: '四季豆倒回锅里，最后怎么调味？', py: 'Sìjìdòu dào huí guō lǐ, zuìhòu zěnme tiáowèi?', en: 'Return the beans — how do we finish the seasoning?', options: [{ id: 'shao', zh: '一点生抽和盐，翻匀就好', emoji: '🍶' }, { id: 'duo', zh: '大量生抽和两勺盐', emoji: '🧂' }, { id: 'shui', zh: '加半碗水煮一煮', emoji: '💧' }], answer: 'shao', add: ['🍶'], tip: { zh: '芽菜本身有咸味，调味要"轻手"。', en: 'The sprout is already salty — season lightly.' } },
-      { type: 'stir', target: 8, seconds: 9, word: '翻炒', zh: '快速翻炒均匀，让芽菜和香料沾在四季豆上。', py: 'Kuàisù fānchǎo jūnyún.', en: 'Toss quickly so everything clings to the beans.', add: ['🥄'], tip: { zh: '这时的香味已经很浓了。', en: 'By now the aroma is strong.' } },
-      { type: 'finish', zh: '出锅装盘！尝一口：外皮微皱、里面还嫩，这就是"干煸"。', py: 'Chū guō zhuāngpán! Zhè jiù shì "gānbiān".', en: 'Plate it up! Wrinkled outside, tender inside — that is "dry-fried".', add: ['🍽️'], tip: { zh: '素菜也能是川菜的主角。', en: 'In Sichuan, vegetables can be the star too.' } }
+      { type: 'heat', heat: 'zhong', zh: '豆角洗净晾干，油热后倒入豆角。', py: 'Dòujiǎo xǐ jìng liàng gān, yóu rè hòu dào rù dòujiǎo.', en: 'Dry the beans, heat the oil and slide them in.', add: ['🫗', '🫛'], tip: { zh: '中火就好：火太大会外糊内生。', en: 'Medium heat — too hot burns the outside and leaves the inside raw.' } },
+      { type: 'wait', seconds: 10, label: '炸到虎皮状', zh: '中火炸到表皮起皱、变成虎皮色，先捞出来。', py: 'Zhōng huǒ zhá dào biǎopí qǐ zhòu.', en: 'Fry until the skins wrinkle and turn "tiger-skin" brown, then lift them out.', add: ['💨'], tip: { zh: '这一步不能省时间——安全第一！', en: 'Never rush this step. Safety first!' } },
+      { type: 'order', zh: '锅里留底油，先下……', py: 'Guō lǐ liú dǐyóu, xiān xià…', en: 'Leave a little oil — what goes in first?', options: [{ id: 'xiang', zh: '干辣椒 + 花椒 + 蒜瓣', emoji: '🌶️🫘🧄' }, { id: 'shui', zh: '一碗水', emoji: '💧' }, { id: 'cu', zh: '香醋', emoji: '🫙' }], answer: 'xiang', add: ['🌶️', '🫘', '🧄'], tip: { zh: '小火炒香，别炒糊。', en: 'Low heat — do not burn them.' } },
+      { type: 'season', zh: '倒入豆角，加……', py: 'Dào rù dòujiǎo, jiā…', en: 'Return the beans and add…', options: [{ id: 'shao', zh: '两勺生抽 + 少许盐 + 鸡精', emoji: '🍶🧂' }, { id: 'tang', zh: '两勺白糖', emoji: '🍬' }, { id: 'shui', zh: '半碗清水', emoji: '💧' }], answer: 'shao', add: ['🫛', '🍶'], tip: { zh: '图上第 4 格：两勺生抽、少许盐和鸡精。', en: 'Tile 4: two spoons of soy sauce, a little salt and chicken essence.' } },
+      { type: 'season', zh: '再撒上……', py: 'Zài sǎ shàng…', en: 'Then sprinkle in…', options: [{ id: 'mian', zh: '一勺辣椒面 + 白芝麻', emoji: '🌶️⚪' }, { id: 'cu', zh: '一勺香醋', emoji: '🫙' }, { id: 'tang', zh: '一勺白糖', emoji: '🍬' }], answer: 'mian', add: ['🌶️', '⚪'], tip: { zh: '图上第 5 格：辣椒面和白芝麻最后放，颜色才红。', en: 'Tile 5: chilli powder and sesame last, for colour.' } },
+      { type: 'finish', zh: '翻炒均匀，即可出锅！', py: 'Fānchǎo jūnyún, jí kě chū guō!', en: 'Toss until evenly coated and serve.', add: ['💨'], tip: { zh: '图上第 6 格：外皮微皱、里面还嫩，这就是"干煸"。', en: 'Wrinkled outside, tender inside — that is "dry-fried".' } }
     ]
   }
 ];
@@ -411,9 +421,9 @@ CC.cultureQuiz = [
   { q: { zh: '"煸"是什么意思？', en: 'What does "biān" (dry-frying) mean?' },
     options: [{ zh: '用中小火慢慢炒，把水分炒干、表面起皱', en: 'fry slowly on medium-low heat until moisture leaves and the surface wrinkles', correct: true }, { zh: '用水煮', en: 'boil in water' }, { zh: '用大量油炸', en: 'deep-fry in lots of oil' }],
     explain: { zh: '干煸四季豆就是最好的例子。', en: 'Dry-fried green beans are the classic example.' } },
-  { q: { zh: '担担面为什么叫"担担面"？', en: 'Why is it called "shoulder-pole noodles"?' },
-    options: [{ zh: '卖面的人用扁担挑着面摊', en: 'the vendor carried his stall on a shoulder pole', correct: true }, { zh: '面条的形状像扁担', en: 'the noodles look like a pole' }, { zh: '用扁担擀面条', en: 'the noodles are rolled with a pole' }],
-    explain: { zh: '一百多年前自贡的陈包包，挑着担子卖面。', en: 'Chen Baobao in Zigong sold noodles from a pole-carried stall over a century ago.' } },
+  { q: { zh: '豌杂面里的"豌"和"杂"分别是什么？', en: 'In wanza noodles, what do "wan" and "za" stand for?' },
+    options: [{ zh: '"豌"是耙豌豆，"杂"是猪肉杂酱', en: '"wan" is soft-cooked peas, "za" is the pork topping', correct: true }, { zh: '"豌"是碗，"杂"是杂菜', en: '"wan" is the bowl, "za" is mixed vegetables' }, { zh: '"豌"是豌豆，"杂"是肉丝', en: '"wan" is peas, "za" is shredded pork' }],
+    explain: { zh: '四川话说"耙"就是软烂：豌豆压得越烂越沙，杂酱炒到干香，拌在一起才好吃。', en: 'In Sichuanese "pa" means mushy-soft: the peas are cooked to a sandy mash, the pork fried dry and fragrant, then both are tossed through the noodles.' } },
   { q: { zh: '自贡的川菜属于哪一流派？', en: 'Which school does Zigong cooking belong to?' },
     options: [{ zh: '小河帮（盐帮菜）', en: 'Small River school (salt-merchant style)', correct: true }, { zh: '上河帮', en: 'Upper River school' }, { zh: '下河帮', en: 'Lower River school' }],
     explain: { zh: '自贡是"盐都"，盐场多牛多，所以牛肉菜特别有名。', en: 'Zigong is the salt capital — many cattle, hence famous beef dishes.' } },

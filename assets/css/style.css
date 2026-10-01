@@ -918,8 +918,8 @@ body:not(.show-en) .en { display: none !important; }
   .hero { grid-template-columns: 1fr; }
   .hero-art { order: -1; min-height: 180px; }
   .cook-layout { grid-template-columns: 1fr; }
-  .wheel-wrap { grid-template-columns: 1fr; }
-  .wheel { max-width: 320px; margin: 0 auto; }
+  .wheel-wrap { grid-template-columns: 1fr !important; }
+  .wheel { max-width: 320px !important; margin: 0 auto !important; }
 }
 @media (max-width: 720px) {
   #app { padding: 16px 13px calc(var(--panda-h) + 30px); }
@@ -934,6 +934,289 @@ body:not(.show-en) .en { display: none !important; }
 }
 
 /* ============ 15. 无障碍与打印 ============ */
+/* ============ 14g. 可爱手账风（全站）：奶油黄 + 草绿 + 番茄红 / 贴纸字 / 胶带 / 星星 ============ */
+:root {
+  --cute-yellow: #ffe9a8;
+  --cute-yellow-d: #f6d271;
+  --cute-green: #cfe3b0;
+  --cute-green-d: #a9c77f;
+  --cute-red: #e0533d;
+  --cute-cream: #fffdf6;
+}
+body {
+  background:
+    radial-gradient(circle at 1px 1px, rgba(214, 190, 150, .30) 1px, transparent 0) 0 0 / 22px 22px,
+    linear-gradient(180deg, #fffdf6 0%, #fdf6e6 100%) !important;
+  background-attachment: fixed;
+}
+/* 贴纸字：白描边 + 圆润字体（幼圆优先，其次雅黑加粗） */
+h1.h1, h2.h2, .dish-name, .step-instruction, .quiz-question, .big-score {
+  font-family: "YouYuan", "幼圆", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif !important;
+  -webkit-text-stroke: 3px #fff;
+  paint-order: stroke fill;
+  letter-spacing: .01em;
+}
+h1.h1 { font-size: clamp(30px, 4.6vw, 50px) !important; color: #4a3a26 !important; }
+h2.h2 { color: #4a3a26 !important; }
+/* 分区标题上的"胶带" + 涂鸦星星 */
+.view-head { position: relative; }
+.view-head::before {
+  content: ""; position: absolute; left: -8px; top: -12px; width: 70px; height: 20px;
+  background: linear-gradient(180deg, var(--cute-green), var(--cute-green-d));
+  opacity: .85; transform: rotate(-11deg); border-radius: 3px;
+  box-shadow: 0 3px 6px rgba(120, 90, 40, .18);
+}
+.view-head .eyebrow::after { content: " ✦"; color: var(--cute-red); }
+/* 贴纸卡片：白边 + 圆角 + 手账投影 */
+.card, .dish-card, .step-card, .ingredient-tile, .season-card, .flash-face, .quiz-option, .dish-progress-row {
+  border-radius: 20px !important;
+  background: var(--cute-cream) !important;
+  border: 3px solid #fff !important;
+  box-shadow: 0 10px 22px rgba(160, 130, 90, .18), 0 2px 0 rgba(0, 0, 0, .04) !important;
+}
+.card-lift:hover { transform: translateY(-5px) rotate(-.5deg) !important; }
+/* 按钮：大圆角 + 立体下沿 */
+.btn { border-radius: 999px !important; font-weight: 800; box-shadow: 0 5px 0 rgba(0, 0, 0, .10) !important; border: 2px solid #fff !important; }
+.btn:active { transform: translateY(3px) !important; box-shadow: 0 2px 0 rgba(0, 0, 0, .10) !important; }
+.btn-primary { background: linear-gradient(180deg, #f0a24a, #e07f2f) !important; color: #fff !important; }
+.btn-gold { background: linear-gradient(180deg, var(--cute-yellow), var(--cute-yellow-d)) !important; color: #6b4a12 !important; }
+/* 导航 */
+.topbar { background: rgba(255, 253, 246, .94) !important; border-bottom: 3px solid var(--cute-yellow) !important; }
+.nav-link.active {
+  background: linear-gradient(180deg, var(--cute-green-d), #7fa457) !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, .08) !important;
+}
+.brand-mark { border: 3px solid #fff !important; box-shadow: 0 6px 0 rgba(0, 0, 0, .08) !important; }
+/* 标签小贴纸 */
+.tag, .taste-chip, .filter-chip {
+  border-radius: 999px !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 4px 10px rgba(180, 150, 100, .16) !important;
+}
+.tag { background: #fff6d8 !important; color: #6b5433 !important; }
+.filter-chip.on { background: linear-gradient(180deg, #f0a24a, #e07f2f) !important; color: #fff !important; }
+/* 传菜带：奶油黄 + 草绿双色块，白描边 */
+.belt-surface {
+  background: linear-gradient(180deg, var(--cute-yellow) 0 48%, var(--cute-green) 48% 100%) !important;
+  border: 4px solid #fff !important;
+  box-shadow: inset 0 -18px 34px rgba(150, 120, 70, .14), 0 14px 28px rgba(170, 140, 90, .22) !important;
+}
+.belt-ticks { background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.55) 0 3px, transparent 3px 66px) !important; }
+.belt-name {
+  -webkit-text-stroke: 0 !important;
+  background: #fff !important; color: #4a3a26 !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, .06) !important;
+}
+.belt-item.on .belt-name { background: linear-gradient(180deg, var(--cute-yellow), var(--cute-yellow-d)) !important; color: #6b4a12 !important; }
+.belt-sub { color: #7c6a55 !important; }
+.belt-help {
+  background: #fff6d8; border-radius: 999px; padding: 8px 16px; display: inline-block;
+  border: 2px solid #fff; box-shadow: 0 6px 14px rgba(170, 140, 90, .16); color: #8a6a3a !important;
+}
+.belt-help::before { content: "✦ "; color: var(--cute-red); }
+.belt-info { position: relative; }
+.belt-info::after {
+  content: "✦"; position: absolute; right: 16px; top: 10px; color: var(--cute-yellow-d); font-size: 20px;
+}
+/* ============ 14f. 选菜页 · 传菜带（缓慢转动 / 悬停渐停 / 点击渐进居停） ============ */
+/* 14f-2 修正：带子只衬盘子（有颜色），菜名落在浅色背景上 */
+/* 14f-3 修正：整块背景（不再半截）+ 菜名换楷体、突出显示 */
+/* 14f-4 字体换成现代无衬线 + 铭牌样式；加互动感（浮动/倾斜/落定弹跳/光环/热气） */
+.belt-name {
+  font-family: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif !important;
+  font-size: 18.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: .02em !important;
+  color: #fff8ec !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.5) !important;
+  background: rgba(0,0,0,.24);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 999px;
+  padding: 4px 16px;
+  display: inline-block;
+  transition: background .35s, border-color .35s, transform .35s, box-shadow .35s;
+}
+.belt-sub { font-family: inherit !important; letter-spacing: .02em; }
+.belt-item {
+  position: relative;
+  transform: translateY(var(--ty, 0px)) scale(var(--sc, 1)) rotate(var(--rot, 0deg));
+  transition: transform .45s cubic-bezier(.2,.8,.2,1);
+}
+.belt-item.on { --ty: -12px; --sc: 1.12; }
+.belt-item .belt-plate { animation: plateBob 4.4s ease-in-out infinite; }
+.belt-item:nth-child(2n) .belt-plate { animation-delay: .8s; }
+.belt-item:nth-child(3n) .belt-plate { animation-delay: 1.5s; }
+@keyframes plateBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+.belt-item.on .belt-plate, .belt-item:hover .belt-plate { animation-play-state: paused; }
+.belt-item:hover .belt-name { background: rgba(0,0,0,.38); border-color: rgba(255,255,255,.32); }
+.belt-item.on .belt-name {
+  background: linear-gradient(135deg, #ffd786, #e8a33d) !important;
+  color: #4a2c05 !important; border-color: transparent !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,.32) !important;
+}
+.belt-item .belt-plate::after {
+  content: ""; position: absolute; width: 152px; height: 152px; border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(255,215,134,0); transition: box-shadow .4s;
+}
+.belt-item.on .belt-plate::after { animation: haloPulse 2.4s ease-in-out infinite; }
+@keyframes haloPulse {
+  0%,100% { box-shadow: 0 0 0 6px rgba(255,215,134,.22), 0 0 26px rgba(255,215,134,.40); }
+  50% { box-shadow: 0 0 0 13px rgba(255,215,134,.34), 0 0 44px rgba(255,215,134,.62); }
+}
+.belt-item.settle { animation: settleBounce .62s cubic-bezier(.2,1.25,.4,1); }
+@keyframes settleBounce {
+  0% { transform: translateY(-16px) scale(1.18); }
+  55% { transform: translateY(4px) scale(.985); }
+  100% { transform: translateY(-12px) scale(1.12); }
+}
+.belt-puff {
+  position: absolute; left: 50%; top: 26px; width: 30px; height: 30px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.92), rgba(255,255,255,0) 70%);
+  pointer-events: none; animation: beltPuff 1.5s ease-out forwards;
+}
+@keyframes beltPuff {
+  0% { opacity: .9; transform: translate(-50%, 0) scale(.5); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--px, 0px)), -86px) scale(2); }
+}
+.belt-viewport {
+  padding: 40px 0 26px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 26px !important;
+  overflow: hidden !important;
+}
+.belt-surface {
+  position: absolute !important; inset: 0 !important;
+  top: 0 !important; bottom: 0 !important; height: auto !important;
+  border-radius: 26px !important;
+  background: linear-gradient(180deg, #8d5836 0%, #6c4023 52%, #4d2c17 100%) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.18),
+    inset 0 -22px 44px rgba(0,0,0,.30),
+    0 16px 32px rgba(80,45,20,.22) !important;
+}
+.belt-ticks {
+  inset: 0 !important; border-radius: 26px !important;
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.10) 0 2px, transparent 2px 66px) !important;
+  opacity: .95;
+}
+.belt-ticks::after { display: none !important; }
+.belt-track { padding: 28px 64px 28px !important; }
+.belt-name {
+  font-family: "Kaiti SC", "STKaiti", "KaiTi", "楷体", "Songti SC", "STSong", "SimSun", serif !important;
+  font-size: 21px !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em;
+  color: #fff7e8 !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,.5), 0 1px 0 rgba(0,0,0,.35) !important;
+}
+.belt-sub { color: rgba(255,243,226,.80) !important; font-size: 12.5px !important; letter-spacing: .04em; }
+.belt-item.on .belt-name { color: #ffd786 !important; text-shadow: 0 2px 10px rgba(0,0,0,.6) !important; }
+.belt-flag {
+  background: linear-gradient(135deg, #ffd786, #e8a33d) !important;
+  color: #4a2c05 !important;
+}
+.belt-item.on::after { background: linear-gradient(90deg, #ffd786, #fff1c9) !important; }
+.belt-help { margin-top: 16px !important; }
+@media (max-width: 720px) {
+  .belt-viewport { padding: 26px 0 18px !important; }
+  .belt-track { padding: 18px 26px 20px !important; }
+  .belt-name { font-size: 17.5px !important; }
+}
+.belt-viewport {
+  padding: 18px 0 8px !important;
+  background: linear-gradient(180deg, #fdf7ea 0%, #f6eddd 100%) !important;
+}
+.belt-surface {
+  top: 96px !important; bottom: auto !important;
+  height: 88px !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(180deg, #a06a45 0%, #7c4a2d 42%, #5c3520 100%) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.22), inset 0 -10px 18px rgba(0,0,0,.22),
+              0 10px 22px rgba(90,55,25,.22) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+}
+.belt-ticks {
+  border-radius: 16px !important;
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.20) 0 2px, transparent 2px 54px) !important;
+}
+/* 刻度带上再叠一条细高光，像皮带在动 */
+.belt-ticks::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 12px; height: 3px;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.34), rgba(255,255,255,0));
+  border-radius: 3px;
+}
+.belt-track { padding-bottom: 74px !important; }
+.belt-name {
+  margin-top: 10px !important;
+  color: #3f2a1d !important;
+  text-shadow: 0 1px 0 #fff !important;
+}
+.belt-sub { color: #8d7767 !important; }
+.belt-item.on .belt-name { color: var(--red) !important; }
+@media (max-width: 720px) {
+  .belt-surface { top: 78px !important; height: 72px !important; }
+  .belt-track { padding-bottom: 66px !important; }
+  .belt-name { margin-top: 8px !important; }
+}
+.belt-viewport {
+  position: relative; overflow: hidden; padding: 26px 0 20px;
+  border-radius: 24px; border: 1px solid #eadfc8;
+  background: linear-gradient(180deg, #fdf7ea 0%, #f3e9d7 100%);
+  box-shadow: inset 0 1px 0 #fff;
+  touch-action: pan-y; cursor: grab;
+}
+.belt-viewport:active { cursor: grabbing; }
+.belt-surface {
+  position: absolute; left: 0; right: 0; bottom: 40px; height: 74px; border-radius: 18px;
+  background: linear-gradient(180deg, #4c3c33 0%, #2a201c 60%, #1d1614 100%);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.1), 0 12px 26px rgba(70,45,25,.25);
+}
+.belt-ticks {
+  position: absolute; inset: 0; border-radius: 18px; display: block;
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 2px, transparent 2px 52px);
+  background-size: auto 100%; background-repeat: repeat-x;
+}
+.belt-track { position: relative; display: flex; gap: 36px; padding: 0 64px 52px; will-change: transform; }
+.belt-item {
+  flex: none; width: 186px; text-align: center; cursor: pointer; outline: none;
+  transition: transform .5s cubic-bezier(.2,.8,.2,1), filter .4s;
+}
+.belt-item .belt-plate { position: relative; height: 158px; display: grid; place-items: center;
+  filter: drop-shadow(0 12px 20px rgba(90,60,30,.22)); transition: filter .4s; }
+.belt-plate-img { position: absolute; width: 152px; height: 152px; }
+.belt-dish-img { position: relative; width: 96px; height: 96px; border-radius: 50%; object-fit: cover;
+  box-shadow: inset 0 -8px 16px rgba(0,0,0,.2); }
+.belt-dish-emoji { position: relative; font-size: 46px; }
+.belt-name { margin-top: 8px; font-weight: 800; font-size: 15.5px; transition: color .3s; }
+.belt-sub { font-size: 12px; color: var(--muted); }
+.belt-flag {
+  position: absolute; top: 4px; right: 8px; z-index: 3;
+  background: linear-gradient(135deg, #e6c46a, #f0d894); color: #4a3a12;
+  font-size: 11px; font-weight: 800; border-radius: 999px; padding: 2px 9px;
+  box-shadow: 0 4px 10px rgba(120,90,30,.25);
+}
+.belt-item.on { transform: translateY(-12px) scale(1.14); }
+.belt-item.on .belt-plate { filter: drop-shadow(0 20px 28px rgba(90,60,30,.34)); }
+.belt-item.on .belt-name { color: var(--red); }
+.belt-item.on::after {
+  content: ""; display: block; width: 58px; height: 4px; margin: 10px auto 0; border-radius: 4px;
+  background: linear-gradient(90deg, var(--red), var(--gold));
+}
+.belt-help { font-size: 13px; color: var(--muted); margin: 12px 0 14px; }
+.belt-info { min-height: 158px; }
+@media (max-width: 720px) {
+  .belt-item { width: 150px; }
+  .belt-plate-img { width: 126px; height: 126px; }
+  .belt-dish-img { width: 78px; height: 78px; }
+  .belt-track { gap: 22px; padding: 0 26px 46px; }
+  .belt-surface { bottom: 32px; height: 62px; }
+}
 /* ============ 14d. 版面参考：奶油燕麦底 + 餐盘展示 + 药丸标签（学习参考图的那套质感） ============ */
 :root {
   --oat: #f7f1e3;
@@ -1061,7 +1344,9 @@ h1.h1, h2.h2, .dish-name, .step-instruction { color: var(--ink-soft); }
 .food-item .food-photo { animation: foodShine 3.4s ease-in-out infinite; }
 /* 真实照片版：锅、词汇卡、厨具 */
 .wok-real { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  border-radius: 50%; opacity: .97; box-shadow: inset 0 0 70px rgba(0,0,0,.5); }
 .ui-photo { width: 1.25em; height: 1.25em; object-fit: cover; border-radius: 6px;
+  display: inline-block; vertical-align: -.25em; margin: 0 2px; box-shadow: 0 2px 6px rgba(107,58,46,.22); }
 /* 透明抠图：去掉边框和底色，让实物"浮"在界面上 */
 img[data-cut="1"] { object-fit: contain !important; border: none !important; border-radius: 0 !important;
   background: transparent !important; box-shadow: none !important; }
@@ -1075,14 +1360,18 @@ img[data-cut="1"].face-photo { padding: 6px; }
 .food-item, .drop-item, .oil-drop, .splash, .steam-puff, .pour-stream { max-width: 100%; }
 .wok-food .food-item { overflow: hidden; }
 /* 味型转盘：标签限制在盘内，避免穿模 */
+.wheel-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr) !important; gap: 26px !important; align-items: center !important; }
+.wheel { max-width: 420px !important; margin: 0 auto !important; }
 .wheel { overflow: hidden !important; }
 .wheel-labels span {
-  font-size: 11px !important;
-  padding-top: 9% !important;
-  max-width: 40% !important;
+  align-items: center !important;      /* 文字先落在盘心，再靠 transform 沿半径外移，12 个标签才会落在同一个圆上 */
+  justify-content: center !important;
+  padding-top: 0 !important;
+  font-size: 11.5px !important;
+  max-width: 46% !important;
   margin: 0 auto;
   pointer-events: none;
-  text-shadow: 0 1px 0 #fff, 0 0 4px #fff;
+  text-shadow: 0 0 3px #fff, 0 0 5px #fff, 0 1px 0 #fff;
 }
 .wheel-center { z-index: 5; }
 .wheel-pointer { z-index: 6; }
@@ -1140,8 +1429,6 @@ img[data-cut="1"].face-photo { padding: 6px; }
   background: linear-gradient(120deg, rgba(255,255,255,.55) 0%, transparent 42%);
   pointer-events: none; opacity: .9;
 }
-  display: inline-block; vertical-align: -.25em; margin: 0 2px; box-shadow: 0 2px 6px rgba(107,58,46,.22); }
-  border-radius: 50%; opacity: .97; box-shadow: inset 0 0 70px rgba(0,0,0,.5); }
 .card-photo { width: 100%; height: 82px; object-fit: cover; border-radius: 12px; margin-bottom: 6px; box-shadow: var(--shadow-s); }
 .face-photo { width: 100%; height: 100%; object-fit: cover; border-radius: var(--r-m); }
 .chip-photo { width: 22px; height: 22px; object-fit: cover; border-radius: 7px; vertical-align: middle; margin-right: 5px; display: inline-block; }

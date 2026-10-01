@@ -1,0 +1,289 @@
+/* 多色主题系统：5 套配色，右上角 🎨 一键切换（存在本机）
+   a1 主色 / a2 辅色 / a3 强调色 / a4 第四色 / bg 底 / card 卡片底 */
+body { --a1: #ffe9a8; --a2: #cfe3b0; --a3: #f0a24a; --a4: #e0533d; --bg: #fffdf6; --card: #fffdf6; }
+body[data-theme="peach"]  { --a1: #ffd3c2; --a2: #ffc078; --a3: #bfe3cf; --a4: #e2725b; --bg: #fff8f4; --card: #fffcf9; }
+body[data-theme="berry"]  { --a1: #ffc9d4; --a2: #c9c6f0; --a3: #cfe3b0; --a4: #f06292; --bg: #fff6fa; --card: #fffbfd; }
+body[data-theme="matcha"] { --a1: #c7dda5; --a2: #e0a45c; --a3: #a9c77f; --a4: #e2725b; --bg: #fbf7ee; --card: #fffdf8; }
+body[data-theme="lemon"]  { --a1: #fff0a3; --a2: #a9d6e5; --a3: #b8e0c8; --a4: #ff8a65; --bg: #f7fbff; --card: #fdffff; }
+body[data-theme="cream"]  { --a1: #ffe9a8; --a2: #cfe3b0; --a3: #f0a24a; --a4: #e0533d; --bg: #fffdf6; --card: #fffdf6; }
+
+/* —— 底色与点阵随主题变化 —— */
+body {
+  background:
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--a2) 55%, #fff) 1px, transparent 0) 0 0 / 22px 22px,
+    linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--a1) 30%, #fff) 100%) !important;
+  background-attachment: fixed;
+}
+/* —— 传菜带：三色块，颜色更丰富 —— */
+body .belt-surface {
+  background: linear-gradient(180deg, var(--a1) 0 34%, var(--a2) 34% 67%, var(--a3) 67% 100%) !important;
+  border: 4px solid #fff !important;
+}
+body .belt-name { background: #fff !important; color: #4a3a26 !important; }
+body .belt-item.on .belt-name { background: linear-gradient(180deg, var(--a1), var(--a3)) !important; color: #4a3a26 !important; }
+body .belt-flag { background: linear-gradient(135deg, var(--a1), var(--a4)) !important; color: #4a2c05 !important; }
+/* —— 顶栏 / 导航 / 按钮 —— */
+body .topbar { border-bottom: 3px solid var(--a1) !important; }
+body .nav-link.active { background: linear-gradient(180deg, var(--a2), color-mix(in srgb, var(--a2) 60%, #6b5433)) !important; }
+body .brand-mark { background: linear-gradient(140deg, var(--a4), var(--a3)) !important; }
+body .btn-primary { background: linear-gradient(180deg, var(--a3), var(--a4)) !important; }
+body .btn-gold { background: linear-gradient(180deg, var(--a1), var(--a2)) !important; color: #4a3a26 !important; }
+body .filter-chip.on { background: linear-gradient(180deg, var(--a3), var(--a4)) !important; }
+/* —— 标题胶带随主题变色，且每个板块不同色 —— */
+body .view-head::before { background: linear-gradient(180deg, var(--a2), color-mix(in srgb, var(--a2) 65%, #6b5433)) !important; }
+body .culture-section:nth-of-type(3n+2) .view-head::before { background: linear-gradient(180deg, var(--a1), var(--a3)) !important; }
+body .culture-section:nth-of-type(3n+3) .view-head::before { background: linear-gradient(180deg, var(--a4), var(--a1)) !important; }
+/* —— 标签多色（循环四色） —— */
+body .tag:nth-child(4n+1) { background: color-mix(in srgb, var(--a1) 70%, #fff) !important; }
+body .tag:nth-child(4n+2) { background: color-mix(in srgb, var(--a2) 70%, #fff) !important; }
+body .tag:nth-child(4n+3) { background: color-mix(in srgb, var(--a3) 45%, #fff) !important; }
+body .tag:nth-child(4n)   { background: color-mix(in srgb, var(--a4) 35%, #fff) !important; }
+/* —— 卡片：主题淡淡的底色，随位置交替 —— */
+body .card, body .dish-card, body .step-card, body .quiz-option, body .ingredient-tile, body .season-card { background: var(--card) !important; }
+body .culture-section:nth-of-type(2n) .card { background: color-mix(in srgb, var(--a1) 22%, #fff) !important; }
+body .culture-section:nth-of-type(2n+1) .card { background: color-mix(in srgb, var(--a2) 18%, #fff) !important; }
+/* —— 首页右侧菜单：四张卡四种色 —— */
+body .hnav-card:nth-of-type(1) { background: linear-gradient(135deg, var(--a1), var(--a3)) !important; }
+body .hnav-card:nth-of-type(2) { background: linear-gradient(135deg, var(--a2), var(--a1)) !important; }
+body .hnav-card:nth-of-type(3) { background: linear-gradient(135deg, var(--a3), var(--a4)) !important; }
+body .hnav-card:nth-of-type(4) { background: linear-gradient(135deg, var(--a4), var(--a1)) !important; }
+/* —— 换肤按钮 —— */
+#themeBtn { display: inline-flex; align-items: center; gap: 4px; }
+
+/* ============ 每个页面 / 板块一个专属颜色（多色，而不仅是换一套主题） ============ */
+body[data-page="home"]    { --accent: #f0a24a; --accent-soft: #ffe9cc; --accent-2: #ffe9a8; }
+body[data-page="guide"]   { --accent: #e79b3c; --accent-soft: #ffe7c9; --accent-2: #ffd79a; }
+body[data-page="culture"] { --accent: #7fa457; --accent-soft: #e4f0d4; --accent-2: #cfe3b0; }
+body[data-page="flavor"]  { --accent: #d96b8a; --accent-soft: #ffe0e8; --accent-2: #ffc9d4; }
+body[data-page="table"]   { --accent: #5b8fd6; --accent-soft: #deebfa; --accent-2: #a9d6e5; }
+body[data-page="dishes"]  { --accent: #e0533d; --accent-soft: #ffe2da; --accent-2: #ffc9b8; }
+body[data-page="prep"]    { --accent: #4f9d78; --accent-soft: #dff2e6; --accent-2: #bfe3cf; }
+body[data-page="cook"]    { --accent: #d9531e; --accent-soft: #ffe3d2; --accent-2: #ffc2a1; }
+body[data-page="vocab"]   { --accent: #8a6fd1; --accent-soft: #eae4fb; --accent-2: #cfc6f0; }
+body[data-page="quiz"]    { --accent: #d9a520; --accent-soft: #fff3cf; --accent-2: #ffe9a8; }
+body[data-page="progress"]{ --accent: #c2597f; --accent-soft: #ffe1ec; --accent-2: #ffc9d9; }
+
+/* 用专属色点亮：胶带、眉标题、标题下划线、卡片描边、主按钮 */
+body .view-head::before { background: linear-gradient(180deg, var(--accent-2, #ffe9a8), var(--accent, #f0a24a)) !important; }
+body .eyebrow { color: var(--accent, #f0a24a) !important; }
+body .eyebrow::before { background: linear-gradient(90deg, var(--accent, #f0a24a), var(--accent-2, #ffe9a8)) !important; }
+body h1.h1 { color: color-mix(in srgb, var(--accent, #4a3a26) 65%, #3a2c1c) !important; }
+body h1.h1::after {
+  content: ""; display: block; width: 96px; height: 8px; margin-top: 10px; border-radius: 8px;
+  background: linear-gradient(90deg, var(--accent, #f0a24a), var(--accent-2, #ffe9a8));
+}
+body .btn-primary { background: linear-gradient(180deg, var(--accent-2, #f0a24a), var(--accent, #e07f2f)) !important; }
+body .filter-chip.on { background: linear-gradient(180deg, var(--accent-2, #f0a24a), var(--accent, #e07f2f)) !important; }
+body .card, body .dish-card, body .step-card, body .quiz-option, body .ingredient-tile, body .season-card {
+  border-top: 6px solid var(--accent-2, #ffe9a8) !important;
+}
+body .culture-section:nth-of-type(3n+2) .card { border-top-color: var(--accent, #f0a24a) !important; }
+body .culture-section:nth-of-type(3n+3) .card { border-top-color: color-mix(in srgb, var(--accent) 55%, #fff) !important; }
+
+/* ============ 右侧导航菜单：更大更显眼（四色卡片） ============ */
+.home-nav { flex: 0 0 330px !important; gap: 16px !important; }
+.hnav-card {
+  min-height: 96px !important;
+  padding: 16px 18px !important;
+  border-radius: 22px !important;
+}
+.hnav-ico { font-size: 34px !important; }
+.hnav-txt b { font-size: 20px !important; }
+.hnav-txt i { font-size: 12.5px !important; }
+.hnav-go { font-size: 30px !important; }
+@media (max-width: 980px) {
+  .home-nav { flex: 1 1 auto !important; }
+  .hnav-card { min-height: 78px !important; }
+  .hnav-ico { font-size: 26px !important; }
+  .hnav-txt b { font-size: 16.5px !important; }
+}
+
+/* ============ 最终修正：全部改纯色（不要渐变）+ 右侧导航改回小按钮，还原参考图 ============ */
+body { background: var(--bg) !important; }
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(190, 165, 125, .30) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+body .belt-surface { background: var(--a1) !important; }
+body .belt-ticks { background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.62) 0 3px, transparent 3px 68px) !important; }
+body .belt-item.on .belt-name { background: var(--a2) !important; color: #4a3a26 !important; }
+body .belt-flag { background: var(--a4) !important; color: #fff !important; }
+body .btn-primary { background: var(--accent, var(--a3)) !important; color: #fff !important; }
+body .btn-gold { background: var(--a2) !important; color: #4a3a26 !important; }
+body .filter-chip.on { background: var(--accent, var(--a3)) !important; color: #fff !important; }
+body .brand-mark { background: var(--a4) !important; }
+body .nav-link.active { background: var(--accent, var(--a2)) !important; color: #fff !important; }
+body .view-head::before { background: var(--accent-2, var(--a1)) !important; }
+body h1.h1::after { background: var(--accent, var(--a3)) !important; }
+body .belt-ticks::after { display: none !important; }
+body .card, body .dish-card, body .step-card, body .quiz-option, body .ingredient-tile, body .season-card,
+body .culture-section:nth-of-type(2n) .card, body .culture-section:nth-of-type(2n+1) .card {
+  background: var(--card) !important;
+}
+body .culture-section:nth-of-type(2n) .card { border-top-color: var(--accent-2, var(--a1)) !important; }
+body .culture-section:nth-of-type(2n+1) .card { border-top-color: var(--accent, var(--a3)) !important; }
+
+/* 右侧导航：小按钮（图标 + 短标题），四色循环，竖排 */
+.home-nav { flex: 0 0 132px !important; gap: 10px !important; }
+.home-nav-title { display: none !important; }
+body .hnav-card {
+  min-height: 0 !important; padding: 10px 8px !important; border-radius: 14px !important;
+  flex-direction: column !important; gap: 4px !important; text-align: center !important;
+  background: var(--a1) !important; border: 2px solid #fff !important;
+  box-shadow: 0 5px 12px rgba(160, 130, 90, .18) !important;
+}
+body .hnav-card:nth-of-type(1) { background: var(--a1) !important; }
+body .hnav-card:nth-of-type(2) { background: var(--a2) !important; }
+body .hnav-card:nth-of-type(3) { background: var(--a3) !important; }
+body .hnav-card:nth-of-type(4) { background: var(--a4) !important; }
+.hnav-ico { font-size: 22px !important; }
+.hnav-txt b { font-size: 13px !important; color: #3f2f1e !important; }
+.hnav-txt i { display: none !important; }
+.hnav-go { display: none !important; }
+@media (max-width: 980px) {
+  .home-nav { flex: 1 1 auto !important; display: flex !important; flex-direction: row !important; }
+  .hnav-card { flex: 1 1 0 !important; }
+}
+
+/* ============ 配色升级：饱和主题色（不再是清一色浅色） ============ */
+body[data-page="home"]    { --accent: #ff8a3d; --accent-2: #ffd9b8; --accent-3: #4fa36b; }
+body[data-page="guide"]   { --accent: #e1892f; --accent-2: #ffe2bd; --accent-3: #e4567f; }
+body[data-page="culture"] { --accent: #4fa36b; --accent-2: #d6ecd9; --accent-3: #ffb02e; }
+body[data-page="flavor"]  { --accent: #e4567f; --accent-2: #ffdbe6; --accent-3: #7c5cd6; }
+body[data-page="table"]   { --accent: #3f7fd6; --accent-2: #d8e7fb; --accent-3: #2fa37b; }
+body[data-page="dishes"]  { --accent: #e14b36; --accent-2: #ffdcd4; --accent-3: #ffb02e; }
+body[data-page="prep"]    { --accent: #2fa37b; --accent-2: #d3f0e4; --accent-3: #e1892f; }
+body[data-page="cook"]    { --accent: #d9531e; --accent-2: #ffdfd0; --accent-3: #e0a81c; }
+body[data-page="vocab"]   { --accent: #7c5cd6; --accent-2: #e4ddfb; --accent-3: #e4567f; }
+body[data-page="quiz"]    { --accent: #e0a81c; --accent-2: #fff0c9; --accent-3: #4fa36b; }
+body[data-page="progress"]{ --accent: #c2477a; --accent-2: #ffdceb; --accent-3: #3f7fd6; }
+
+/* 板块标题带：改成饱和色块 + 白色文字，画面更有层次 */
+body .view-head { position: relative; padding-left: 4px; }
+body .view-head h1.h1, body .view-head h2.h2 { position: relative; }
+body .view-head::after {
+  content: ""; position: absolute; left: -14px; right: auto; top: 26px;
+  width: 8px; height: 54px; border-radius: 8px; background: var(--accent, #ff8a3d);
+}
+body .eyebrow {
+  background: var(--accent, #ff8a3d) !important; color: #fff !important;
+  padding: 3px 12px; border-radius: 999px;
+}
+body .eyebrow::before { display: none !important; }
+/* 每张卡片底部一条彩色细条，让页面"有颜色" */
+body .card::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 5px;
+  border-radius: 0 0 18px 18px; background: var(--accent-2, #ffe2bd);
+}
+body .card { position: relative; overflow: hidden; }
+body .culture-section:nth-of-type(3n+2) .card::after { background: var(--accent-3, #ffb02e); }
+body .culture-section:nth-of-type(3n) .card::after { background: var(--accent, #ff8a3d); }
+
+/* ============ 交互动效 ============ */
+.spark {
+  position: fixed; z-index: 9999; pointer-events: none; font-weight: 900;
+  animation: sparkFly .95s ease-out forwards;
+}
+@keyframes sparkFly {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.4) rotate(0deg); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.35) rotate(220deg); }
+}
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .5s ease, transform .5s cubic-bezier(.2,.8,.2,1); }
+.reveal-in { opacity: 1 !important; transform: none !important; }
+#app.page-in { animation: pageIn .45s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+body .card:hover { transform: translateY(-4px) rotate(-.35deg) !important; box-shadow: 0 16px 30px rgba(150, 115, 75, .24) !important; }
+
+/* ============ 一屏展示：页壳不滚动，各页按视口高度排布 ============ */
+@media (min-width: 981px) {
+  html, body { height: 100%; overflow: hidden; }
+  #app { height: calc(100vh - 62px); overflow: hidden; padding-top: 14px; padding-bottom: 10px; }
+  .view { height: 100%; display: flex; flex-direction: column; min-height: 0; }
+  /* 内容多的页面：只在内部滚动，页壳不动 */
+  .view > .grid, .view > section, .view > .culture-section { overflow: auto; min-height: 0; }
+  /* 上灶页：锅 + 步骤图 + 评分条一屏装下 */
+  .cook-layout { flex: 1 1 auto; min-height: 0; grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr); }
+  /* 缩小锅、把右栏放宽（图文比例改成 1 : 1.15） */
+  .cook-layout { grid-template-columns: minmax(0, .92fr) minmax(0, 1.15fr) !important; gap: 16px !important; }
+  .wok-stage { height: 100%; min-height: 0; display: flex; flex-direction: column; padding: 12px 12px 8px; }
+  .wok { width: min(100%, 208px); margin: 0 auto; }
+  .wok-food { inset: 18% 16% 28% 16%; }
+  .food-photo { width: 26px; height: 26px; }
+  .stage-label, .stage-temp { font-size: 11.5px; }
+  #autoBtn, #videoBtn { font-size: 12px !important; padding: 6px 10px !important; }
+  .step-panel { height: 100%; min-height: 0; overflow: auto; }
+  .step-photo { height: 20vh !important; object-fit: cover; }
+  .step-strip { flex-wrap: nowrap !important; overflow-x: auto; }
+  .step-strip img { width: 42px !important; height: 42px !important; }
+  .step-source { display: none; }
+  .step-instruction { font-size: 15.5px !important; margin: 6px 0 2px !important; }
+  .step-card { padding: 12px 14px !important; }
+  .score-strip { margin-top: 8px !important; }
+  .score-item { padding: 6px 10px !important; }
+  .dish-strip { padding-bottom: 6px !important; }
+  .view-head { margin-bottom: 10px !important; }
+  h1.h1 { font-size: clamp(24px, 3vw, 34px) !important; }
+  .lead { font-size: 14.5px !important; }
+}
+@media (max-width: 980px) {
+  html, body { overflow: auto; }
+  #app { height: auto; overflow: visible; }
+  .view { height: auto; }
+}
+
+/* ============ 文化页：居中标题卡片墙 + 翻页弹窗 ============ */
+.culture-grid {
+  display: grid; gap: 18px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));   /* 宽屏：5 张一排，比例统一 */
+  grid-auto-rows: minmax(0, 360px); align-content: center;   /* 卡片高度收敛并整组垂直居中，避免卡内太空 */
+  flex: 1 1 auto; height: 100%; overflow: auto; min-height: 0; padding: 4px;
+}
+@media (max-width: 1500px) { .culture-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 980px)  { .culture-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; } }
+.cc-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  gap: 8px; padding: 28px 20px; cursor: pointer; border: 3px solid #fff; border-radius: 24px; min-height: 0;
+  background: var(--card, #fffdf6); box-shadow: 0 10px 22px rgba(160, 130, 90, .18);
+  border-top: 8px solid var(--accent, #4fa36b) !important;
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s;
+}
+.cc-card:nth-child(3n+1) { border-top-color: var(--accent, #4fa36b) !important; }
+.cc-card:nth-child(3n+2) { border-top-color: var(--accent-2, #d6ecd9) !important; }
+.cc-card:nth-child(3n)   { border-top-color: var(--accent-3, #ffb02e) !important; }
+.cc-card:hover { transform: translateY(-6px) rotate(-.6deg); box-shadow: 0 18px 32px rgba(150, 115, 75, .26); }
+.cc-emoji { font-size: 54px; line-height: 1; }
+.cc-title {
+  font-family: "YouYuan", "幼圆", "Microsoft YaHei UI", sans-serif;
+  font-size: 24px; font-weight: 800; color: #4a3a26;
+}
+.cc-sub { font-size: 13px; color: #e4567f; }
+.cc-lead {
+  font-size: 13px; color: #6b5433; line-height: 1.7; max-width: 100%;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+  text-overflow: ellipsis; padding: 0 4px;
+}
+.cc-card { height: 100%; box-sizing: border-box; }
+
+/* 字体统一为文渊圆体（见 final.css），这里不再单独指定标题字体 */
+.cc-more {
+  margin-top: 6px; font-size: 12px; color: #7c6a55;
+  background: color-mix(in srgb, var(--accent, #4fa36b) 22%, #fff);
+  padding: 3px 12px; border-radius: 999px;
+}
+/* 翻页弹窗动画：整页翻转进来 */
+.modal-card.flip-right { animation: flipRight .5s cubic-bezier(.2,.8,.2,1) both !important; }
+.modal-card.flip-left  { animation: flipLeft .5s cubic-bezier(.2,.8,.2,1) both !important; }
+@keyframes flipRight {
+  0% { opacity: 0; transform: perspective(1200px) rotateY(-75deg) translateX(60px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes flipLeft {
+  0% { opacity: 0; transform: perspective(1200px) rotateY(75deg) translateX(-60px); }
+  100% { opacity: 1; transform: none; }
+}
+.flip-panel { animation: panelIn .35s ease both; }
+@keyframes panelIn { from { opacity: 0; } to { opacity: 1; } }
+.cc-big-emoji { font-size: 54px; line-height: 1; }
+.cc-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
