@@ -25,7 +25,7 @@
   var S = {
     py: true, en: true, sound: true, dish: null,
     theme: 'cream',
-    prepped: {}, cooked: {}, badges: [], stirs: 0, chat: 0,
+    prepped: {}, cooked: {}, badges: [], stirs: 0, hands: 0, chat: 0,
     flavorCorrect: 0, vocabSeen: [], name: ''
   };
   var LS_KEY = 'sichuan-kitchen-state-v2';   /* 升版一次：让旧的字体选择失效，改用新的默认字体 */
@@ -1072,6 +1072,132 @@
     $('#stepNext').addEventListener('click', function () { paintCookStep(cookStep + 1); });
     pandaSay('cook');
   }
+  /* ============ 上灶页：动手键（模拟做菜的小互动）============
+     放在"👉 火候/答案"那一行的右边。按这一步该做的动作给 2–4 个键：
+     切配（连点 5 刀）/ 火候 / 计时 / 翻炒 / 下锅 / 装盘放凉，外加一个"尝一口"。
+     点一下 = 音效 + 飘一个 emoji + 熊猫说一句；点错只提示、不扣分。 */
+  var actState = {};                     /* '菜:步:键' → 已点次数（本次会话内记着） */
+  var ACT_LINES = {
+    chop: ['沙沙沙，刀要斜着下。', '听到这个声音就对了。', '切得挺匀，手腕别太用力。'],
+    mix: ['拌的时候从底下兜上来。', '每根都要沾到酱，别偷懒。'],
+    soak: ['泡上，等下锅就不容易糊。', '热水泡一下，香味更足。'],
+    fire: ['火候对了，香味马上出来。', '听，油开始响了。', '火别太大，慢慢来。'],
+    timer: ['计时开始，别走开。', '趁这个时间把碗摆好。'],
+    stir: ['翻炒别停，手腕带一下。', '每一下都从锅底兜上来。', '香味出来了！'],
+    drop: ['下锅喽！', '这一勺就是味道的关键。', '顺着锅边倒，别溅出来。'],
+    plate: ['装盘！颜色真好看。', '摆整齐一点，更好看。'],
+    cool: ['放凉是这道菜的秘密武器。', '凉了以后更香，等着瞧。'],
+    taste: ['小心烫！尝一口，再调调味道。', '自己尝尝，咸淡最准。', '这一口，值了。']
+  };
+  function randLine(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function cutKeyOf(zh) {
+    var s = zh || '';
+    var rules = [
+      { re: /切成?条|切条|切成?细条/, ok: '切成条', bad: ['拍碎', '切成丝'] },
+      { re: /切成?丝|切丝|切成?细丝/, ok: '切成丝', bad: ['拍碎', '切成块'] },
+      { re: /切成?片|切片|切薄片/, ok: '切成片', bad: ['切成丝', '拍碎'] },
+      { re: /切成?段|切段|剪成段/, ok: '切成段', bad: ['切成丝', '拍碎'] },
+      { re: /切成?丁|切丁/, ok: '切成丁', bad: ['切成丝', '拍碎'] },
+      { re: /切末|剁成末|切成末|剁碎/, ok: '剁成末', bad: ['切成块', '拍碎'] },
+      { re: /拍碎|拍一拍|拍散/, ok: '拍碎', bad: ['切成丝', '切成块'] },
+      { re: /切成?块|切块/, ok: '切成块', bad: ['切成丝', '拍碎'] }
+    ];
+    for (var i = 0; i < rules.length; i++) if (rules[i].re.test(s)) return rules[i];
+    return null;
+  }
+  function cookActionKeys(d, st, i) {
+    var zh = st.zh || '', keys = [], cut = cutKeyOf(zh);
+    if (cut) {
+      keys.push({ id: 'chop', label: '🔪 切一切', need: 5, sfx: 'chop', pop: '🔪', line: ACT_LINES.chop });
+      keys.push({ id: 'cut-ok', label: '🔪 ' + cut.ok, need: 1, correct: true, sfx: 'chop', pop: '🥩', line: ['对，就是这样——' + cut.ok + '。'] });
+      keys.push({ id: 'cut-bad', label: '🔪 ' + cut.bad[0], need: 1, wrong: true, line: ['这一步要' + cut.ok + '哦，不是' + cut.bad[0] + '。'] });
+    } else if (st.type === 'heat') {
+      var hm = (CC.heat || {})[st.heat] || {};
+      keys.push({ id: 'fire', label: '🔥 ' + (st.heat === 'da' ? '调大火' : st.heat === 'xiao' ? '调小火' : '开火'), need: 1, correct: true, sfx: 'sizzle', pop: '🔥', line: ACT_LINES.fire });
+      keys.push({ id: 'fire-bad', label: '💨 ' + (st.heat === 'da' ? '用最小火' : '一直开大火'), need: 1, wrong: true, line: ['火候不对：这一步要' + (hm.zh || '看准火候') + '。'] });
+    } else if (st.type === 'stir') {
+      keys.push({ id: 'stir', label: '🥄 翻炒', need: st.target || 8, sfx: 'stir', pop: '🥄', line: ACT_LINES.stir, stir: true });
+    } else if (/拌/.test(zh)) {
+      keys.push({ id: 'mix', label: '🥄 拌一拌', need: 3, sfx: 'stir', pop: '🥄', line: ACT_LINES.mix });
+    } else if (/泡|浸/.test(zh)) {
+      keys.push({ id: 'soak', label: '💧 泡一下', need: 1, correct: true, sfx: 'bubble', pop: '💧', line: ACT_LINES.soak });
+    } else if (st.type === 'wait') {
+      keys.push({ id: 'timer', label: '⏳ 开始计时', need: 1, correct: true, sfx: 'bubble', pop: '⏳', line: ACT_LINES.timer });
+    } else if (st.type === 'order' || st.type === 'season') {
+      keys.push({ id: 'drop', label: '🥣 加进去', need: 1, correct: true, sfx: 'pop', pop: '🥣', line: ACT_LINES.drop });
+    } else if (st.type === 'finish') {
+      keys.push({ id: 'plate', label: '🍽️ 装盘', need: 1, correct: true, sfx: 'ding', pop: '🍽️', line: ACT_LINES.plate });
+      keys.push({ id: 'cool', label: '❄️ 放凉', need: 1, correct: true, sfx: 'bubble', pop: '❄️', line: ACT_LINES.cool });
+    }
+    /* 尝一口只在最后一步出现（用户要求） */
+    if (i === d.steps.length - 1 || st.type === 'finish') {
+      keys.push({ id: 'taste', label: '😋 尝一口', need: 1, sfx: 'pop', pop: '😋', line: ACT_LINES.taste });
+    }
+    return keys;
+  }
+  function cookActionsHTML(d, st, i) {
+    var keys = cookActionKeys(d, st, i);
+    return '<div class="act-row">' + keys.map(function (k) {
+      return '<button class="act-key" data-act="' + k.id + '" data-need="' + k.need + '" title="点一下试试">' +
+        '<span class="act-label">' + k.label + '</span>' +
+        '<span class="tick">' + (k.need > 1 ? '0/' + k.need : '') + '</span></button>';
+    }).join('') + '</div>';
+  }
+  function fxAtPop(btn, emoji) {
+    if (!emoji) return;
+    var row = btn.parentNode;
+    if (!row) return;
+    var sp = document.createElement('span');
+    sp.className = 'act-pop';
+    sp.textContent = emoji;
+    row.appendChild(sp);
+    setTimeout(function () { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 950);
+  }
+  function markActDone(btn, key) {
+    btn.classList.remove('on');
+    btn.classList.add('done');
+    var t = btn.querySelector('.tick');
+    if (t) t.textContent = '✅';
+  }
+  function bindCookActions(d, st, i) {
+    var row = $('#stepView .act-row');
+    if (!row) return;
+    var keys = cookActionKeys(d, st, i);
+    Array.prototype.forEach.call(row.querySelectorAll('.act-key'), function (btn) {
+      var k = keys.filter(function (x) { return x.id === btn.getAttribute('data-act'); })[0];
+      if (!k) return;
+      var sk = d.id + ':' + i + ':' + k.id;
+      actState[sk] = actState[sk] || 0;
+      if (actState[sk] >= k.need) markActDone(btn, k);
+      btn.addEventListener('click', function () {
+        if (actState[sk] >= k.need) { pandaSay('cook', '这一步已经做好啦，点"下一步"继续。', 'happy'); return; }
+        S.hands++;
+        if (k.wrong) {
+          Sfx.error();
+          btn.classList.add('shake', 'bad');
+          setTimeout(function () { btn.classList.remove('shake'); }, 360);
+          pandaSay('cook', randLine(k.line), 'oh');
+        } else {
+          actState[sk]++;
+          if (k.stir) S.stirs++;
+          if (k.sfx && Sfx[k.sfx]) Sfx[k.sfx]();
+          fxAtPop(btn, k.pop);
+          if (actState[sk] >= k.need) {
+            markActDone(btn, k);
+            Sfx.ding();
+            pandaSay('cook', randLine(k.line), 'happy');
+            if (k.stir && S.stirs >= 100) awardBadge('stir');
+          } else {
+            btn.classList.add('on');
+            var t = btn.querySelector('.tick');
+            if (t) t.textContent = actState[sk] + '/' + k.need;
+          }
+        }
+        save();
+      });
+    });
+  }
+
   function paintCookStep(i) {
     var d = dishById(S.dish);
     if (!d) return;
@@ -1086,11 +1212,15 @@
       '<div class="sbs-text">' +
       '<span class="step-badge">' + (STEP_LABEL[st.type] || '步骤') + ' · 第 ' + (cookStep + 1) + ' / ' + d.steps.length + ' 步</span>' +
       '<div class="step-instruction">' + esc(st.zh) + ' ' + speakBtn(st.zh) + '</div>' +
+      '<div class="step-actrow">' +
       (stepAnswerLine(st) ? '<div class="step-answer">' + esc(stepAnswerLine(st)) + '</div>' : '') +
+      cookActionsHTML(d, st, cookStep) +
+      '</div>' +
       pyLine(st.py) + enLine(st.en) +
       (st.tip ? '<div class="hint-box good" style="margin-top:10px"><span>🐼</span><div>' + esc(st.tip.zh) + enLine(st.tip.en) + '</div></div>' : '') +
       '</div>' + photo + '</div>';
     $('#stepPos').textContent = (cookStep + 1) + ' / ' + d.steps.length;
+    bindCookActions(d, st, cookStep);
     $('#stepPrev').disabled = cookStep === 0;
     $('#stepNext').disabled = cookStep === d.steps.length - 1;
     var zoomImg = $('#stepView .step-photo');
@@ -2170,7 +2300,7 @@
     var totalStars = 0;
     Object.keys(S.cooked).forEach(function (k) { totalStars += S.cooked[k].stars; });
     return {
-      cooked: cookedCount, stars: totalStars, stirs: S.stirs,
+      cooked: cookedCount, stars: totalStars, stirs: S.stirs, hands: S.hands || 0,
       badges: S.badges.length, dishTotal: (CC.dishes || []).length, badgeTotal: (CC.badges || []).length
     };
   }
@@ -2210,6 +2340,7 @@
       '<div class="card dash-stat"><span class="icon">🍽️</span><div><b>' + n.cooked + '</b><span class="muted small">完成菜品（共 ' + n.dishTotal + ' 道）</span></div></div>' +
       '<div class="card dash-stat"><span class="icon">★</span><div><b>' + n.stars + '</b><span class="muted small">累计星星</span></div></div>' +
       '<div class="card dash-stat"><span class="icon">💨</span><div><b>' + n.stirs + '</b><span class="muted small">累计翻炒次数</span></div></div>' +
+      '<div class="card dash-stat"><span class="icon">✋</span><div><b>' + n.hands + '</b><span class="muted small">动手次数（切、炒、尝…）</span></div></div>' +
       '<div class="card dash-stat"><span class="icon">🎖️</span><div><b>' + n.badges + ' / ' + n.badgeTotal + '</b><span class="muted small">获得徽章</span></div></div>' +
       '</div>' +
       '<section class="culture-section"><div class="card"><h3 class="h3">⚠️ 课堂安全提示</h3>' +

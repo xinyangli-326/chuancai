@@ -485,6 +485,40 @@ body[data-page="table"] .view > .culture-section { flex: 0 0 auto !important; mi
   display: flex; align-items: center; justify-content: center; gap: 12px;
   margin: 20px 0 auto; flex-wrap: wrap;
 }
+/* ---- 上灶页：动手键（和"👉 火候/答案"同一行，填掉右边那块空白） ---- */
+.step-actrow { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 8px 0 8px; }
+.step-actrow .step-answer { margin: 0 !important; }
+.act-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; position: relative; }
+.act-key {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 14px; border-radius: 999px; cursor: pointer;
+  border: 1.5px solid #e8d6b8; background: #fffaf1; color: #7c5330 !important;
+  font-size: 14.5px !important; font-weight: 700 !important; font-family: inherit;
+  box-shadow: 0 3px 10px rgba(180,150,110,.18);
+  transition: transform .12s, background .18s, border-color .18s, color .18s;
+}
+.act-key:hover { background: #fff2dc; transform: translateY(-1px); }
+.act-key:active { transform: scale(.96); }
+.act-key .tick { font-size: 12px; font-weight: 600; opacity: .75; }
+.act-key.on { background: linear-gradient(180deg, #fff0cc, #ffe1a4); border-color: #efc176; }
+.act-key.done { background: linear-gradient(180deg, #e2f6df, #c8ebc4); border-color: #8ac982; color: #2f6b2c !important; }
+.act-key.done .tick { opacity: 1; }
+.act-key.bad { background: #ffe8e6; border-color: #f0aaa4; color: #a63a2e !important; }
+.act-key.shake { animation: actShake .34s ease; }
+@keyframes actShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  60% { transform: translateX(4px); }
+}
+.act-pop {
+  position: absolute; left: 50%; bottom: 92%; font-size: 22px; line-height: 1;
+  pointer-events: none; animation: actPop .95s ease-out forwards;
+}
+@keyframes actPop {
+  0% { opacity: 0; transform: translate(-50%, 8px) scale(.7); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -46px) scale(1.3) rotate(14deg); }
+}
 @media (max-width: 900px) { .sbs-step { grid-template-columns: 1fr; } }
 
 /* ============ 语言标注：点一下展开下拉，选显示哪些语言 ============ */
