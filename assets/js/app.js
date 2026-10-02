@@ -331,12 +331,26 @@
     var D = dialogueOf(d.id);
     if (!D || !D.talk) { host.innerHTML = ''; return; }
     if (!talkReady(d)) {
-      host.innerHTML = '<div class="talk-locked">💬 这 8 步都做完以后，这里会出现「上桌 · 开口」的对话卡。</div>';
+      host.innerHTML = '<div class="talk-locked">💬 这 8 步都做完以后，会自动弹出「上桌 · 开口」的对话。</div>';
       return;
     }
-    var lines = D.talk.lines.map(function (l) {
+    /* 已完成：页面里留一个"再学一遍"的入口，对话本体走弹窗 */
+    host.innerHTML = '<div class="talk-cta"><span class="talk-cta-txt">🎉 ' + esc(d.name) + ' 已经做好了</span>' +
+      '<button class="btn btn-primary btn-sm" id="openTalk">💬 再学一遍「上桌 · 开口」</button></div>';
+    $('#openTalk').addEventListener('click', function () { openTalkModal(d, false); });
+    if (!talkPopped[d.id]) {                 /* 做完那一刻自动弹一次（每次进页面只弹一次） */
+      talkPopped[d.id] = 1;
+      setTimeout(function () { openTalkModal(d, true); }, 560);
+    }
+  }
+  var talkPopped = {};
+  /* 情景对话弹窗：恭喜 → 一起来学对话（入场有特效 + 音效） */
+  function openTalkModal(d, celebrate) {
+    var D = dialogueOf(d.id);
+    if (!D || !D.talk) return;
+    var lines = D.talk.lines.map(function (l, i) {
       var me = l.who === 'student';
-      return '<div class="talk-row ' + (me ? 'is-student' : 'is-chef') + '">' +
+      return '<div class="talk-row ' + (me ? 'is-student' : 'is-chef') + '" style="animation-delay:' + (140 + i * 105) + 'ms">' +
         '<span class="talk-face" aria-hidden="true">' + (me ? '🧑‍🎓' : '👨‍🍳') + '</span>' +
         '<div class="talk-bubble">' +
         '<span class="talk-who">' + (me ? '学员' : '厨师') + '</span>' +
@@ -345,19 +359,30 @@
         pyLine(l.py) + enLine(l.en) +
         '</div></div>';
     }).join('');
-    host.innerHTML = '<section class="talk-card" id="talkCard">' +
-      '<div class="talk-head"><span class="eyebrow">上桌 · 开口</span>' +
-      '<h2 class="h2">🍽️ ' + esc(d.name) + ' · 情景对话</h2>' +
-      '<p class="lead">' + esc(D.talk.scene) + '</p>' +
+    openModal('<div class="talk-hero">' +
+      '<span class="talk-hero-ico">🎉</span>' +
+      '<h3 class="talk-hero-t">恭喜你完成了菜品制作！</h3>' +
+      '<p class="talk-hero-s">' + esc(d.name) + ' 出锅啦 —— 让我们一起来学对话吧。</p></div>' +
+      '<p class="talk-scene">📍 ' + esc(D.talk.scene) + '</p>' +
       '<div class="talk-actions"><button class="btn btn-primary btn-sm" id="playAllTalk">▶️ 整段播放</button>' +
       '<button class="btn btn-sm" id="stopTalk">⏹ 停止</button>' +
-      '<span class="small muted" id="talkState"></span></div></div>' +
-      '<div class="talk-list">' + lines + '</div></section>';
+      '<span class="small muted" id="talkState"></span></div>' +
+      '<div class="talk-list">' + lines + '</div>' +
+      '<div class="talk-foot"><button class="btn btn-primary" data-close="1">👍 学会了</button></div>');
+    var card = $('.modal-card');
+    if (card) card.classList.add('talk-modal');
     $('#playAllTalk').addEventListener('click', function () { playAllTalk(D.talk.lines); });
     $('#stopTalk').addEventListener('click', function () {
+      talkPlaying = false;
       try { speechSynthesis.cancel(); } catch (e) {}
       var st = $('#talkState'); if (st) st.textContent = '';
     });
+    if (celebrate) {
+      confetti(110); Sfx.fanfare();
+      D.talk.lines.forEach(function (l, i) {          /* 气泡一条一条"啵"出来 */
+        setTimeout(function () { Sfx.bubble(); }, 140 + i * 105);
+      });
+    }
   }
   /* 整段播放：一轮一轮念（复用站里同一套语音合成设置） */
   var talkPlaying = false;
