@@ -26,7 +26,7 @@
     py: true, en: true, sound: true, dish: null,
     theme: 'cream',
     prepped: {}, cooked: {}, badges: [], stirs: 0, hands: 0, chat: 0,
-    flavorCorrect: 0, vocabSeen: [], name: ''
+    mistakes: 0, flavorCorrect: 0, vocabSeen: [], name: ''
   };
   var LS_KEY = 'sichuan-kitchen-state-v2';   /* 升版一次：让旧的字体选择失效，改用新的默认字体 */
   function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) {} }
@@ -244,9 +244,146 @@
     wrong: ['再想想，看看我给的小提示。', '不对哦，川菜这一步很讲究。', '差一点点，换一个试试？'],
     finish: ['上菜啦！色、香、味都到位。', '这道菜你已经学会了，去试试别的吧。', '好吃！要不要写进你的"我的厨房"？']
   };
-  function pandaSay(kind, text, mood) {
-    /* 熊猫助手已下线（用户要求删除），这里保留空函数：全站一百多处调用它的地方不用改 */
-    return;
+  /* 熊猫助手已下线（用户要求删除），但它原来负责的"文字提示"不能跟着消失——
+     现在统一走站内提示条（不出现熊猫形象）。只传 kind、不传 text 的调用是熊猫原来的固定台词，保持静默。 */
+  function pandaSay(kind, text) {
+    if (!text) return;
+    showHint(text, kind);
+  }
+  var hintTimer = null, hintAnchorEl = null;
+  /* 记下"刚点的那个元素"，提示条好贴着它弹（捕获阶段，免得被别的处理器挡掉） */
+  document.addEventListener('pointerdown', function (e) {
+    var t = e.target;
+    hintAnchorEl = (t && t.closest) ? t.closest('button, a, .ingredient-tile') : null;
+  }, true);
+  function showHint(html, kind) {
+    var bar = $('#hintBar');
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'hintBar';
+      document.body.appendChild(bar);
+    }
+    bar.className = 'hint-bar ' + (kind === 'wrong' ? 'is-wrong' : (kind === 'correct' ? 'is-correct' : 'is-info'));
+    bar.innerHTML = '<span class="hint-ico">' + (kind === 'wrong' ? '⚠️' : (kind === 'correct' ? '✅' : '💡')) + '</span>' +
+      '<span class="hint-txt">' + html + '</span>' +
+      '<button class="hint-x" type="button" aria-label="关闭提示">✕</button>';
+    bar.querySelector('.hint-x').addEventListener('click', function () { bar.classList.remove('show'); });
+    var r = (hintAnchorEl && document.contains(hintAnchorEl)) ? hintAnchorEl.getBoundingClientRect() : null;
+    var ok = !!(r && r.width && r.bottom > 0 && r.top < (window.innerHeight - 40));
+    bar.classList.toggle('anchored', ok);
+    if (ok) {
+      bar.style.left = '0px'; bar.style.top = '0px';
+      bar.classList.add('show');
+      var w = bar.offsetWidth, h = bar.offsetHeight;
+      var left = Math.min(Math.max(10, r.left + r.width / 2 - w / 2), Math.max(10, window.innerWidth - w - 10));
+      var top = r.bottom + 10;
+      if (top + h > window.innerHeight - 10) top = Math.max(10, r.top - h - 10);
+      bar.style.left = Math.round(left) + 'px';
+      bar.style.top = Math.round(top) + 'px';
+    } else {
+      bar.style.left = ''; bar.style.top = '';
+      bar.classList.add('show');
+    }
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(function () { bar.classList.remove('show'); }, 3200);
+  }
+  /* 备菜/上灶顶部的实时计数：当场就能看到"动手 / 翻炒 / 点错"的变化 */
+  function liveCountInner() {
+    return '<b>✋ ' + (S.hands || 0) + '</b> 动手' +
+      '<b>🥄 ' + (S.stirs || 0) + '</b> 翻炒' +
+      '<b class="lc-bad">❌ ' + (S.mistakes || 0) + '</b> 点错';
+  }
+  function liveCountHTML() { return '<span class="live-count">' + liveCountInner() + '</span>'; }
+  function paintLiveCount() {
+    $$('.live-count').forEach(function (el) { el.innerHTML = liveCountInner(); });
+  }
+  /* ============ 情景对话（2026-10-02 新增 · 论文创新点） ============
+     数据在 assets/js/data-dialogues.js（window.CC_DIALOGUES）。
+     三处用到：① 备菜页一句"师傅指令" ② 上灶每步下方一句"师傅指令句"
+             ③ 一道菜走完最后一步后，出现"上桌 · 开口"对话卡。 */
+  function dialogueOf(id) { return (window.CC_DIALOGUES || {})[id] || null; }
+  function prepCmdHTML(d) {
+    var D = dialogueOf(d.id);
+    if (!D || !D.prep) return '';
+    return '<div class="prep-cmd"><span class="cmd-who">👨‍🍳 师傅：</span>' +
+      '<span class="cmd-zh">' + esc(D.prep.zh) + '</span> ' + speakBtn(D.prep.zh) +
+      pyLine(D.prep.py) + enLine(D.prep.en) + '</div>';
+  }
+  function stepCmdHTML(d, i) {
+    var D = dialogueOf(d.id);
+    if (!D || !D.steps || !D.steps[i]) return '';
+    var c = D.steps[i];
+    return '<div class="step-cmd"><span class="cmd-who">👨‍🍳 师傅：</span>' +
+      '<span class="cmd-zh">' + esc(c.zh) + '</span> ' + speakBtn(c.zh) +
+      pyLine(c.py) + enLine(c.en) + '</div>';
+  }
+  /* 最后一步的动手键都做完了 → 可以"上桌·开口" */
+  function talkReady(d) {
+    if (!dialogueOf(d.id) || !dialogueOf(d.id).talk) return false;
+    var last = d.steps.length - 1;
+    if (cookStep < last) return false;
+    var info = stepDoneKeys(d, d.steps[last], last);
+    return info.total === 0 || info.done >= info.total;
+  }
+  function paintTalkCard(d) {
+    var host = $('#talkHost');
+    if (!host) return;
+    var D = dialogueOf(d.id);
+    if (!D || !D.talk) { host.innerHTML = ''; return; }
+    if (!talkReady(d)) {
+      host.innerHTML = '<div class="talk-locked">💬 这 8 步都做完以后，这里会出现「上桌 · 开口」的对话卡。</div>';
+      return;
+    }
+    var lines = D.talk.lines.map(function (l) {
+      var me = l.who === 'student';
+      return '<div class="talk-row ' + (me ? 'is-student' : 'is-chef') + '">' +
+        '<span class="talk-face" aria-hidden="true">' + (me ? '🧑‍🎓' : '👨‍🍳') + '</span>' +
+        '<div class="talk-bubble">' +
+        '<span class="talk-who">' + (me ? '学员' : '厨师') + '</span>' +
+        '<span class="talk-tag">' + esc(l.tag) + '</span>' +
+        '<div class="talk-zh">' + esc(l.zh) + ' ' + speakBtn(l.zh) + '</div>' +
+        pyLine(l.py) + enLine(l.en) +
+        '</div></div>';
+    }).join('');
+    host.innerHTML = '<section class="talk-card" id="talkCard">' +
+      '<div class="talk-head"><span class="eyebrow">上桌 · 开口</span>' +
+      '<h2 class="h2">🍽️ ' + esc(d.name) + ' · 情景对话</h2>' +
+      '<p class="lead">' + esc(D.talk.scene) + '</p>' +
+      '<div class="talk-actions"><button class="btn btn-primary btn-sm" id="playAllTalk">▶️ 整段播放</button>' +
+      '<button class="btn btn-sm" id="stopTalk">⏹ 停止</button>' +
+      '<span class="small muted" id="talkState"></span></div></div>' +
+      '<div class="talk-list">' + lines + '</div></section>';
+    $('#playAllTalk').addEventListener('click', function () { playAllTalk(D.talk.lines); });
+    $('#stopTalk').addEventListener('click', function () {
+      try { speechSynthesis.cancel(); } catch (e) {}
+      var st = $('#talkState'); if (st) st.textContent = '';
+    });
+  }
+  /* 整段播放：一轮一轮念（复用站里同一套语音合成设置） */
+  var talkPlaying = false;
+  function playAllTalk(lines) {
+    if (!window.speechSynthesis) { toast('这个浏览器暂时不支持朗读，可以换 Edge 或 Chrome 试试'); return; }
+    talkPlaying = true;
+    var state = $('#talkState');
+    var i = 0;
+    (function next() {
+      if (!talkPlaying || i >= lines.length) {
+        if (state) state.textContent = talkPlaying ? '播放完了 ✓' : '';
+        talkPlaying = false;
+        return;
+      }
+      var u = new SpeechSynthesisUtterance(lines[i].zh);
+      u.lang = 'zh-CN'; u.rate = 0.86; u.pitch = 1.02;
+      var v = voices.filter(function (x) { return /zh|Chinese/i.test(x.lang + ' ' + x.name); });
+      if (v.length) {
+        var prefer = v.find(function (x) { return /Yunxi|Xiaoxiao|Huihui|Kangkang|yaoyao|Tingting|Chinese \(Mainland\)/i.test(x.name); });
+        u.voice = prefer || v[0];
+      }
+      if (state) state.textContent = '正在播放 ' + (i + 1) + ' / ' + lines.length;
+      u.onend = function () { i++; setTimeout(next, 260); };
+      u.onerror = function () { i++; setTimeout(next, 260); };
+      speechSynthesis.speak(u);
+    })();
   }
 
   /* ============ 徽章 ============ */
@@ -861,7 +998,9 @@
       '<div class="dish-name">' + esc(d.name) + '</div>' + pyLine(d.py) + enLine(d.en) +
       '<div class="small muted">' + esc(d.flavor) + ' · ' + d.minutes + ' 分钟 · ' + esc(d.region) + '</div></div></div>' +
       '<div class="prep-progress"><div class="small muted">备菜进度 <b id="prepCount">' + done.length + ' / ' + d.prep.length + '</b></div>' +
-      '<div class="progress-bar"><div class="progress-fill" id="prepFill" style="width:' + pct + '%"></div></div></div>' +
+      '<div class="progress-bar"><div class="progress-fill" id="prepFill" style="width:' + pct + '%"></div></div>' +
+      prepCmdHTML(d) +
+      liveCountHTML() + '</div>' +
       '</div>' +
       '<div class="ing-grid" id="ingGrid"></div>' +
       '<div class="basket" id="basket"><span class="basket-label">🧺 备菜筐</span><span class="muted small">处理好的食材会放到这里</span></div>' +
@@ -1043,6 +1182,7 @@
           }
         } else {
           Sfx.error();
+          S.mistakes = (S.mistakes || 0) + 1; save(); paintLiveCount();
           tile.classList.add('wrong');
           if (btn) btn.classList.add('wrong');
           setTimeout(function () { tile.classList.remove('wrong'); if (btn) btn.classList.remove('wrong'); }, 700);
@@ -1260,6 +1400,7 @@
     app.innerHTML = '<div class="view"><div class="view-head"><span class="eyebrow">烹饪 · 上灶</span>' +
       '<h1 class="h1">' + d.emoji + ' ' + esc(d.name) + ' · 怎么做</h1>' +
       '<p class="lead">一共 <b>' + d.steps.length + '</b> 步。左边是这一步的做法，右边是这一步的实拍图，跟着做就行。</p>' +
+      liveCountHTML() +
       '<button class="btn btn-sm head-clear" id="clearProgress">清空做菜进度</button></div>' +
       dishStrip() +
       '<div id="stepView"></div>' +
@@ -1269,6 +1410,7 @@
       '<button class="btn" id="stepNext">下一步 ›</button>' +
       '<span class="step-gate" id="stepGate"></span>' +
       '<button class="btn btn-gold" id="videoBtn">🎬 看真人做法</button></div>' +
+      '<div id="talkHost"></div>' +
       '</div>';
     bindStrip();
     paintCookStep(0);
@@ -1473,9 +1615,10 @@
         S.hands++;
         if (k.wrong) {
           Sfx.error();
+          S.mistakes = (S.mistakes || 0) + 1;
           btn.classList.add('shake', 'bad');
           setTimeout(function () { btn.classList.remove('shake'); }, 360);
-          pandaSay('cook', randLine(k.line), 'oh');
+          pandaSay('wrong', randLine(k.line), 'oh');      /* 传 wrong，提示条才会用红色 ⚠️ */
         } else {
           actState[sk]++;
           if (k.stir) S.stirs++;
@@ -1484,17 +1627,19 @@
           if (actState[sk] >= k.need) {
             markActDone(btn, k);
             Sfx.ding();
-            pandaSay('cook', randLine(k.line), 'happy');
+            pandaSay('correct', randLine(k.line), 'happy');
             if (k.id === 'stir') Sfx.fryHard();      /* 炒完这一轮：油锅最响的一下 */
             if (k.id === 'timer') setTimeout(function () { Sfx.boil(); }, 260);
             if (k.stir && S.stirs >= 100) awardBadge('stir');
             refreshStepGate(d, st, i);
+            paintTalkCard(d);                   /* 最后一步做完了 → 把「上桌·开口」放出来 */
           } else {
             btn.classList.add('on');
             var t = btn.querySelector('.tick');
             if (t) t.textContent = actState[sk] + '/' + k.need;
           }
         }
+        paintLiveCount();
         save();
       });
     });
@@ -1777,6 +1922,7 @@
       '<div class="sbs-text">' +
       '<span class="step-badge">' + (STEP_LABEL[st.type] || '步骤') + ' · 第 ' + (cookStep + 1) + ' / ' + d.steps.length + ' 步</span>' +
       '<div class="step-instruction">' + esc(st.zh) + ' ' + speakBtn(st.zh) + '</div>' +
+      stepCmdHTML(d, cookStep) +
       '<div class="step-actrow">' +
       (stepAnswerLine(st) ? '<div class="step-answer">' + esc(stepAnswerLine(st)) + '</div>' : '') +
       cookActionsHTML(d, st, cookStep) +
@@ -1790,6 +1936,7 @@
     bindCookActions(d, st, cookStep);
     $('#stepPrev').disabled = cookStep === 0;
     $('#stepNext').disabled = cookStep === d.steps.length - 1;
+    paintTalkCard(d);
     var zoomImg = $('#stepView .step-photo');
     function zoom() {
       if (zoomImg) openPhotoModal(zoomImg.getAttribute('src'), d.name + ' · 第 ' + (cookStep + 1) + ' 步 · 实拍图');
@@ -2834,7 +2981,10 @@
     if (quiz.i >= quiz.deck.length) return renderQuizResult();
     var q = quiz.deck[quiz.i];
     var pct = Math.round(quiz.i / quiz.deck.length * 100);
+    /* 题型标签：抽到"句子排序/听音"这种没有 ABC 选项的题时，让用户一眼知道这是什么题 */
+    var typeTag = q.tag || (q.type === 'text' ? '选择题' : q.type === 'audio' ? '听音题' : q.type === 'order' ? '顺序题' : q.type === 'build' ? '句子排序' : '');
     var head = '<div class="quiz-top"><span class="step-badge">第 ' + (quiz.i + 1) + ' / ' + quiz.deck.length + ' 题</span>' +
+      (typeTag ? '<span class="q-tag">' + typeTag + '</span>' : '') +
       '<div class="quiz-bar"><i style="width:' + pct + '%"></i></div><span class="small muted">得分 ' + quiz.score + '</span></div>';
     var body = '';
     if (q.type === 'text') {
@@ -2861,7 +3011,7 @@
         '<div style="margin-top:12px"><b>你的顺序：</b><span id="orderPick" class="muted">（还没选）</span></div>' +
         '<button class="btn btn-sm" id="resetOrder" style="margin-top:10px">↻ 重新排</button></div>';
     } else if (q.type === 'build') {
-      body = '<div class="card"><div class="quiz-question">句子练习：把下面的词排成一个通顺的句子</div>' +
+      body = '<div class="card"><div class="quiz-question">句子排序：👇 点下面的词，按顺序排成一句话</div>' +
         (q.hint ? '<p class="small muted">句型提示：' + esc(q.hint.zh) + enLine(q.hint.en) + '</p>' : '') +
         '<div class="build-row" id="buildRow">' + q.tokens.map(function (t, i) {
           return '<button class="build-token" data-t="' + i + '">' + esc(t) + '</button>';
@@ -3053,6 +3203,7 @@
       '<div class="card dash-stat"><span class="icon">★</span><div><b>' + n.stars + '</b><span class="muted small">累计星星</span></div></div>' +
       '<div class="card dash-stat"><span class="icon">💨</span><div><b>' + n.stirs + '</b><span class="muted small">累计翻炒次数</span></div></div>' +
       '<div class="card dash-stat"><span class="icon">✋</span><div><b>' + n.hands + '</b><span class="muted small">动手次数（切、炒、尝…）</span></div></div>' +
+      '<div class="card dash-stat"><span class="icon">❌</span><div><b>' + (S.mistakes || 0) + '</b><span class="muted small">点错次数（备菜 + 上灶）</span></div></div>' +
       '<div class="card dash-stat"><span class="icon">🎖️</span><div><b>' + n.badges + ' / ' + n.badgeTotal + '</b><span class="muted small">获得徽章</span></div></div>' +
       '</div>' +
       '<section class="culture-section"><div class="card"><h3 class="h3">⚠️ 课堂安全提示</h3>' +

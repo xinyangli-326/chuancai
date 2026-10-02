@@ -73,6 +73,13 @@
       (q.options || []).forEach(function (o) { pair(o.zh, o.en); });
       if (q.explain) pair(q.explain.zh, q.explain.en);
     });
+    /* 情景对话（2026-10-02 新增）：师傅指令句 + 上桌对话，跟着全局语言切换走 */
+    Object.keys(window.CC_DIALOGUES || {}).forEach(function (id) {
+      var D = window.CC_DIALOGUES[id];
+      if (D.prep) pair(D.prep.zh, D.prep.en);
+      (D.steps || []).forEach(function (s) { pair(s.zh, s.en); });
+      (((D.talk || {}).lines) || []).forEach(function (l) { pair(l.zh, l.en); });
+    });
   })();
 
   /* ---------- 文本节点替换 ---------- */
