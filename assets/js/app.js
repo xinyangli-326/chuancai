@@ -1478,6 +1478,7 @@
       '<h1 class="h1">' + d.emoji + ' ' + esc(d.name) + ' · 怎么做</h1>' +
       '<p class="lead">一共 <b>' + d.steps.length + '</b> 步。左边是这一步的做法，右边是这一步的实拍图，跟着做就行。</p>' +
       liveCountHTML() +
+      '<button class="btn btn-sm head-demo" id="demoAll" title="课堂演示用：一键把这 8 步全部做完，直接看情景对话">🧑‍🏫 教师演示：一键完成</button>' +
       '<button class="btn btn-sm head-clear" id="clearProgress">清空做菜进度</button></div>' +
       dishStrip() +
       '<div id="stepView"></div>' +
@@ -1495,7 +1496,25 @@
     $('#stepPrev').addEventListener('click', function () { paintCookStep(cookStep - 1); });
     $('#stepNext').addEventListener('click', function () { paintCookStep(cookStep + 1); });
     $('#clearProgress').addEventListener('click', function () { openClearProgress(d); });
+    $('#demoAll').addEventListener('click', function () { demoFinishAll(); });
     pandaSay('cook');
+  }
+  /* 教师演示模式：一键把这道菜的所有步骤标成完成，并直接弹出「上桌 · 开口」情景对话。
+     只改本次会话里的 actState，不写学习记录（不污染学生的成绩/徽章）。 */
+  function demoFinishAll() {
+    var d = dishById(S.dish);
+    if (!d) return;
+    d.steps.forEach(function (st, i) {
+      requiredKeys(d, st, i).forEach(function (k) {
+        actState[d.id + ':' + i + ':' + k.id] = k.need;
+      });
+    });
+    cookStep = d.steps.length - 1;
+    talkPopped[d.id] = 1;                 /* 阻止 paintCookCard 的自动弹，这里强制弹一次 */
+    paintCookStep(cookStep);
+    Sfx.fanfare();
+    toast('教师演示：已一键完成 ' + d.steps.length + ' 步，马上弹出情景对话');
+    setTimeout(function () { openTalkModal(d, true); }, 420);
   }
   /* 清空做菜进度：这道菜 / 全部 8 道菜 */
   function clearCooking(ids) {

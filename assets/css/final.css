@@ -1168,6 +1168,16 @@ body[data-page="story"] .story-photo img { max-height: 420px; }
   color: #8a5a2b !important;
 }
 .head-clear:hover { background: #fff1dc !important; }
+/* 教师演示模式按钮（放在"清空做菜进度"左边，用户圈的位置） */
+.head-demo {
+  position: absolute; right: 138px; top: 2px;
+  background: #fff8ec !important; border: 1.5px solid #eccf9d !important;
+  color: #8a5a1b !important; font-weight: 800 !important;
+}
+.head-demo:hover { background: #ffefd4 !important; }
+@media (max-width: 900px) {
+  .head-demo { position: static; display: block; margin: 10px auto 0; }
+}
 @media (max-width: 900px) {
   .head-clear { position: static; display: block; margin: 10px auto 0; }
 }
