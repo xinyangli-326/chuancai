@@ -26,7 +26,7 @@
     py: true, en: true, sound: true, dish: null,
     theme: 'cream',
     prepped: {}, cooked: {}, badges: [], stirs: 0, hands: 0, chat: 0,
-    mistakes: 0, flavorCorrect: 0, vocabSeen: [], name: ''
+    mistakes: 0, talkDone: {}, flavorCorrect: 0, vocabSeen: [], name: ''
   };
   var LS_KEY = 'sichuan-kitchen-state-v2';   /* 升版一次：让旧的字体选择失效，改用新的默认字体 */
   function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) {} }
@@ -381,7 +381,7 @@
       try { speechSynthesis.cancel(); } catch (e) {}
       var st = $('#talkState'); if (st) st.textContent = '';
     });
-    bindTalkStep(card, D.talk.lines);
+    bindTalkStep(card, D.talk.lines, d);
     if (celebrate) {
       confetti(110); Sfx.fanfare();
       setTimeout(function () { Sfx.bubble(); }, 180);
@@ -389,7 +389,17 @@
   }
   /* 逐句显示：默认只出第一句，点一下（或点"下一句"）出下一句 */
   var talkShown = 1;
-  function bindTalkStep(card, lines) {
+  /* 把整段对话"看完"（显示到最后一句）就算解锁一次，记进学习记录 */
+  function markTalkDone(d) {
+    if (!d) return;
+    S.talkDone = S.talkDone || {};
+    if (S.talkDone[d.id]) return;
+    S.talkDone[d.id] = 1;
+    save();
+    Sfx.ding();
+    toast('已解锁「' + d.name + '」的情景对话 💬');
+  }
+  function bindTalkStep(card, lines, dish) {
     if (!card) return;
     talkShown = 1;
     var list = card.querySelector('.talk-list');
@@ -404,6 +414,7 @@
       if (al) al.style.display = left > 0 ? '' : 'none';
       if (dn) dn.style.display = left === 0 ? '' : 'none';
       if (pg) pg.textContent = '已显示 ' + Math.min(talkShown, lines.length) + ' / ' + lines.length + ' 句';
+      if (talkShown >= lines.length) markTalkDone(dish);
     }
     function next() {
       if (talkShown >= lines.length) return;
@@ -2973,7 +2984,8 @@
     var deck = [];
     var pool = (level && level.questions) ? level.questions : (CC.cultureQuiz || []);
     var G = window.CC_QUIZ_GRAMMAR || { fill: [], build: [] };
-    var take = level ? 5 : 8;                 /* 有等级的：5 道学科题 + 1 语法填空 + 1 句子排序 + 1 附加题 = 8 */
+    /* 有等级的：3 学科 + 1 语法填空 + 1 句子排序 + 1 对话排序 + 1 选词填空 + 1 听音 = 8 题（过线仍是 6） */
+    var take = level ? 3 : 8;
     shuffle(pool.slice()).slice(0, take).forEach(function (q) {
       /* 选项每次打乱：不然正确答案永远在第一个（自检时发现的：全点 A 也能满分） */
       deck.push({ type: 'text', q: q.q, options: shuffle(q.options.slice()), explain: q.explain });
@@ -2983,6 +2995,11 @@
       if (f) deck.push({ type: 'text', tag: '语法', q: f.q, options: shuffle(f.options.slice()), explain: f.explain });
       var b = shuffle((G.build || []).slice())[0];
       if (b) deck.push({ type: 'build', tag: '句子', tokens: b.tokens.slice(), answer: b.answer, hint: b.hint, explain: b.explain });
+      /* 新增两种题型：素材都从"情景对话"里取（论文创新点的联动） */
+      var dq = buildDialogQuestion();
+      if (dq) deck.push(dq);
+      var bq = buildBlankQuestion();
+      if (bq) deck.push(bq);
     }
     var allWords = [];
     Object.keys(CC.vocab).forEach(function (c) { CC.vocab[c].forEach(function (w) { allWords.push(w); }); });
@@ -3003,7 +3020,71 @@
         deck.push({ type: 'order', tag: '顺序', dish: d, steps: steps, shuffled: shuffle(steps.map(function (s, i) { return { s: s, i: i }; })) });
       }
     }
+    /* 自检用：把这一套题的题型列出来（work/check-quiz-mixed.mjs 会读它），不影响界面 */
+    window.CC_QUIZ_LAST = deck.map(function (q) { return q.tag || q.type; });
     return shuffle(deck);
+  }
+  /* 新题型①「对话排序」：从某道菜的情景对话里取连续 3 句，打乱让学生排回去 */
+  function buildDialogQuestion() {
+    var D = window.CC_DIALOGUES || {};
+    var ids = Object.keys(D).filter(function (k) {
+      return D[k] && D[k].talk && D[k].talk.lines && D[k].talk.lines.length >= 5;
+    });
+    if (!ids.length) return null;
+    var id = ids[Math.floor(Math.random() * ids.length)];
+    var lines = D[id].talk.lines;
+    var start = Math.floor(Math.random() * (lines.length - 3));
+    var picked = lines.slice(start, start + 3);
+    var who = function (l) { return l.who === 'student' ? '学员' : '厨师'; };
+    return {
+      type: 'dialog', tag: '对话排序', dishId: id,
+      lines: picked,
+      shuffled: shuffle(picked.map(function (l, i) { return { l: l, i: i }; })),
+      explain: {
+        zh: '正确顺序：' + picked.map(function (l) { return who(l) + '「' + l.zh + '」'; }).join(' → '),
+        en: 'Correct order: ' + picked.map(function (l) { return who(l) + ': ' + l.en; }).join(' → ')
+      }
+    };
+  }
+  /* 新题型②「选词填空」：从情景对话里挑一句，挖掉一个站里学过的词，三选一 */
+  function buildBlankQuestion() {
+    var D = window.CC_DIALOGUES || {};
+    var cands = [];
+    Object.keys(D).forEach(function (k) {
+      if (!D[k] || !D[k].talk) return;
+      D[k].talk.lines.forEach(function (l) {
+        var hits = [];
+        Object.keys(CC.vocab || {}).forEach(function (c) {
+          (CC.vocab[c] || []).forEach(function (w) {
+            if (w && w.zh && w.zh.length >= 2 && l.zh.indexOf(w.zh) >= 0) hits.push(w);
+          });
+        });
+        if (hits.length) cands.push({ line: l, hits: hits });
+      });
+    });
+    if (!cands.length) return null;
+    var pick = cands[Math.floor(Math.random() * cands.length)];
+    var w = pick.hits[Math.floor(Math.random() * pick.hits.length)];
+    var pool = [];
+    Object.keys(CC.vocab || {}).forEach(function (c) {
+      (CC.vocab[c] || []).forEach(function (x) {
+        if (x && x.zh && x.zh !== w.zh && x.zh.length === w.zh.length) pool.push(x);
+      });
+    });
+    var others = shuffle(pool).slice(0, 2);
+    while (others.length < 2) others.push({ zh: '不是这个词', en: '' });
+    var opts = shuffle([w].concat(others)).map(function (o) {
+      return { zh: o.zh, en: (o.py ? o.py + ' · ' : '') + (o.en || ''), correct: o.zh === w.zh };
+    });
+    return {
+      type: 'text', tag: '选词填空',
+      q: { zh: '选词填空：' + pick.line.zh.replace(w.zh, '＿＿＿'), en: 'Fill in the blank — which word fits?' },
+      options: opts,
+      explain: {
+        zh: '原句：' + pick.line.zh + '　｜　空里要填「' + w.zh + '」（' + (w.py || '') + ' ' + (w.en || '') + '）',
+        en: pick.line.en
+      }
+    };
   }
   function renderQuiz() {
     var levels = window.CC_QUIZ_LEVELS || [];
@@ -3086,6 +3167,15 @@
         '<div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">' +
         '<button class="btn btn-sm" id="buildUndo">‹ 撤回</button>' +
         '<button class="btn btn-sm" id="buildReset">↻ 重排</button></div></div>';
+    } else if (q.type === 'dialog') {
+      body = '<div class="card"><div class="quiz-question">对话排序：把下面三句排成一段通顺的对话</div>' +
+        '<p class="small muted">按顺序点下面的句子；点错了可以"重新排"。</p>' +
+        '<div class="quiz-options" id="dlgOptions">' + q.shuffled.map(function (o, i) {
+          return '<button class="quiz-option" data-k="' + i + '"><span class="key">?</span>' +
+            '<span>' + esc(o.l.zh) + '<span class="en">' + (o.l.who === 'student' ? '学员' : '厨师') + '</span></span></button>';
+        }).join('') + '</div>' +
+        '<div style="margin-top:12px"><b>你的顺序：</b><span id="dlgPick" class="muted">（还没选）</span></div>' +
+        '<button class="btn btn-sm" id="resetDlg" style="margin-top:10px">↻ 重新排</button></div>';
     }
     shell.innerHTML = head + body + '<div id="quizFb"></div>';
     if (q.type === 'audio') {
@@ -3145,6 +3235,31 @@
         used = []; paintBuild();
       });
       paintBuild();
+    } else if (q.type === 'dialog') {
+      var dpicked = [];
+      var dWho = function (l) { return l.who === 'student' ? '学员' : '厨师'; };
+      $$('#dlgOptions .quiz-option').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var idx = +b.dataset.k;
+          if (dpicked.indexOf(idx) >= 0) return;
+          dpicked.push(idx);
+          b.classList.add('correct');
+          b.querySelector('.key').textContent = dpicked.length;
+          $('#dlgPick').textContent = dpicked.map(function (p) { return dWho(q.shuffled[p].l); }).join(' → ');
+          Sfx.pop();
+          if (dpicked.length === q.shuffled.length) {
+            var ok = dpicked.every(function (p, pos) { return q.shuffled[p].i === pos; });
+            judgeQuiz(ok, q, ok ? null : q.explain.zh);
+          }
+        });
+      });
+      $('#resetDlg').addEventListener('click', function () {
+        dpicked = [];
+        $$('#dlgOptions .quiz-option').forEach(function (b) {
+          b.classList.remove('correct'); b.querySelector('.key').textContent = '?';
+        });
+        $('#dlgPick').textContent = '（还没选）';
+      });
     } else {
       $$('.quiz-option').forEach(function (b) {
         b.addEventListener('click', function () {
@@ -3229,6 +3344,7 @@
     Object.keys(S.cooked).forEach(function (k) { totalStars += S.cooked[k].stars; });
     return {
       cooked: cookedCount, stars: totalStars, stirs: S.stirs, hands: S.hands || 0,
+      talk: Object.keys(S.talkDone || {}).length, talkTotal: Object.keys(window.CC_DIALOGUES || {}).length,
       badges: S.badges.length, dishTotal: (CC.dishes || []).length, badgeTotal: (CC.badges || []).length
     };
   }
@@ -3237,7 +3353,7 @@
     if (PROGRESS_SECTIONS.some(function (s) { return s.id === sec; })) return renderProgressSection(sec);
     var n = progressStats();
     var meta = {
-      record: n.cooked + '/' + n.dishTotal + ' 道 · ' + n.stars + ' 星 · ' + n.badges + '/' + n.badgeTotal + ' 徽章',
+      record: n.cooked + '/' + n.dishTotal + ' 道 · ' + n.talk + '/' + n.talkTotal + ' 对话 · ' + n.stars + ' 星 · ' + n.badges + '/' + n.badgeTotal + ' 徽章',
       menu: n.dishTotal + ' 道菜 · 已完成 ' + n.cooked + ' 道',
       badges: n.badges + ' / ' + n.badgeTotal + ' 枚已获得',
       cert: S.name ? '名字：' + S.name : '写上名字就能生成'
@@ -3270,6 +3386,7 @@
       '<div class="card dash-stat"><span class="icon">💨</span><div><b>' + n.stirs + '</b><span class="muted small">累计翻炒次数</span></div></div>' +
       '<div class="card dash-stat"><span class="icon">✋</span><div><b>' + n.hands + '</b><span class="muted small">动手次数（切、炒、尝…）</span></div></div>' +
       '<div class="card dash-stat"><span class="icon">❌</span><div><b>' + (S.mistakes || 0) + '</b><span class="muted small">点错次数（备菜 + 上灶）</span></div></div>' +
+      '<div class="card dash-stat"><span class="icon">💬</span><div><b>' + n.talk + ' / ' + n.talkTotal + '</b><span class="muted small">已解锁情景对话（看完一张对话卡算一次）</span></div></div>' +
       '<div class="card dash-stat"><span class="icon">🎖️</span><div><b>' + n.badges + ' / ' + n.badgeTotal + '</b><span class="muted small">获得徽章</span></div></div>' +
       '</div>' +
       '<section class="culture-section"><div class="card"><h3 class="h3">⚠️ 课堂安全提示</h3>' +
@@ -3300,6 +3417,10 @@
         return '<div class="dish-progress-row"><span class="emoji">' + d.emoji + '</span>' +
           '<div class="grow"><b>' + esc(d.name) + '</b><span class="py">' + esc(d.py) + '</span>' +
           '<div class="small muted">备菜 ' + prep + '/' + d.prep.length + (c ? ' · 已做，得分 ' + c.score + '，' + '★'.repeat(c.stars) : ' · 还没做') + '</div></div>' +
+          (window.CC_DIALOGUES && window.CC_DIALOGUES[d.id]
+            ? '<span class="talk-flag' + (S.talkDone && S.talkDone[d.id] ? ' on' : '') + '">' +
+              (S.talkDone && S.talkDone[d.id] ? '💬 对话已解锁' : '💬 对话未解锁') + '</span>'
+            : '') +
           '<button class="btn btn-sm" data-go="prep" data-id="' + d.id + '">' + (c ? '再做一次' : '开始做') + '</button></div>';
       }).join('') + '</section></div>';
       pandaSay('progress');
