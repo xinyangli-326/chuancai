@@ -72,10 +72,77 @@
       src.connect(f); f.connect(g); g.connect(c.destination);
       src.start();
     }
+    /* 带扫频的噪声：倒液体、"哗"的一下、油锅起烟 */
+    function noiseSweep(dur, fromHz, toHz, gain, type) {
+      var c = ctx(); if (!c) return;
+      var len = Math.floor(c.sampleRate * dur);
+      var buf = c.createBuffer(1, len, c.sampleRate);
+      var d = buf.getChannelData(0);
+      for (var i = 0; i < len; i++) {
+        var t = i / len;
+        d[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * Math.min(1, t * 1.6)) * (1 - t * 0.5);
+      }
+      var src = c.createBufferSource(); src.buffer = buf;
+      var f = c.createBiquadFilter(); f.type = type || 'bandpass'; f.Q.value = 0.7;
+      f.frequency.setValueAtTime(fromHz, c.currentTime);
+      f.frequency.exponentialRampToValueAtTime(Math.max(80, toHz), c.currentTime + dur);
+      var g = c.createGain(); g.gain.setValueAtTime(gain || 0.14, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+      src.connect(f); f.connect(g); g.connect(c.destination);
+      src.start();
+    }
+    /* 油锅里的"噼啪"小爆点 */
+    function crackles(n, freq, gain, spread) {
+      for (var i = 0; i < n; i++) {
+        (function (k) {
+          setTimeout(function () { noise(0.03 + Math.random() * 0.03, freq || 3200, (gain || 0.1) * (0.6 + Math.random() * 0.7), 2.4); },
+            k * (spread || 90) + Math.random() * 40);
+        })(i);
+      }
+    }
     return {
-      sizzle: function () { noise(0.7, 2600, 0.13, 0.6); },
-      chop: function () { noise(0.08, 1800, 0.2, 2.2); tone(220, 0.06, 'square', 0.06, 120); },
-      stir: function () { noise(0.22, 900, 0.1, 0.7); },
+      /* —— 开火：一声"咔"+ 火着起来的"呼" —— */
+      ignite: function () {
+        noise(0.05, 2600, 0.18, 3);
+        tone(150, 0.05, 'square', 0.05, 90);
+        setTimeout(function () { noiseSweep(0.5, 420, 1500, 0.1, 'lowpass'); }, 70);
+      },
+      /* —— 油锅滋啦（下锅 / 炒）—— */
+      fry: function () { noiseSweep(0.55, 2400, 3600, 0.11, 'highpass'); crackles(3, 3400, 0.06, 120); },
+      fryHard: function () { noiseSweep(1.1, 1800, 4200, 0.13, 'highpass'); crackles(8, 3200, 0.08, 110); },
+      /* —— 切：刀落砧板的闷响 + 一点脆声 —— */
+      knife: function () { noise(0.06, 1200, 0.2, 1.6); tone(180, 0.07, 'square', 0.05, 110); setTimeout(function () { noise(0.04, 3600, 0.07, 2.6); }, 25); },
+      /* —— 拌：筷子刮碗 —— */
+      scrape: function () { noiseSweep(0.34, 700, 1500, 0.1, 'bandpass'); setTimeout(function () { noise(0.05, 2600, 0.05, 2); }, 120); },
+      /* —— 水：注水 + 冒泡 —— */
+      water: function () { noiseSweep(0.6, 900, 2200, 0.12, 'bandpass'); setTimeout(function () { tone(320, 0.14, 'sine', 0.07, 520); }, 260); },
+      boil: function () { for (var i = 0; i < 4; i++) setTimeout(function () { tone(260 + Math.random() * 200, 0.16, 'sine', 0.07, 520); }, i * 210); },
+      /* —— 倒液体 —— */
+      pour: function () { noiseSweep(0.7, 600, 1800, 0.13, 'bandpass'); setTimeout(function () { noiseSweep(0.25, 1500, 900, 0.07, 'lowpass'); }, 520); },
+      /* —— 撒粉 / 撒芝麻 —— */
+      sprinkle: function () { for (var i = 0; i < 7; i++) setTimeout(function () { noise(0.035, 4200 + Math.random() * 1800, 0.07, 2.8); }, i * 55); },
+      /* —— 放固体食材进锅：闷响 + 油花 —— */
+      plop: function () { tone(210, 0.12, 'sine', 0.1, 120); noise(0.16, 1600, 0.1, 1.4); setTimeout(function () { noiseSweep(0.35, 2600, 3600, 0.07, 'highpass'); }, 60); },
+      /* —— 瓷器相碰（装盘）—— */
+      clink: function () { tone(1750, 0.09, 'triangle', 0.09); setTimeout(function () { tone(2600, 0.14, 'triangle', 0.07); }, 45); setTimeout(function () { tone(3400, 0.2, 'sine', 0.035); }, 90); },
+      /* —— 计时器滴答 —— */
+      timer: function () { [0, 480, 960].forEach(function (d) { setTimeout(function () { noise(0.03, 2400, 0.12, 4); }, d); }); },
+      /* —— 尝一口：小口一抿 —— */
+      sip: function () { noise(0.09, 700, 0.09, 1.2); setTimeout(function () { tone(420, 0.1, 'sine', 0.06, 700); }, 90); },
+      /* —— 拖拽/落下的一下"咻" —— */
+      whoosh: function () { noiseSweep(0.3, 400, 2200, 0.09, 'bandpass'); },
+      /* —— 放调料进锅：按食材形状分三种声音 —— */
+      dropSound: function (id) {
+        var POWDER = { huajiafen: 1, lajiaomian: 1, ziranfen: 1, jijing: 1, yan: 1, baitang: 1, zhima: 1, dianfen: 1 };
+        var LIQUID = { shengchou: 1, laochou: 1, xiangcu: 1, haoyou: 1, liaojiu: 1, shiyongyou: 1, hongyou: 1, lajiaoyou: 1, niuyou: 1, qingshui: 1, gaotang: 1, jitang: 1 };
+        if (POWDER[id]) { setTimeout(function () { return SfxPublic.sprinkle(); }, 10); return; }
+        if (LIQUID[id]) { setTimeout(function () { return SfxPublic.pour(); }, 10); return; }
+        setTimeout(function () { return SfxPublic.plop(); }, 10);
+      },
+      /* —— 旧名字都留着当别名，老代码还在用 —— */
+      sizzle: function () { noiseSweep(0.8, 2400, 3200, 0.12, 'highpass'); crackles(4, 3400, 0.05, 150); },
+      chop: function () { this.knife(); },
+      stir: function () { this.fry(); },
       ding: function () { tone(880, 0.16, 'sine', 0.12); setTimeout(function () { tone(1320, 0.22, 'sine', 0.1); }, 110); },
       pop: function () { tone(520, 0.12, 'sine', 0.12, 900); },
       error: function () { tone(200, 0.22, 'sawtooth', 0.1, 110); },
@@ -85,6 +152,7 @@
       }
     };
   })();
+  var SfxPublic = Sfx;      /* dropSound 里要用别名 */
 
   /* ============ 朗读（浏览器内置语音合成） ============ */
   var voices = [];
@@ -177,19 +245,8 @@
     finish: ['上菜啦！色、香、味都到位。', '这道菜你已经学会了，去试试别的吧。', '好吃！要不要写进你的"我的厨房"？']
   };
   function pandaSay(kind, text, mood) {
-    var box = $('#pandaBubble'), t = $('#pandaText'), av = $('#pandaAvatar');
-    if (!t) return;
-    var pool = PANDA[kind];
-    t.innerHTML = text || (pool ? pool[Math.floor(Math.random() * pool.length)] : '');
-    box.style.animation = 'none';
-    void box.offsetWidth;
-    box.style.animation = 'popIn .35s both';
-    if (mood && av) {
-      av.classList.remove('react-happy', 'react-oh');
-      void av.offsetWidth;
-      av.classList.add(mood === 'oh' ? 'react-oh' : 'react-happy');
-      setTimeout(function () { av.classList.remove('react-happy', 'react-oh'); }, 700);
-    }
+    /* 熊猫助手已下线（用户要求删除），这里保留空函数：全站一百多处调用它的地方不用改 */
+    return;
   }
 
   /* ============ 徽章 ============ */
@@ -262,8 +319,10 @@
   function photoImg(zh, cls, fallbackEmoji) {
     var src = photoOf(zh);
     if (!src) return '<span class="' + (cls || '') + '">' + (fallbackEmoji || '') + '</span>';
-    return '<img class="' + (cls || '') + '" src="' + src + '" alt="' + esc(zh) + '" loading="lazy" ' +
-      'onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{textContent:\'' + (fallbackEmoji || '') + '\'}))">';
+    /* data-fb：万一抠图路径被换成了不存在的文件，先退回实拍图；实拍图也没有再退成 emoji */
+    return '<img class="' + (cls || '') + '" src="' + src + '" data-fb="' + src + '" alt="' + esc(zh) + '" loading="lazy" ' +
+      'onerror="if(this.getAttribute(\'src\')!==this.dataset.fb){this.src=this.dataset.fb;}' +
+      'else{this.replaceWith(Object.assign(document.createElement(\'span\'),{textContent:\'' + (fallbackEmoji || '') + '\'}));}">';
   }
   /* 干净图：优先用抠好的透明图（assets/img/cutv、c、cs），没有就退回实拍图 */
   function cutPath(kind, id) {
@@ -293,12 +352,14 @@
     ['progress', '我的厨房', '🐼']
   ];
   /* 首页右侧菜单对应的子页（不属于顶部主导航） */
-  var SUB_ROUTES = ['guide', 'culture', 'flavor', 'table'];
+  var SUB_ROUTES = ['guide', 'culture', 'flavor', 'table', 'story'];
   var current = { name: 'home', arg: null };
 
   function renderNav() {
     $('#nav').innerHTML = NAV.map(function (n) {
-      var on = current.name === n[0] || (n[0] === 'home' && SUB_ROUTES.indexOf(current.name) >= 0);
+      var on = current.name === n[0]
+        || (n[0] === 'home' && SUB_ROUTES.indexOf(current.name) >= 0 && current.name !== 'story')
+        || (n[0] === 'dishes' && current.name === 'story');   /* 文化故事页高亮"选菜" */
       return '<a class="nav-link' + (on ? ' active' : '') + '" data-route="' + n[0] + '">' + n[2] + ' ' + n[1] + '</a>';
     }).join('');
   }
@@ -317,6 +378,7 @@
     renderNav();
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (r.name === 'home') renderHome();
+    else if (r.name === 'story') renderStory();
     else if (SUB_ROUTES.indexOf(r.name) >= 0) renderHomeSectionPage(r.name);
     else if (r.name === 'dishes') renderBeltPage();
     else if (r.name === 'prep') renderPrep();
@@ -361,30 +423,40 @@
       ['100%', '中·英·拼音']
     ];
     var html = '';
-    html += '<section class="hero"><div class="hero-copy">' +
-      '<span class="eyebrow">国际中文教育 · 文化体验课</span>' +
-      '<h1>在网上做一道<span>川菜</span>，边动手边学中文</h1>' +
-      '<p class="lead">川味小厨房是为来华留学生设计的川菜文化学习网站。<span class="py">Chuānwèi xiǎochúfáng shì wèi láihuá liúxuéshēng shèjì de chuāncài wénhuà xuéxí wǎngzhàn.</span>' +
-      '从选菜、逛菜市场、认识食材和调料，到真正开火下锅，一步一步动手做，让"麻辣鲜香"变成看得见、听得懂、说得出的事。</p>' +
+    /* 首页 hero：图（标题字/盘子/辣子鸡/贴纸）照用户给的参考做，位置按参考图量出来的百分比摆；
+       左边的文案是本站自己的（面向留学生的川菜文化课），不照抄参考站的广告语。 */
+    html += '<section class="hero hero-sticker">' +
+      '<div class="hs-stage">' +
+      /* data-depth = 鼠标视差的层深（px）；值越大离眼睛越近、动得越多 */
+      '<img class="hs-deco hs-d1" data-depth="24" src="assets/img/hero/doodle1.png?v=5" alt="" aria-hidden="true" loading="lazy">' +
+      '<img class="hs-deco hs-d2" data-depth="24" src="assets/img/hero/doodle2.png?v=5" alt="" aria-hidden="true" loading="lazy">' +
+      '<img class="hs-deco hs-d3" data-depth="24" src="assets/img/hero/doodle3.png?v=5" alt="" aria-hidden="true" loading="lazy">' +
+      '<img class="hs-plate-img" data-depth="12" src="assets/img/hero/plate.png?v=5" alt="麻婆豆腐" loading="lazy">' +
+      '<img class="hs-blob-img" data-depth="18" src="assets/img/hero/blob.png?v=5" alt="辣子鸡" loading="lazy">' +
+      '<div class="hs-title-wrap" data-depth="6"><h1 class="sr-only">川味加油站 · 留学生的川菜文化课</h1>' +
+      '<img class="hs-title-img" src="assets/img/hero/title.png?v=5" alt="川味加油站" loading="lazy"></div>' +
+      '<p class="hs-source" data-depth="4">Sichuan Flavor Kitchen<br><span>国际中文教育 · 文化体验课</span></p>' +
+      '<div class="hs-col hs-col-top" data-depth="4">' +
+      '<p class="hs-en">Cook &amp; Learn</p>' +
+      '<p class="hs-en3">一边做菜，一边学中文</p>' +
+      '<p class="hs-en2">为来华留学生准备的川菜文化课</p>' +
+      '</div>' +
+      '<div class="hs-col hs-col-bottom" data-depth="4">' +
+      '<p class="hs-slogan">从一口川菜<br>认识中国味道</p>' +
+      '<p class="hs-slogan2">8 道菜 · 从选菜、备菜到上灶全过程</p>' +
+      '<div class="hs-actions">' +
       '<div class="hero-actions">' +
       '<button class="btn btn-primary" data-route="dishes">🍽️ 开始点菜</button>' +
-      '<button class="btn" data-route="home" data-scroll="#culture">🏮 先看川菜文化</button>' +
       '<button class="btn btn-gold" id="randomDish">🎲 随机来一道</button>' +
+      '<button class="btn" data-route="home" data-scroll="#culture">🏮 先看川菜文化</button>' +
       '</div>' +
-      '<div class="hero-stats">' + stats.map(function (s) { return '<div class="stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></div>'; }).join('') + '</div>' +
-      '</div><div class="hero-art" style="align-content:start">' +
-      '<div style="position:relative;width:100%;max-width:340px;margin:0 auto">' +
-      '<img class="hero-photo" src="assets/img/hero.jpg" alt="一桌川菜" onerror="this.style.display=\'none\'">' +
-      '<img class="floating-ing cut-float" style="left:2%;top:4%;animation-delay:.2s" src="assets/img/cut/c/ganlajiao.png" alt="" onerror="this.remove()">' +
-      '<img class="floating-ing cut-float" style="right:4%;top:14%;animation-delay:1.1s" src="assets/img/cut/c/huajiao.png" alt="" onerror="this.remove()">' +
-      '<img class="floating-ing cut-float" style="left:6%;bottom:8%;animation-delay:.6s" src="assets/img/cut/c/dasuan.png" alt="" onerror="this.remove()">' +
-      '<span class="floating-ing" style="left:4%;top:8%;animation-delay:.2s">🌶️</span>' +
-      '<span class="floating-ing" style="right:6%;top:16%;animation-delay:1.1s">🫘</span>' +
-      '<span class="floating-ing" style="left:10%;bottom:10%;animation-delay:.6s">🧄</span>' +
-      '<span class="floating-ing" style="right:12%;bottom:6%;animation-delay:1.6s">🥢</span>' +
       '</div>' +
-      '<p class="photo-credit" style="margin-top:8px">图：四川家常一桌菜（教学演示用图）</p>' +
-      '</div></section>';
+      '</div>' +
+      '<img class="hs-sticker-img hs-s1" data-depth="21" src="assets/img/hero/stick1.png?v=5" alt="麻辣满分" loading="lazy">' +
+      '<img class="hs-sticker-img hs-s3" data-depth="21" src="assets/img/hero/stick3.png?v=5" alt="川味源泉" loading="lazy">' +
+      '<p class="hero-meta hs-meta-bar">' + stats.map(function (s) { return '<b>' + s[0] + '</b> ' + s[1]; }).join('　·　') + '</p>' +
+      '</div>' +
+      '</section>';
 
     html += '<section class="culture-section">' +
       '<div class="view-head"><span class="eyebrow">怎么用</span><h2 class="h2">三步，做出一道真正的川菜</h2>' +
@@ -425,13 +497,15 @@
       '<p class="lead">川菜讲究"一菜一格，百菜百味"。常说有二十多种味型，其中约一半和麻辣沾边，其余并不辣。<span class="en">Sichuan cooking has 20-odd flavour types — about half of them are not spicy at all.</span></p></div>' +
       '<div class="wheel-wrap"><div style="position:relative">' +
       '<span class="wheel-pointer">📍</span>' +
-      '<div class="wheel" id="wheel"><div class="wheel-labels">' +
+      /* 标签层跟着扇区一起转（位置会动），但每个字的字形每帧反向转回来，所以字始终是水平的 */
+      '<div class="wheel" id="wheel"><div class="wheel-disc" id="wheelDisc"><div class="wheel-labels">' +
       (CC.flavors || []).map(function (f, i) {
         var a = i * 30 + 15;
-        /* 标签在圆盘中心做极坐标外移：12 个标签落在同一个圆上（-35% = 半径约 0.35 个盘宽） */
-        return '<span style="transform: rotate(' + a + 'deg) translateY(-35%) rotate(' + (-a) + 'deg)">' + esc(f.zh.replace('味', '')) + '</span>';
+        /* 外层 span 负责把标签摆到圆上；内层 i 负责"把字转正"（每帧跟着盘的角度反向转） */
+        return '<span style="transform: rotate(' + a + 'deg) translateY(-35%) rotate(' + (-a) + 'deg)">' +
+          '<i class="wl-txt">' + esc(f.zh.replace('味', '')) + '</i></span>';
       }).join('') +
-      '</div><div class="wheel-center" id="wheelCenter">点我<br>转一转</div></div></div>' +
+      '</div></div><div class="wheel-center" id="wheelCenter">点我<br>转一转</div></div></div>' +
       '<div class="card flavor-card" id="flavorCard"><h3 class="h3">今天是哪一味？</h3>' +
       '<p class="muted small">按下左边的转盘，会随机停在一个味型上，我给你讲讲它是什么味道、有哪些代表菜。</p></div>' +
       '</div></section>';
@@ -504,28 +578,117 @@
         p.style.animation = 'none'; void p.offsetWidth; p.style.animation = 'popIn .5s both';
       });
     });
+    initHeroPlate();                 /* hero 圆盘轮播 */
+    initHeroParallax();              /* hero 鼠标视差 + 悬浮 + 贴纸摆动 */
     pandaSay('home');
   }
 
-  var wheelRot = 0;
+  var wheelRot = 0, wheelAnim = null;
+  /* ===== 首页 hero 的动效（用户 2026-10-02 要求"灵动一点"）=====
+     1) 鼠标视差：鼠标在 hero 上移动，各层按 data-depth 反向微移；移出缓慢归位。
+     2) 悬浮感：盘子和辣子鸡各自缓慢上下浮动，悬停抬起放大（纯 CSS 动画/属性）。
+     3) 贴纸摆动：两张贴纸错峰轻摆。
+     三个都用 CSS 的独立变换属性（translate / rotate / scale）+ transform 变量，
+     所以"浮动动画"和"视差位移"互不覆盖。系统开了减少动态效果就整套不启动。 */
+  function initHeroParallax() {
+    var stage = $('#app .hs-stage');
+    if (!stage) return;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      stage.classList.add('no-motion');
+      return;
+    }
+    var layers = $$('.hs-stage [data-depth]');
+    if (!layers.length) return;
+    var raf = null, tx = 0, ty = 0;
+    function paint() {
+      raf = null;
+      layers.forEach(function (el) {
+        var d = parseFloat(el.getAttribute('data-depth')) || 0;
+        el.style.setProperty('--hs-px', (tx * d).toFixed(2) + 'px');
+        el.style.setProperty('--hs-py', (ty * d * .62).toFixed(2) + 'px');
+      });
+    }
+    function move(e) {
+      var r = stage.getBoundingClientRect();
+      if (!r.width) return;
+      tx = Math.max(-1, Math.min(1, (((e.clientX - r.left) / r.width) - .5) * -2));
+      ty = Math.max(-1, Math.min(1, (((e.clientY - r.top) / r.height) - .5) * -2));
+      if (!raf) raf = requestAnimationFrame(paint);
+    }
+    function home() {
+      tx = 0; ty = 0;
+      if (!raf) raf = requestAnimationFrame(paint);
+    }
+    stage.addEventListener('mousemove', move);
+    stage.addEventListener('mouseleave', home);
+    stage.addEventListener('blur', home);
+  }
+  /* 首页 hero 圆盘轮播：3 道菜轮流出现，点图片进那道菜的故事 */
+  var HERO_SLIDES = [
+    { id: 'mapo', name: '麻婆豆腐' },
+    { id: 'gongbao', name: '宫保鸡丁' },
+    { id: 'shuizhu', name: '水煮牛肉' }
+  ];
+  var heroTimer = null, heroIdx = 0;
+  function initHeroPlate() {
+    var imgs = $$('#heroPlate .hero-slide');
+    var dots = $$('#heroDots i');
+    if (!imgs.length) return;
+    function show(i) {
+      heroIdx = (i + imgs.length) % imgs.length;
+      imgs.forEach(function (im, k) { im.classList.toggle('on', k === heroIdx); });
+      dots.forEach(function (d, k) { d.classList.toggle('on', k === heroIdx); });
+    }
+    dots.forEach(function (d) {
+      d.addEventListener('click', function (e) { e.stopPropagation(); show(Number(d.dataset.i)); });
+    });
+    imgs.forEach(function (im) {
+      im.addEventListener('click', function () { go('story', im.getAttribute('data-id')); });
+    });
+    if (heroTimer) clearInterval(heroTimer);
+    heroTimer = setInterval(function () { show(heroIdx + 1); }, 6000);
+    show(0);
+  }
   function spinWheel() {
     var f = CC.flavors || [];
-    if (!f.length) return;
+    if (!f.length || wheelAnim) return;                 /* 正在转就别重复触发 */
     var idx = Math.floor(Math.random() * f.length);
-    wheelRot += 360 * 4 + (wheelRot % 360 ? 0 : 0) + idx * 30 + 15;
-    var w = $('#wheel');
-    w.style.transform = 'rotate(' + wheelRot + 'deg)';
+    /* 指针在正上方（0°），标签在第 idx 段的正中间（idx*30+15）；
+       要让这个标签转到正上方，旋转量必须是 -(idx*30+15)，再往前多转 4 圈 */
+    var base = wheelRot - (((wheelRot % 360) + 360) % 360);
+    var from = wheelRot, to = base + 360 * 4 - (idx * 30 + 15);
+    var dur = 4200, t0 = performance.now();
+    var disc = $('#wheelDisc') || $('#wheel');
+    var txts = $$('.wheel-labels .wl-txt');             /* 每个标签里的文字，要一直保持水平 */
     Sfx.sizzle();
-    setTimeout(function () {
-      var x = f[f.length - 1 - (idx % f.length)];
-      var el = $('#flavorCard');
-      el.innerHTML = '<h3 class="h3">' + esc(x.zh) + ' ' + speakBtn(x.zh) + '</h3>' + pyLine(x.py) + enLine(x.en) +
+    var finished = false;
+    function finish() {                                 /* 兜底：切到别的标签页时 rAF 会被暂停，用定时器保证一定收尾 */
+      if (finished) return;
+      finished = true;
+      wheelAnim = null;
+      wheelRot = to;
+      txts.forEach(function (el) { el.style.transform = 'rotate(' + (-to) + 'deg)'; });
+      if (disc) disc.style.transform = 'rotate(' + to + 'deg)';
+      var x = f[idx % f.length];            /* 对上以后不用再反着取 */
+      var el2 = $('#flavorCard');
+      if (el2) el2.innerHTML = '<h3 class="h3">' + esc(x.zh) + ' ' + speakBtn(x.zh) + '</h3>' + pyLine(x.py) + enLine(x.en) +
         '<div class="taste-chips"><span class="taste-chip">' + esc(x.taste) + '</span></div>' +
         '<p class="small">' + esc(x.desc.zh) + enLine(x.desc.en) + '</p>' +
         '<p class="small muted">代表菜：' + x.dishes.map(esc).join('、') + '</p>';
       Sfx.ding();
       pandaSay('home', '这个味型叫 <b>' + esc(x.zh) + '</b>，代表菜是' + esc(x.dishes[0]) + '。', 'happy');
-    }, 4700);
+    }
+    function frame(now) {
+      var t = Math.min(1, (now - t0) / dur);
+      var e = 1 - Math.pow(1 - t, 3);                   /* ease-out：先快后慢 */
+      var r = from + (to - from) * e;
+      disc.style.transform = 'rotate(' + r + 'deg)';
+      txts.forEach(function (el) { el.style.transform = 'rotate(' + (-r) + 'deg)'; });
+      if (t < 1) { wheelAnim = requestAnimationFrame(frame); return; }
+      finish();
+    }
+    wheelAnim = requestAnimationFrame(frame);
+    setTimeout(finish, dur + 150);
   }
 
   function showSources() {
@@ -681,6 +844,7 @@
           '<span class="vm-go">进去看看 ›</span></a>' +
       '</div>' +
       '<div style="margin:16px 0 6px;display:flex;gap:10px;flex-wrap:wrap">' +
+      '<a class="btn" href="#/story/' + d.id + '">📖 文化故事</a>' +
       '<button class="btn" data-route="dishes">🍽️ 换一道菜</button>' +
       '<button class="btn btn-gold" data-route="cook">🔥 直接上灶</button></div></div>';
     bindStrip();
@@ -753,6 +917,7 @@
       b.addEventListener('click', function () {
         S.dish = b.dataset.strip; save(); Sfx.pop();
         if (current.name === 'cook') { renderCook(); return; }
+        if (current.name === 'story') { renderStory(); return; }   /* 文化故事页：换菜留在故事页 */
         if (current.sub) { go('prep', b.dataset.strip + '/' + current.sub); return; }   /* 在子页里换菜 → 停在同一个子页 */
         renderPrep();
       });
@@ -1050,19 +1215,59 @@
     if (st.type === 'wait' && st.seconds) return '👉 计时：' + st.seconds + ' 秒（课堂加速）';
     return '';
   }
+  /* ============ 选菜 · 文化故事（每道菜的来历）============ */
+  function renderStory() {
+    var d = dishById(S.dish) || dishById((CC.dishes || [])[0].id);
+    S.dish = d.id;
+    var det = (window.CC_STORY_DETAIL || {})[d.id] || {};
+    var dots = '';
+    for (var i = 1; i <= 5; i++) dots += '<i class="heat-dot' + (i <= d.heat ? ' on' : '') + '"></i>';
+    var nPts = (det.points || []).length;
+    app.innerHTML = '<div class="view">' +
+      '<a class="vocab-back" href="#/dishes">‹ 返回选菜</a>' +
+      '<div class="view-head"><span class="eyebrow">选菜 · 文化故事</span>' +
+      '<div class="story-title-row">' +
+      '<h1 class="h1">📖 ' + esc(d.name) + ' 的故事</h1>' +
+      (nPts ? '<button class="btn btn-sm story-link" id="storyPointsBtn" type="button">🏮 ' + nPts + ' 个文化点</button>' : '') +
+      '</div>' +
+      (det.lead ? '<p class="lead">' + esc(det.lead) + '</p>' : '') + '</div>' +
+      '<div class="story-grid">' +
+      '<div class="card story-photo">' +
+      '<img src="assets/img/dish-' + d.id + '.jpg" alt="' + esc(d.name) + ' 成品图" loading="lazy">' +
+      '<div class="story-photo-meta"><span class="heat-dots">' + dots + '</span>' +
+      '<span>⏱ ' + d.minutes + ' 分钟</span><span>' + esc(d.region) + '</span></div>' +
+      '<div class="dish-tags" style="margin-top:8px"><span class="tag">' + esc(d.flavor) + '</span>' +
+      (d.tags || []).map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; }).join('') + '</div>' +
+      '</div>' +
+      '<div class="card story-main">' +
+      '<h3 class="h3">这道菜是怎么来的</h3>' +
+      '<p>' + esc(d.story.zh) + '</p>' + pyLine(d.story.py) + enLine(d.story.en) +
+      '</div></div>' +
+      '<div class="story-cta">' +
+      '<a class="btn btn-primary" href="#/prep/' + d.id + '">🔪 去备菜</a>' +
+      '<a class="btn" href="#/cook/' + d.id + '">🔥 直接上灶</a>' +
+      '<a class="btn btn-gold" href="#/culture">🏮 看更多川菜文化</a></div>' +
+      '</div>';
+    pandaSay('dishes');
+    var pbtn = $('#storyPointsBtn');
+    if (pbtn) pbtn.addEventListener('click', function () { Sfx.pop(); openStoryPoints(d); });
+  }
+
   function renderCook() {
     var d = dishById(S.dish) || dishById((CC.dishes || [])[0].id);
     S.dish = d.id;
     cookStep = 0;
     app.innerHTML = '<div class="view"><div class="view-head"><span class="eyebrow">烹饪 · 上灶</span>' +
       '<h1 class="h1">' + d.emoji + ' ' + esc(d.name) + ' · 怎么做</h1>' +
-      '<p class="lead">一共 <b>' + d.steps.length + '</b> 步。左边是这一步的做法，右边是这一步的实拍图，跟着做就行。</p></div>' +
+      '<p class="lead">一共 <b>' + d.steps.length + '</b> 步。左边是这一步的做法，右边是这一步的实拍图，跟着做就行。</p>' +
+      '<button class="btn btn-sm head-clear" id="clearProgress">清空做菜进度</button></div>' +
       dishStrip() +
       '<div id="stepView"></div>' +
       '<div class="step-foot">' +
       '<button class="btn" id="stepPrev">‹ 上一步</button>' +
       '<span class="muted small" id="stepPos">1 / ' + d.steps.length + '</span>' +
       '<button class="btn" id="stepNext">下一步 ›</button>' +
+      '<span class="step-gate" id="stepGate"></span>' +
       '<button class="btn btn-gold" id="videoBtn">🎬 看真人做法</button></div>' +
       '</div>';
     bindStrip();
@@ -1070,7 +1275,38 @@
     $('#videoBtn').addEventListener('click', function () { openVideo(d); });
     $('#stepPrev').addEventListener('click', function () { paintCookStep(cookStep - 1); });
     $('#stepNext').addEventListener('click', function () { paintCookStep(cookStep + 1); });
+    $('#clearProgress').addEventListener('click', function () { openClearProgress(d); });
     pandaSay('cook');
+  }
+  /* 清空做菜进度：这道菜 / 全部 8 道菜 */
+  function clearCooking(ids) {
+    ids.forEach(function (id) { delete S.prepped[id]; delete S.cooked[id]; });
+    S.stirs = 0; S.hands = 0;
+    actState = {};
+    save();
+  }
+  function openClearProgress(d) {
+    var all = (CC.dishes || []).length;
+    openModal('<h3 class="h3">清空做菜进度</h3>' +
+      '<p class="small">清掉以后，备菜的勾选、这道菜的星星，还有这一页的动手记录都会归零（词汇、小测的记录不动）。</p>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+      '<button class="btn btn-primary" id="clearThis">只清「' + esc(d.name) + '」</button>' +
+      '<button class="btn" id="clearAll">清空全部 ' + all + ' 道菜</button>' +
+      '<button class="btn" data-close="1">先不清</button></div>');
+    $('#clearThis').addEventListener('click', function () {
+      clearCooking([d.id]);
+      closeModal();
+      renderCook();
+      pandaSay('cook', '「' + esc(d.name) + '」的进度清好了，可以再做一遍。', 'happy');
+      toast('已清空「' + d.name + '」的进度');
+    });
+    $('#clearAll').addEventListener('click', function () {
+      clearCooking((CC.dishes || []).map(function (x) { return x.id; }));
+      closeModal();
+      renderCook();
+      pandaSay('cook', '全部做菜进度都清空了，重新开始吧。', 'happy');
+      toast('已清空全部做菜进度');
+    });
   }
   /* ============ 上灶页：动手键（模拟做菜的小互动）============
      放在"👉 火候/答案"那一行的右边。按这一步该做的动作给 2–4 个键：
@@ -1079,6 +1315,8 @@
   var actState = {};                     /* '菜:步:键' → 已点次数（本次会话内记着） */
   var ACT_LINES = {
     chop: ['沙沙沙，刀要斜着下。', '听到这个声音就对了。', '切得挺匀，手腕别太用力。'],
+    cutTick: ['好，继续，别切到手。', '刀口要斜一点，切得才利落。', '顺着食材划，别压太狠。'],
+    cutDone: ['切好了！大小差不多，这样受热才均匀。', '漂亮，切得挺匀。', '这一盘切得可以上灶了。'],
     mix: ['拌的时候从底下兜上来。', '每根都要沾到酱，别偷懒。'],
     soak: ['泡上，等下锅就不容易糊。', '热水泡一下，香味更足。'],
     fire: ['火候对了，香味马上出来。', '听，油开始响了。', '火别太大，慢慢来。'],
@@ -1090,6 +1328,55 @@
     taste: ['小心烫！尝一口，再调调味道。', '自己尝尝，咸淡最准。', '这一口，值了。']
   };
   function randLine(a) { return a[Math.floor(Math.random() * a.length)]; }
+  /* 真实照片素材：厨具用实拍图，食材/调料用抠图或照片（拿不到再加兜底） */
+  var PIC = {
+    knife: ['assets/img/cut/t/3.png', 'assets/img/t/3.jpg'],
+    spatula: ['assets/img/cut/t/2.png', 'assets/img/t/2.jpg'],
+    wok: ['assets/img/cut/t/1.png', 'assets/img/t/1.jpg'],
+    plate: ['assets/img/cut/t/6.png', 'assets/img/t/6.jpg'],
+    bowl: ['assets/img/cut/t/5.png', 'assets/img/t/5.jpg'],
+    chopsticks: ['assets/img/cut/t/7.png', 'assets/img/t/7.jpg'],
+    stove: ['assets/img/cut/t/12.png', 'assets/img/t/12.jpg'],
+    board: ['assets/img/cut/t/4.png', 'assets/img/t/4.jpg']
+  };
+  function materialIdsOf(d, st) {
+    var A = (window.STEP_ASSETS || {})[d.id] || {}, out = [];
+    (st.add || []).forEach(function (e) {
+      var id = A[e];
+      if (id && id !== 'x' && out.indexOf(id) < 0) out.push(id);
+    });
+    return out;
+  }
+  /* 一个 id 的照片：优先透明抠图 → 调料照片 → 食材照片 → cut 目录 */
+  function photoChain(id) {
+    return [
+      'assets/img/cut/s/' + id + '.png', 'assets/img/cut/i/' + id + '.png',
+      'assets/img/cut/c/' + id + '.png', 'assets/img/cut/cs/' + id + '.png',
+      'assets/img/cs/' + id + '.png', 'assets/img/c/' + id + '.png',
+      'assets/img/s/' + id + '.jpg', 'assets/img/i/' + id + '.jpg'
+    ];
+  }
+  function chainImg(chain, cls, title) {
+    return '<img class="' + cls + '" src="' + chain[0] + '" alt="' + esc(title || '') + '"' +
+      ' data-fb="' + chain.slice(1).join('|') + '">';
+  }
+  /* 注意：这里必须叫 matPhoto，不能叫 photoImg —— 上面 330 行已经有个 photoImg(中文名)，
+     同名函数声明会互相覆盖（之前就是这么把词汇页的图搞挂的）。 */
+  function matPhoto(id, cls, title) {
+    return chainImg(photoChain(id), cls, title);
+  }
+  /* 图挂了就顺着兜底链换下一张；全挂了就把这张图删掉 */
+  function bindPhotoFallback(root) {
+    if (!root) return;
+    Array.prototype.forEach.call(root.querySelectorAll('img[data-fb]'), function (im) {
+      im.addEventListener('error', function () {
+        var chain = (im.getAttribute('data-fb') || '').split('|').filter(Boolean);
+        if (!chain.length) { im.remove(); return; }
+        im.setAttribute('data-fb', chain.slice(1).join('|'));
+        im.src = chain[0];
+      });
+    });
+  }
   function cutKeyOf(zh) {
     var s = zh || '';
     var rules = [
@@ -1107,31 +1394,32 @@
   }
   function cookActionKeys(d, st, i) {
     var zh = st.zh || '', keys = [], cut = cutKeyOf(zh);
+    var mats = materialIdsOf(d, st);
     if (cut) {
-      keys.push({ id: 'chop', label: '🔪 切一切', need: 5, sfx: 'chop', pop: '🔪', line: ACT_LINES.chop });
-      keys.push({ id: 'cut-ok', label: '🔪 ' + cut.ok, need: 1, correct: true, sfx: 'chop', pop: '🥩', line: ['对，就是这样——' + cut.ok + '。'] });
-      keys.push({ id: 'cut-bad', label: '🔪 ' + cut.bad[0], need: 1, wrong: true, line: ['这一步要' + cut.ok + '哦，不是' + cut.bad[0] + '。'] });
+      keys.push({ id: 'chop', label: '切一切', pic: PIC.knife, need: 5, sfx: 'knife', line: ACT_LINES.chop });
+      keys.push({ id: 'cut-ok', label: cut.ok, pic: PIC.knife, need: 1, correct: true, sfx: 'knife', popId: mats[0], line: ['对，就是这样——' + cut.ok + '。'] });
+      keys.push({ id: 'cut-bad', label: cut.bad[0], pic: PIC.knife, need: 1, wrong: true, line: ['这一步要' + cut.ok + '哦，不是' + cut.bad[0] + '。'] });
     } else if (st.type === 'heat') {
       var hm = (CC.heat || {})[st.heat] || {};
-      keys.push({ id: 'fire', label: '🔥 ' + (st.heat === 'da' ? '调大火' : st.heat === 'xiao' ? '调小火' : '开火'), need: 1, correct: true, sfx: 'sizzle', pop: '🔥', line: ACT_LINES.fire });
-      keys.push({ id: 'fire-bad', label: '💨 ' + (st.heat === 'da' ? '用最小火' : '一直开大火'), need: 1, wrong: true, line: ['火候不对：这一步要' + (hm.zh || '看准火候') + '。'] });
+      keys.push({ id: 'fire', label: (st.heat === 'da' ? '调大火' : st.heat === 'xiao' ? '调小火' : '开火'), pic: PIC.stove, need: 1, correct: true, sfx: 'ignite', line: ACT_LINES.fire });
+      keys.push({ id: 'fire-bad', label: (st.heat === 'da' ? '用最小火' : '一直开大火'), need: 1, wrong: true, line: ['火候不对：这一步要' + (hm.zh || '看准火候') + '。'] });
     } else if (st.type === 'stir') {
-      keys.push({ id: 'stir', label: '🥄 翻炒', need: st.target || 8, sfx: 'stir', pop: '🥄', line: ACT_LINES.stir, stir: true });
+      keys.push({ id: 'stir', label: '翻炒', pic: PIC.spatula, need: st.target || 8, sfx: 'fry', line: ACT_LINES.stir, stir: true });
     } else if (/拌/.test(zh)) {
-      keys.push({ id: 'mix', label: '🥄 拌一拌', need: 3, sfx: 'stir', pop: '🥄', line: ACT_LINES.mix });
+      keys.push({ id: 'mix', label: '拌一拌', pic: PIC.chopsticks, need: 3, sfx: 'scrape', line: ACT_LINES.mix });
     } else if (/泡|浸/.test(zh)) {
-      keys.push({ id: 'soak', label: '💧 泡一下', need: 1, correct: true, sfx: 'bubble', pop: '💧', line: ACT_LINES.soak });
+      keys.push({ id: 'soak', label: '泡一下', pic: PIC.bowl, need: 1, correct: true, sfx: 'water', line: ACT_LINES.soak });
     } else if (st.type === 'wait') {
-      keys.push({ id: 'timer', label: '⏳ 开始计时', need: 1, correct: true, sfx: 'bubble', pop: '⏳', line: ACT_LINES.timer });
+      keys.push({ id: 'timer', label: '开始计时', pic: PIC.stove, need: 1, correct: true, sfx: 'timer', line: ACT_LINES.timer });
     } else if (st.type === 'order' || st.type === 'season') {
-      keys.push({ id: 'drop', label: '🥣 加进去', need: 1, correct: true, sfx: 'pop', pop: '🥣', line: ACT_LINES.drop });
+      keys.push({ id: 'drop', label: '加进去', shopId: mats[0], need: 1, correct: true, sfx: 'dropSound', line: ACT_LINES.drop });
     } else if (st.type === 'finish') {
-      keys.push({ id: 'plate', label: '🍽️ 装盘', need: 1, correct: true, sfx: 'ding', pop: '🍽️', line: ACT_LINES.plate });
-      keys.push({ id: 'cool', label: '❄️ 放凉', need: 1, correct: true, sfx: 'bubble', pop: '❄️', line: ACT_LINES.cool });
+      keys.push({ id: 'plate', label: '装盘', pic: PIC.plate, need: 1, correct: true, sfx: 'clink', line: ACT_LINES.plate });
+      keys.push({ id: 'cool', label: '放凉', need: 1, correct: true, sfx: 'bubble', line: ACT_LINES.cool });
     }
     /* 尝一口只在最后一步出现（用户要求） */
     if (i === d.steps.length - 1 || st.type === 'finish') {
-      keys.push({ id: 'taste', label: '😋 尝一口', need: 1, sfx: 'pop', pop: '😋', line: ACT_LINES.taste });
+      keys.push({ id: 'taste', label: '尝一口', pic: PIC.chopsticks, need: 1, sfx: 'sip', popId: mats[0], line: ACT_LINES.taste });
     }
     return keys;
   }
@@ -1139,25 +1427,36 @@
     var keys = cookActionKeys(d, st, i);
     return '<div class="act-row">' + keys.map(function (k) {
       return '<button class="act-key" data-act="' + k.id + '" data-need="' + k.need + '" title="点一下试试">' +
+        (k.pic ? chainImg(k.pic, 'act-ico') : (k.shopId ? matPhoto(k.shopId, 'act-ico') : '')) +
         '<span class="act-label">' + k.label + '</span>' +
         '<span class="tick">' + (k.need > 1 ? '0/' + k.need : '') + '</span></button>';
-    }).join('') + '</div>';
+    }).join('') + dragChipHTML(d, st) + '</div>';
   }
-  function fxAtPop(btn, emoji) {
-    if (!emoji) return;
+  function dragChipHTML(d, st) {
+    if (!(st.type === 'order' || st.type === 'season')) return '';
+    var label = stepAnswerLabel(st);
+    if (!label) return '';
+    var mats = materialIdsOf(d, st);
+    var pics = mats.slice(0, 3).map(function (id) { return matPhoto(id, 'drag-pic', label); }).join('');
+    return '<div class="drag-chip" data-label="' + esc(label) + '" title="按住它，拖到右边的实拍图上">' +
+      (pics || '') + '<span class="drag-name">' + label + '</span><span class="drag-tip">拖到图上 ›</span></div>';
+  }
+  function fxAtPop(btn, id) {
+    if (!id) return;
     var row = btn.parentNode;
     if (!row) return;
     var sp = document.createElement('span');
     sp.className = 'act-pop';
-    sp.textContent = emoji;
+    sp.innerHTML = matPhoto(id, 'act-pop-img');
     row.appendChild(sp);
-    setTimeout(function () { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 950);
+    bindPhotoFallback(sp);
+    setTimeout(function () { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 1000);
   }
   function markActDone(btn, key) {
     btn.classList.remove('on');
     btn.classList.add('done');
     var t = btn.querySelector('.tick');
-    if (t) t.textContent = '✅';
+    if (t) t.textContent = '完成';
   }
   function bindCookActions(d, st, i) {
     var row = $('#stepView .act-row');
@@ -1180,13 +1479,16 @@
         } else {
           actState[sk]++;
           if (k.stir) S.stirs++;
-          if (k.sfx && Sfx[k.sfx]) Sfx[k.sfx]();
-          fxAtPop(btn, k.pop);
+          if (k.sfx && Sfx[k.sfx]) Sfx[k.sfx](k.shopId);
+          fxAtPop(btn, k.popId);
           if (actState[sk] >= k.need) {
             markActDone(btn, k);
             Sfx.ding();
             pandaSay('cook', randLine(k.line), 'happy');
+            if (k.id === 'stir') Sfx.fryHard();      /* 炒完这一轮：油锅最响的一下 */
+            if (k.id === 'timer') setTimeout(function () { Sfx.boil(); }, 260);
             if (k.stir && S.stirs >= 100) awardBadge('stir');
+            refreshStepGate(d, st, i);
           } else {
             btn.classList.add('on');
             var t = btn.querySelector('.tick');
@@ -1196,6 +1498,269 @@
         save();
       });
     });
+  }
+
+  /* ---- 在实拍图上直接"切"：按住鼠标/手指在图上划，一刀一刀切完 ---- */
+  function syncActButton(actId, n, need) {
+    var btn = $('#stepView .act-key[data-act="' + actId + '"]');
+    if (!btn) return;
+    var t = btn.querySelector('.tick');
+    if (n >= need) { btn.classList.remove('on'); btn.classList.add('done'); if (t) t.textContent = '完成'; }
+    else { btn.classList.add('on'); if (t) t.textContent = n + '/' + need; }
+  }
+  function syncChopButton(n, need) { syncActButton('chop', n, need); }
+  /* ---- 步骤闸门：这一步的关键动作做完了，才放出「下一步」 ---- */
+  function keyRequired(k) { return !!k.correct || k.need > 1; }
+  function requiredKeys(d, st, i) {
+    return cookActionKeys(d, st, i).filter(keyRequired);
+  }
+  function stepDoneKeys(d, st, i) {
+    var out = { done: 0, total: 0, missing: [] };
+    requiredKeys(d, st, i).forEach(function (k) {
+      out.total++;
+      var sk = d.id + ':' + i + ':' + k.id;
+      if ((actState[sk] || 0) >= k.need) out.done++;
+      else out.missing.push(k.label + (k.need > 1 ? '（' + (actState[sk] || 0) + '/' + k.need + '）' : ''));
+    });
+    return out;
+  }
+  function refreshStepGate(d, st, i, quiet) {
+    var next = $('#stepNext'), gate = $('#stepGate');
+    if (!next) return;
+    var info = stepDoneKeys(d, st, i);
+    var ok = info.total === 0 || info.done >= info.total;
+    var isLast = i >= d.steps.length - 1;
+    if (isLast) {                       /* 最后一步本来就是"结束" */
+      next.style.display = '';
+      if (gate) gate.style.display = 'none';
+      return;
+    }
+    next.style.display = ok ? '' : 'none';
+    next.disabled = !ok;                 /* 藏起来也要点不动 */
+    if (gate) {
+      gate.style.display = ok ? 'none' : '';
+      if (!ok) gate.textContent = '先做完这一步：' + info.missing.join('、');
+    }
+    if (ok && !quiet && next.dataset.gateWasOff === '1') {
+      Sfx.ding();
+      next.classList.add('gate-open');
+      setTimeout(function () { next.classList.remove('gate-open'); }, 900);
+      pandaSay('cook', '这一步做好了，可以点「下一步」。', 'happy');
+    }
+    next.dataset.gateWasOff = ok ? '0' : '1';
+  }
+  function bindPhotoCut(d, st, i, zoom) {
+    var cut = cutKeyOf(st.zh);
+    if (!cut) return;
+    var wrap = $('#stepView .sbs-photo');
+    if (!wrap || !wrap.querySelector('.step-photo')) return;
+    var keys = cookActionKeys(d, st, i);
+    var chop = keys.filter(function (k) { return k.id === 'chop'; })[0];
+    var need = chop ? chop.need : 5;
+    var sk = d.id + ':' + i + ':chop';
+    if (actState[sk] >= need) { wrap.classList.add('cut-ready'); return; }   /* 已经切过就不重复铺层 */
+    wrap.classList.add('cut-ready');
+    var layer = document.createElement('div');
+    layer.className = 'cut-layer';
+    var hint = document.createElement('div');
+    hint.className = 'cut-hint';
+    function refresh() {
+      var n = Math.min(actState[sk] || 0, need);
+      hint.textContent = n >= need ? '切好了' : '按住鼠标，顺着食材划一刀（' + n + '/' + need + '）';
+      if (n >= need) hint.classList.add('done');
+      syncChopButton(n, need);
+    }
+    wrap.appendChild(layer);
+    wrap.appendChild(hint);
+    refresh();
+    var stroke = null, moved = false, sx = 0, sy = 0;
+    function pos(e) {
+      var r = layer.getBoundingClientRect();
+      return { x: e.clientX - r.left, y: e.clientY - r.top };
+    }
+    layer.addEventListener('pointerdown', function (e) {
+      if ((actState[sk] || 0) >= need) return;
+      var p = pos(e);
+      stroke = { x: p.x, y: p.y, len: 0 };
+      moved = false; sx = e.clientX; sy = e.clientY;
+      if (layer.setPointerCapture) layer.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+    layer.addEventListener('pointermove', function (e) {
+      if (!stroke) return;
+      if (!moved && (Math.abs(e.clientX - sx) + Math.abs(e.clientY - sy) > 8)) moved = true;
+      if (!moved) return;
+      var p = pos(e), dx = p.x - stroke.x, dy = p.y - stroke.y, len = Math.sqrt(dx * dx + dy * dy);
+      if (len < 26) return;
+      var mark = document.createElement('div');
+      mark.className = 'cut-mark';
+      mark.style.left = stroke.x + 'px';
+      mark.style.top = stroke.y + 'px';
+      mark.style.width = len + 'px';
+      mark.style.transform = 'rotate(' + (Math.atan2(dy, dx) * 180 / Math.PI) + 'deg)';
+      layer.appendChild(mark);
+      setTimeout(function () { if (mark.parentNode) mark.parentNode.removeChild(mark); }, 1300);
+      var knife = document.createElement('img');
+      knife.className = 'cut-knife';
+      knife.src = PIC.knife[0];
+      knife.addEventListener('error', function () { knife.src = PIC.knife[1]; });
+      knife.alt = '';
+      knife.style.left = (p.x - 6) + 'px';
+      knife.style.top = (p.y - 30) + 'px';
+      layer.appendChild(knife);
+      setTimeout(function () { if (knife.parentNode) knife.parentNode.removeChild(knife); }, 560);
+      stroke.x = p.x; stroke.y = p.y; stroke.len += len;
+    });
+    function endStroke() {
+      if (!stroke) return;
+      var far = stroke.len, wasMoved = moved;
+      stroke = null;
+      if (!wasMoved || far < 60) return;          /* 只是点了一下，不算切 */
+      actState[sk] = (actState[sk] || 0) + 1;
+      S.hands++; save();
+      Sfx.chop();
+      if (actState[sk] >= need) { Sfx.ding(); pandaSay('cook', randLine(ACT_LINES.cutDone), 'happy'); }
+      else pandaSay('cook', randLine(ACT_LINES.cutTick), 'happy');
+      refresh();
+      refreshStepGate(d, st, i);
+    }
+    layer.addEventListener('pointerup', endStroke);
+    layer.addEventListener('pointercancel', function () { stroke = null; });
+    /* 划动时别把"点图看大图"一起触发；没划动就还是看作点图 */
+    layer.addEventListener('click', function (e) {
+      if (moved) { e.stopPropagation(); e.preventDefault(); return; }
+      if (zoom) zoom();
+    });
+  }
+
+  /* ---- 「这一步 ↔ 最终成品」对比滑块 ---- */
+  var BA_SLIDER = false;   /* 暂时不渲染：用户反馈"又大又不对题"，见交接文档；要开就改这里 */
+  /* ---- 把调料拖进锅里（调味/下锅那几步） ---- */
+  function stepAnswerLabel(st) {
+    if (st.options && st.answer) {
+      var hit = st.options.filter(function (o) { return o.id === st.answer; })[0];
+      if (hit) return (hit.emoji ? hit.emoji + ' ' : '') + hit.zh;
+    }
+    return '';
+  }
+  /* 松手以后：真实食材/调料照片落到图上 + 几滴油花 */
+  function dropPhotos(host, ids, x, y) {
+    if (!host) return;
+    var list = (ids && ids.length) ? ids : [null];
+    list.forEach(function (id, k) {
+      var el = document.createElement('span');
+      el.className = 'drop-photo';
+      el.style.left = (x + (k - (list.length - 1) / 2) * 34) + 'px';
+      el.style.top = y + 'px';
+      el.style.animationDelay = (k * 90) + 'ms';
+      el.innerHTML = id ? matPhoto(id, 'drop-photo-img') : '';
+      host.appendChild(el);
+      bindPhotoFallback(el);
+      setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1600);
+    });
+    for (var i = 0; i < 8; i++) {
+      var d = document.createElement('span');
+      d.className = 'drop-bit';
+      d.style.left = (x - 40 + Math.random() * 80) + 'px';
+      d.style.top = (y - 10 + Math.random() * 20) + 'px';
+      d.style.animationDelay = (i * 40) + 'ms';
+      host.appendChild(d);
+      setTimeout(function (el) { return function () { if (el.parentNode) el.parentNode.removeChild(el); }; }(d), 1200);
+    }
+  }
+  function bindDragChip(d, st, i) {
+    var chip = $('#stepView .drag-chip');
+    if (!chip) return;
+    var sk = d.id + ':' + i + ':drop';
+    var keys = cookActionKeys(d, st, i);
+    var dk = keys.filter(function (k) { return k.id === 'drop'; })[0];
+    var need = dk ? dk.need : 1;
+    var mats = materialIdsOf(d, st);
+    var photo = $('#stepView .sbs-photo');
+    var dragging = false, ghost = null, ox = 0, oy = 0;
+    function overPhoto(e) {
+      if (!photo) return false;
+      var r = photo.getBoundingClientRect();
+      return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    }
+    function moveGhost(e) {
+      if (!ghost) return;
+      ghost.style.left = (e.clientX - ox) + 'px';
+      ghost.style.top = (e.clientY - oy) + 'px';
+      if (photo) photo.classList.toggle('drop-hot', overPhoto(e));
+    }
+    function clearGhost() {
+      chip.classList.remove('ghost');
+      if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
+      ghost = null;
+      if (photo) photo.classList.remove('drop-hot');
+    }
+    if (actState[sk] >= need) { chip.classList.add('done'); return; }
+    chip.addEventListener('pointerdown', function (e) {
+      if (actState[sk] >= need) return;
+      dragging = true;
+      Sfx.whoosh();
+      var r = chip.getBoundingClientRect();
+      ox = e.clientX - r.left; oy = e.clientY - r.top;
+      ghost = chip.cloneNode(true);
+      ghost.classList.add('drag-ghost');
+      ghost.classList.remove('ghost');
+      document.body.appendChild(ghost);
+      chip.classList.add('ghost');
+      moveGhost(e);
+      if (chip.setPointerCapture) chip.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+    chip.addEventListener('pointermove', function (e) { if (dragging) moveGhost(e); });
+    chip.addEventListener('pointerup', function (e) {
+      if (!dragging) return;
+      dragging = false;
+      var hit = overPhoto(e);
+      clearGhost();
+      if (!hit) return;
+      actState[sk] = need;
+      S.hands++; save();
+      Sfx.dropSound(mats[0]);
+      var pr = photo.getBoundingClientRect();
+      dropPhotos(photo, materialIdsOf(d, st), e.clientX - pr.left, e.clientY - pr.top);
+      syncActButton('drop', need, need);
+      chip.classList.add('done');
+      pandaSay('cook', randLine(ACT_LINES.drop), 'happy');
+      refreshStepGate(d, st, i);
+    });
+    chip.addEventListener('pointercancel', function () { dragging = false; clearGhost(); });
+  }
+
+  function baCardHTML(d, i) {
+    var step = stepCropOf(d, i);
+    if (!step) return '';
+    return '<section class="culture-section"><div class="card ba-card">' +
+      '<h3 class="h3">👀 这一步做完，最后会变成这样</h3>' +
+      '<div class="ba-wrap" id="baWrap">' +
+      '<img class="ba-bot" src="assets/img/dish-' + d.id + '.jpg" alt="' + esc(d.name) + ' 成品图" loading="lazy">' +
+      '<img class="ba-top" src="' + step + '" alt="' + esc(d.name) + ' 第 ' + (i + 1) + ' 步实拍图" loading="lazy">' +
+      '<span class="ba-handle" id="baHandle"></span>' +
+      '<span class="ba-tag l">👀 这一步</span><span class="ba-tag r">🍽️ 最后的样子</span>' +
+      '<input class="ba-range" id="baRange" type="range" min="0" max="100" value="50" aria-label="对比这一步和成品">' +
+      '</div>' +
+      '<p class="small muted" style="margin-top:8px">左右拖动中间的小圆点：左边是这一步的样子，右边是做好的成品。</p>' +
+      '</div></section>';
+  }
+  function bindBaCard() {
+    var wrap = $('#baWrap');
+    if (!wrap) return;
+    var range = $('#baRange'), top = wrap.querySelector('.ba-top'), handle = $('#baHandle');
+    if (!range || !top || !handle) return;
+    function paint(v) {
+      top.style.clipPath = 'inset(0 ' + (100 - v) + '% 0 0)';
+      handle.style.left = v + '%';
+    }
+    range.addEventListener('input', function () { paint(Number(range.value)); });
+    /* 成品图没有就整块撤掉（不让它留个破图） */
+    Array.prototype.forEach.call(wrap.querySelectorAll('img'), function (im) {
+      im.addEventListener('error', function () { var s = wrap.closest('section'); if (s) s.remove(); });
+    });
+    paint(50);
   }
 
   function paintCookStep(i) {
@@ -1218,15 +1783,21 @@
       '</div>' +
       pyLine(st.py) + enLine(st.en) +
       (st.tip ? '<div class="hint-box good" style="margin-top:10px"><span>🐼</span><div>' + esc(st.tip.zh) + enLine(st.tip.en) + '</div></div>' : '') +
-      '</div>' + photo + '</div>';
+      '</div>' + photo + '</div>' + (BA_SLIDER ? baCardHTML(d, cookStep) : '');
     $('#stepPos').textContent = (cookStep + 1) + ' / ' + d.steps.length;
+    bindPhotoFallback($('#stepView'));
+    bindBaCard();
     bindCookActions(d, st, cookStep);
     $('#stepPrev').disabled = cookStep === 0;
     $('#stepNext').disabled = cookStep === d.steps.length - 1;
     var zoomImg = $('#stepView .step-photo');
-    if (zoomImg) zoomImg.addEventListener('click', function () {
-      openPhotoModal(zoomImg.getAttribute('src'), d.name + ' · 第 ' + (cookStep + 1) + ' 步 · 实拍图');
-    });
+    function zoom() {
+      if (zoomImg) openPhotoModal(zoomImg.getAttribute('src'), d.name + ' · 第 ' + (cookStep + 1) + ' 步 · 实拍图');
+    }
+    if (zoomImg) zoomImg.addEventListener('click', zoom);
+    bindPhotoCut(d, st, cookStep, zoom);
+    bindDragChip(d, st, cookStep);
+    refreshStepGate(d, st, cookStep, true);
   }
   /* ---- 自动演示：整道菜连续播放动画 ---- */
   var autoTimer = null;
@@ -2084,11 +2655,46 @@
         '<button class="btn btn-sm" id="vmNext"' + (vocabIndex >= total - 1 ? ' disabled' : '') + '>下一张 ›</button>' +
       '</div></div>';
   }
+  /* 文化点：翻页弹窗（点故事页标题旁边的按钮打开） */
+  var storyPointsCtx = null;
+  function pointModalHTML(p) {
+    var total = vocabShown.length, i = vocabIndex;
+    var d = storyPointsCtx ? storyPointsCtx.d : null;
+    var fact = storyPointsCtx ? storyPointsCtx.fact : '';
+    return '<div class="vocab-modal point-modal">' +
+      '<div class="vm-top"><div class="vm-photo"><span class="vm-emoji">' + (p.icon || '🏮') + '</span></div>' +
+      '<div class="vm-meta"><h3 class="h3">' + esc(p.title) + ' ' + speakBtn(p.title) + '</h3>' +
+      '<div class="vm-cat">🏮 ' + esc(d ? d.name : '') + ' · 文化点 ' + (i + 1) + ' / ' + total + '</div></div></div>' +
+      '<div class="vm-sec"><h4>🔎 说说这一点</h4><p class="small">' + esc(p.zh) + enLine(p.en) + '</p></div>' +
+      (fact && i === total - 1 ? '<div class="vm-sec"><h4>📌 顺带一提</h4><p class="small">' + esc(fact) + '</p></div>' : '') +
+      '<div class="vm-pager">' +
+      '<button class="btn btn-sm" id="vmPrev"' + (i <= 0 ? ' disabled' : '') + '>‹ 上一个</button>' +
+      '<span class="muted small">第 ' + (i + 1) + ' / ' + total + ' 个</span>' +
+      '<button class="btn btn-sm" id="vmNext"' + (i >= total - 1 ? ' disabled' : '') + '>下一个 ›</button>' +
+      '</div></div>';
+  }
+  function openStoryPoints(d) {
+    var det = (window.CC_STORY_DETAIL || {})[d.id] || {};
+    var list = (det.points || []).slice();
+    if (!list.length) return;
+    modalKind = 'point';
+    storyPointsCtx = { d: d, fact: det.fact || '', lead: det.lead || '' };
+    vocabShown = list;
+    vocabIndex = 0;
+    paintVocabModal(0);
+    speak(list[0].title);
+  }
+  function speakCurrent() {
+    var w = vocabShown[vocabIndex];
+    if (!w) return;
+    speak(modalKind === 'point' ? (w.title || '') : (w.zh || w.name || ''));
+  }
   function paintVocabModal(dir) {
     if (!vocabShown.length) return;
     vocabIndex = Math.max(0, Math.min(vocabShown.length - 1, vocabIndex));
     var w = vocabShown[vocabIndex];
     openModal(modalKind === 'school' ? schoolModalHTML(w)
+      : modalKind === 'point' ? pointModalHTML(w)
       : modalKind === 'tool' ? toolModalHTML(w)
       : modalKind === 'season' ? seasonModalHTML(w)
       : vocabModalHTML(w));
@@ -2099,11 +2705,11 @@
     var prev = $('#vmPrev'), next = $('#vmNext');
     if (prev) prev.addEventListener('click', function () {
       if (vocabIndex <= 0) return;
-      vocabIndex--; Sfx.pop(); paintVocabModal(-1); speak(vocabShown[vocabIndex].zh);
+      vocabIndex--; Sfx.pop(); paintVocabModal(-1); speakCurrent();
     });
     if (next) next.addEventListener('click', function () {
       if (vocabIndex >= vocabShown.length - 1) return;
-      vocabIndex++; Sfx.pop(); paintVocabModal(1); speak(vocabShown[vocabIndex].zh);
+      vocabIndex++; Sfx.pop(); paintVocabModal(1); speakCurrent();
     });
   }
   function openVocabModal(i) {
@@ -2144,38 +2750,83 @@
   }
   document.addEventListener('keydown', function (e) {
     if (!document.querySelector('.vocab-modal')) return;          /* 只有详解弹窗开着才响应左右键 */
-    if (e.key === 'ArrowLeft' && vocabIndex > 0) { vocabIndex--; paintVocabModal(-1); speak(vocabShown[vocabIndex].zh); }
-    if (e.key === 'ArrowRight' && vocabIndex < vocabShown.length - 1) { vocabIndex++; paintVocabModal(1); speak(vocabShown[vocabIndex].zh); }
+    if (e.key === 'ArrowLeft' && vocabIndex > 0) { vocabIndex--; paintVocabModal(-1); speakCurrent(); }
+    if (e.key === 'ArrowRight' && vocabIndex < vocabShown.length - 1) { vocabIndex++; paintVocabModal(1); speakCurrent(); }
   });
 
   /* ============ 小测 ============ */
   var quiz = null;
-  function buildQuiz() {
+  function buildQuiz(level) {
     var deck = [];
-    shuffle(CC.cultureQuiz || []).slice(0, 8).forEach(function (q) {
-      deck.push({ type: 'text', q: q.q, options: q.options, explain: q.explain });
+    var pool = (level && level.questions) ? level.questions : (CC.cultureQuiz || []);
+    var G = window.CC_QUIZ_GRAMMAR || { fill: [], build: [] };
+    var take = level ? 5 : 8;                 /* 有等级的：5 道学科题 + 1 语法填空 + 1 句子排序 + 1 附加题 = 8 */
+    shuffle(pool.slice()).slice(0, take).forEach(function (q) {
+      /* 选项每次打乱：不然正确答案永远在第一个（自检时发现的：全点 A 也能满分） */
+      deck.push({ type: 'text', q: q.q, options: shuffle(q.options.slice()), explain: q.explain });
     });
+    if (level) {
+      var f = shuffle((G.fill || []).slice())[0];
+      if (f) deck.push({ type: 'text', tag: '语法', q: f.q, options: shuffle(f.options.slice()), explain: f.explain });
+      var b = shuffle((G.build || []).slice())[0];
+      if (b) deck.push({ type: 'build', tag: '句子', tokens: b.tokens.slice(), answer: b.answer, hint: b.hint, explain: b.explain });
+    }
     var allWords = [];
     Object.keys(CC.vocab).forEach(function (c) { CC.vocab[c].forEach(function (w) { allWords.push(w); }); });
-    shuffle(allWords).slice(0, 3).forEach(function (w) {
+    /* 附加题：等级模式只加 1 道（听音 / 厨房顺序），没等级的老模式保持 3 道听音 + 1 道顺序 */
+    var wordCount = level ? (level.id === 'hard' ? 0 : 1) : 3;   /* 高级那道附加题换成厨房顺序题 */
+    shuffle(allWords).slice(0, wordCount).forEach(function (w) {
       var others = shuffle(allWords.filter(function (x) { return x.zh !== w.zh; })).slice(0, 2);
       deck.push({
-        type: 'audio', word: w,
+        type: 'audio', tag: '听音', word: w,
         options: shuffle([w].concat(others)).map(function (o) { return { zh: o.zh, py: o.py, en: o.en, correct: o.zh === w.zh }; }),
         explain: { zh: w.zh + '（' + w.py + '）意思是 ' + w.en + '。', en: w.en }
       });
     });
-    var d = (CC.dishes || [])[Math.floor(Math.random() * (CC.dishes || []).length)];
-    var steps = d.steps.filter(function (s) { return s.type !== 'finish'; }).slice(0, 3);
-    if (steps.length >= 3) {
-      deck.push({ type: 'order', dish: d, steps: steps, shuffled: shuffle(steps.map(function (s, i) { return { s: s, i: i }; })) });
+    if (!level || level.id === 'hard') {
+      var d = (CC.dishes || [])[Math.floor(Math.random() * (CC.dishes || []).length)];
+      var steps = d.steps.filter(function (s) { return s.type !== 'finish'; }).slice(0, 3);
+      if (steps.length >= 3) {
+        deck.push({ type: 'order', tag: '顺序', dish: d, steps: steps, shuffled: shuffle(steps.map(function (s, i) { return { s: s, i: i }; })) });
+      }
     }
     return shuffle(deck);
   }
   function renderQuiz() {
-    quiz = { deck: buildQuiz(), i: 0, score: 0, wrong: [], picked: [] };
+    var levels = window.CC_QUIZ_LEVELS || [];
+    var want = current.arg || '';
+    var lv = levels.filter(function (x) { return x.id === want; })[0];
+    if (!lv) return renderQuizMenu(levels);
+    quiz = { level: lv, deck: buildQuiz(lv), i: 0, score: 0, wrong: [], picked: [] };
     app.innerHTML = '<div class="view"><div class="quiz-shell" id="quizShell"></div></div>';
     renderQuizStep();
+    pandaSay('quiz');
+  }
+  /* 小测入口：三张等级卡 */
+  function renderQuizMenu(levels) {
+    var best = S.quizBest || {};
+    if (!levels.length) {                       /* 兜底：没有等级数据就跑老的那套 */
+      quiz = { deck: buildQuiz(), i: 0, score: 0, wrong: [], picked: [] };
+      app.innerHTML = '<div class="view"><div class="quiz-shell" id="quizShell"></div></div>';
+      renderQuizStep();
+      return;
+    }
+    app.innerHTML = '<div class="view"><div class="view-head"><span class="eyebrow">小测 · 闯关</span>' +
+      '<h1 class="h1">🏆 选一个等级，开始闯关</h1>' +
+      '<p class="lead">三个等级各 8 题，答对 6 题算通过。初级考"认识川菜"，中级考站里学过的内容，高级考来历和细节。</p></div>' +
+      '<div class="vocab-menu">' + levels.map(function (l) {
+        var b = best[l.id];
+        return '<a class="vm-card" href="#/quiz/' + l.id + '">' +
+          '<span class="vm-ico">' + l.icon + '</span>' +
+          '<span class="vm-title">' + esc(l.name) + '</span>' +
+          '<span class="vm-sub">' + esc(l.sub) + '</span>' +
+      '<span class="vm-meta">' + l.questions.length + ' 题 · 答对 ' + l.pass + ' 题算过' +
+          (b ? ' · 最好 ' + b.score + '/' + b.total + ' ' + '★'.repeat(b.stars || 0) : ' · 还没考过') + '</span>' +
+          '<span class="vm-go">开始闯关 ›</span></a>';
+      }).join('') + '</div>' +
+      '<div class="story-cta">' +
+      '<a class="btn" href="#/vocab">📚 先去学词汇</a>' +
+      '<a class="btn" href="#/culture">🏮 看川菜文化</a></div></div>';
     pandaSay('quiz');
   }
   function renderQuizStep() {
@@ -2209,6 +2860,16 @@
         }).join('') + '</div>' +
         '<div style="margin-top:12px"><b>你的顺序：</b><span id="orderPick" class="muted">（还没选）</span></div>' +
         '<button class="btn btn-sm" id="resetOrder" style="margin-top:10px">↻ 重新排</button></div>';
+    } else if (q.type === 'build') {
+      body = '<div class="card"><div class="quiz-question">句子练习：把下面的词排成一个通顺的句子</div>' +
+        (q.hint ? '<p class="small muted">句型提示：' + esc(q.hint.zh) + enLine(q.hint.en) + '</p>' : '') +
+        '<div class="build-row" id="buildRow">' + q.tokens.map(function (t, i) {
+          return '<button class="build-token" data-t="' + i + '">' + esc(t) + '</button>';
+        }).join('') + '</div>' +
+        '<div class="build-line" id="buildLine"><span class="muted">点上面的词，按顺序组句…</span></div>' +
+        '<div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">' +
+        '<button class="btn btn-sm" id="buildUndo">‹ 撤回</button>' +
+        '<button class="btn btn-sm" id="buildReset">↻ 重排</button></div></div>';
     }
     shell.innerHTML = head + body + '<div id="quizFb"></div>';
     if (q.type === 'audio') {
@@ -2238,6 +2899,36 @@
         });
         $('#orderPick').textContent = '（还没选）';
       });
+    } else if (q.type === 'build') {
+      var used = [];
+      function paintBuild() {
+        var line = used.map(function (i) { return q.tokens[i]; }).join('');
+        $('#buildLine').innerHTML = line ? esc(line) : '<span class="muted">点上面的词，按顺序组句…</span>';
+        $$('#buildRow .build-token').forEach(function (b, i) {
+          var on = used.indexOf(i) >= 0;
+          b.disabled = on;
+          b.classList.toggle('used', on);
+        });
+      }
+      $$('#buildRow .build-token').forEach(function (b, i) {
+        b.addEventListener('click', function () {
+          if (used.indexOf(i) >= 0) return;
+          used.push(i); Sfx.pop(); paintBuild();
+          if (used.length === q.tokens.length) {
+            var made = used.map(function (k) { return q.tokens[k]; }).join('');
+            var ok = made === q.answer;
+            judgeQuiz(ok, q, ok ? null : '正确句子：' + q.answer);
+          }
+        });
+      });
+      $('#buildUndo').addEventListener('click', function () {
+        if (!used.length) return;
+        used.pop(); paintBuild();
+      });
+      $('#buildReset').addEventListener('click', function () {
+        used = []; paintBuild();
+      });
+      paintBuild();
     } else {
       $$('.quiz-option').forEach(function (b) {
         b.addEventListener('click', function () {
@@ -2264,15 +2955,35 @@
   }
   function renderQuizResult() {
     var total = quiz.deck.length, sc = quiz.score;
-    var level = sc >= 8 ? '川菜文化小博士 📚' : sc >= 6 ? '川菜学徒 👨‍🍳' : '川菜新手 🐣';
-    if (sc >= 8) awardBadge('culture', true);
+    var lv = quiz.level || null;
+    var passLine = lv ? lv.pass : 6;
+    var passed = sc >= passLine;
+    var pct = Math.round(sc / total * 100);
+    /* 评星：满分 3 星，过线 2 星，答对一半 1 星 */
+    var stars = sc >= total ? 3 : passed ? 2 : (sc >= Math.ceil(total / 2) ? 1 : 0);
+    var level = sc >= total - 1 ? '川菜文化小博士 📚' : passed ? '川菜学徒 👨‍🍳' : '川菜新手 🐣';
+    /* 记录这个等级的最好成绩 */
+    if (lv) {
+      S.quizBest = S.quizBest || {};
+      if (!S.quizBest[lv.id] || S.quizBest[lv.id].score < sc) S.quizBest[lv.id] = { score: sc, total: total, stars: stars };
+      save();
+    }
+    if (lv && lv.id === 'hard' && passed) awardBadge('culture', true);
+    else if (!lv && sc >= 8) awardBadge('culture', true);
     confetti(sc >= 6 ? 120 : 50);
-    if (sc >= 6) Sfx.fanfare();
+    if (passed) Sfx.fanfare();
     $('#quizShell').innerHTML = '<div class="card quiz-result">' +
+      (lv ? '<div class="small muted">' + lv.icon + ' ' + esc(lv.name) + '</div>' : '') +
       '<div class="big-score">' + sc + '<span style="font-size:22px;color:var(--muted)"> / ' + total + '</span></div>' +
+      '<div style="text-align:center;margin:6px 0 2px"><span class="stars">' +
+      [1, 2, 3].map(function (i) {
+        return '<span class="star' + (i <= stars ? ' on' : '') + '" style="animation-delay:' + (i * 0.15) + 's">★</span>';
+      }).join('') + '</span></div>' +
+      '<p class="small" style="text-align:center;margin:2px 0 6px">答对 <b>' + sc + '</b> / ' + total + ' 题 · 正确率 <b>' + pct + '%</b>' +
+      ' · ' + (stars === 3 ? '满分三星' : stars === 2 ? '过了，想拿三星还差一点' : stars === 1 ? '刚过半，再练一次吧' : '分有点低，先去看看词汇') + '</p>' +
       '<h2 class="h2">' + level + '</h2>' +
-      '<p class="small">' + (sc >= 8 ? '你对川菜的理解已经很深了，可以去给别人讲讲"麻辣"是怎么来的。'
-        : sc >= 6 ? '不错！再复习一下词汇和文化部分，就能拿满分。'
+      '<p class="small">' + (sc >= total - 1 ? '你对川菜的理解已经很深了，可以去给别人讲讲"麻辣"是怎么来的。'
+        : passed ? '不错！再复习一下词汇和文化部分，就能拿满分。'
         : '没关系，先去"词汇"和"首页·文化"逛一圈，再来挑战一次。') + '</p>' +
       (quiz.wrong.length ? '<div style="text-align:left;margin-top:12px"><h3 class="h3">这些题可以再看一眼</h3>' +
         quiz.wrong.map(function (w) {
@@ -2281,6 +2992,7 @@
         }).join('') + '</div>' : '') +
       '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">' +
       '<button class="btn btn-primary" id="quizAgain">↻ 再来一次</button>' +
+      '<a class="btn" href="#/quiz">🏆 换一个等级</a>' +
       '<button class="btn" data-route="vocab">📚 去学词汇</button>' +
       '<button class="btn btn-gold" data-route="progress">🐼 我的厨房</button></div></div>';
     $('#quizAgain').addEventListener('click', renderQuiz);
@@ -2455,18 +3167,133 @@
       window.__stir();
     }
   });
-  $('#pandaAvatar').addEventListener('click', function () {
-    if (pandaIsHidden()) {            /* 收起来的时候点一下 = 再展开，并给一句新的提示 */
-      setPandaHidden(false);
-      S.chat++; save();
-      if (S.chat >= 20) awardBadge('panda');
-      pandaSay(current.name);
-      Sfx.pop();
-      return;
-    }
-    setPandaHidden(true);             /* 气泡开着的时候点一下 = 收起气泡 */
+  /* 熊猫头像已删除（用户要求），这段绑定保留判空，将来恢复也还能用 */
+  var pandaAvatarEl = $('#pandaAvatar');
+  if (pandaAvatarEl) pandaAvatarEl.addEventListener('click', function () {
+    if (pandaChatOpen()) { closePandaChat(); Sfx.pop(); return; }
+    setPandaHidden(false);
+    openPandaChat();
     Sfx.pop();
   });
+
+  /* ============ 熊猫客服：本地知识库问答（不联网，记录存 localStorage）============ */
+  var PANDA_CHAT_KEY = 'sichuan-kitchen-panda-chat-v1';
+  var pandaMsgs = [];
+  var PANDA_WELCOME = '你好！我是胖达。做菜、调料、词汇、文化，或者网站怎么用，都可以问我——比如"麻婆豆腐要什么材料"、"郫县豆瓣是什么"、"我做了几道菜"。';
+  var PANDA_CHIPS = ['怎么开始做菜？', '麻婆豆腐要什么材料？', '郫县豆瓣是什么？', '什么叫干煸？', '我做了几道菜？', '小测在哪？'];
+  function pandaChatOpen() { var el = $('#pandaChat'); return !!(el && !el.hidden); }
+  function pandaLoadChat() {
+    try { pandaMsgs = JSON.parse(localStorage.getItem(PANDA_CHAT_KEY) || '[]') || []; } catch (e) { pandaMsgs = []; }
+    if (!pandaMsgs.length) pandaMsgs = [{ who: 'panda', zh: PANDA_WELCOME }];
+  }
+  function pandaSaveChat() { try { localStorage.setItem(PANDA_CHAT_KEY, JSON.stringify(pandaMsgs.slice(-40))); } catch (e) {} }
+  function pandaPush(m) { pandaMsgs.push(m); pandaSaveChat(); if (pandaChatOpen()) renderPandaLog(); }
+  function pandaEsc(s) { return esc(s); }
+  function renderPandaLog() {
+    var log = $('#pandaLog');
+    if (!log) return;
+    log.innerHTML = pandaMsgs.map(function (m) {
+      var acts = (m.acts || []).map(function (a) {
+        return '<a class="pc-act" href="' + a.href + '">' + esc(a.t) + '</a>';
+      }).join('');
+      /* 注意：这里不能用 class "panda" —— 站里 .panda 是熊猫容器的类（position:fixed 到左下角），
+         之前就是因为它，熊猫的回复全被拉到框外面去了。 */
+      return '<div class="pc-msg ' + (m.who === 'user' ? 'me' : 'bot') + '">' +
+        '<div class="pc-bub">' + pandaEsc(m.zh) + (m.en ? '<span class="en">' + pandaEsc(m.en) + '</span>' : '') + '</div>' +
+        (acts ? '<div class="pc-acts">' + acts + '</div>' : '') + '</div>';
+    }).join('');
+    log.scrollTop = log.scrollHeight;
+  }
+  function renderPandaChips() {
+    var box = $('#pandaChips');
+    if (!box) return;
+    box.innerHTML = PANDA_CHIPS.map(function (q) { return '<button class="pc-chip" type="button">' + esc(q) + '</button>'; }).join('');
+    $$('#pandaChips .pc-chip').forEach(function (b) {
+      b.addEventListener('click', function () { pandaAsk(b.textContent); });
+    });
+  }
+  function openPandaChat() {
+    var el = $('#pandaChat');
+    if (!el) return;
+    el.hidden = false;
+    $('#panda').classList.add('chat-open');
+    renderPandaLog();
+    renderPandaChips();
+    setTimeout(function () { if (pandaReflow) pandaReflow(); }, 30);   /* 变大以后收进屏幕 */
+    setTimeout(function () { var i = $('#pandaInput'); if (i) i.focus(); }, 120);
+  }
+  function closePandaChat() {
+    var el = $('#pandaChat');
+    if (el) el.hidden = true;
+    var p = $('#panda'); if (p) p.classList.remove('chat-open');
+  }
+  /* —— 匹配：先看动态条目（菜名/调料/食材/生词），再看关键词 —— */
+  function pandaCtx() {
+    var text = '';
+    return {
+      CC: CC, S: S,
+      dishByName: function (t) {
+        return (CC.dishes || []).filter(function (d) { return t.indexOf(d.name) >= 0; })[0] || null;
+      },
+      ingName: function (id) { return (CC.ingredients[id] || {}).zh || id; },
+      seasonByName: function (t) {
+        /* 允许简称："郫县豆瓣" 也能匹配 "郫县豆瓣酱" */
+        return (CC.seasonings || []).filter(function (s) {
+          if (t.indexOf(s.zh) >= 0) return true;
+          var head = s.zh.slice(0, 3);
+          return head.length >= 3 && t.indexOf(head) >= 0;
+        })[0] || null;
+      },
+      ingByName: function (t) {
+        var ids = Object.keys(CC.ingredients || {}).filter(function (k) {
+          var zh = CC.ingredients[k].zh;
+          return t.indexOf(zh) >= 0 || (zh.length >= 3 && t.indexOf(zh.slice(0, 3)) >= 0);
+        });
+        return ids.length ? CC.ingredients[ids[0]] : null;
+      },
+      vocabWord: function (t) {
+        var words = [];
+        Object.keys(CC.vocab || {}).forEach(function (c) { (CC.vocab[c] || []).forEach(function (w) { words.push(w); }); });
+        (CC.tools || []).forEach(function (w) { words.push(w); });
+        (CC.tastes || []).forEach(function (w) { words.push(w); });
+        return words.filter(function (w) { return t.indexOf(w.zh) >= 0 && w.zh.length >= 2; }).sort(function (a, b) { return b.zh.length - a.zh.length; })[0] || null;
+      }
+    };
+  }
+  function pandaAnswer(text) {
+    var ctx = pandaCtx(), best = null;
+    (window.CC_PANDA_KB || []).forEach(function (e) {
+      var score = 0, payload = null;
+      if (e.probe) {
+        try { var r = e.probe(text, ctx); if (r) { score = r.score || 2; payload = r.payload; } } catch (err) {}
+      } else {
+        (e.keys || []).forEach(function (k) { if (text.indexOf(k) >= 0) score += (k.length >= 2 ? 3 : 1); });
+      }
+      if (score > 0 && (!best || score > best.score)) best = { e: e, score: score, payload: payload };
+    });
+    if (!best) {
+      return { zh: '这个问题我还没学会 😅 你可以去"词汇"里搜一下关键词，或者问问老师。也可以这样问我：某道菜要什么材料、某个调料是什么、某个词怎么读。',
+        en: 'I have not learned that yet — try asking about a dish, a seasoning or a word.',
+        acts: [{ t: '去词汇页', href: '#/vocab' }, { t: '去选菜', href: '#/dishes' }] };
+    }
+    var e = best.e;
+    var a = (typeof e.a === 'function') ? e.a(ctx, best.payload) : e.a;
+    var acts = (typeof e.acts === 'function') ? e.acts(ctx, best.payload) : (e.acts || []);
+    return { zh: a.zh, en: a.en, acts: acts };
+  }
+  function pandaAsk(text) {
+    text = (text || '').trim();
+    if (!text) return;
+    pandaPush({ who: 'user', zh: text });
+    S.chat++; save();
+    if (S.chat >= 20) awardBadge('panda');
+    Sfx.pop();
+    setTimeout(function () {
+      var a = pandaAnswer(text);
+      pandaPush({ who: 'panda', zh: a.zh, en: a.en, acts: a.acts });
+      Sfx.ding();
+    }, 260);
+  }
   /* 熊猫气泡可以收起（点熊猫头），收起状态记在浏览器里 */
   var PANDA_HIDE_KEY = 'sichuan-kitchen-panda-hidden-v1';
   function pandaIsHidden() { try { return localStorage.getItem(PANDA_HIDE_KEY) === '1'; } catch (e) { return false; } }
@@ -2477,9 +3304,36 @@
     try { h ? localStorage.setItem(PANDA_HIDE_KEY, '1') : localStorage.removeItem(PANDA_HIDE_KEY); } catch (e) {}
   }
   setPandaHidden(pandaIsHidden());
+  pandaLoadChat();
+  (function initPandaChat() {
+    var close = $('#pandaChatClose');
+    if (close) close.addEventListener('click', function () { closePandaChat(); Sfx.pop(); });
+    var clear = $('#pandaClear');
+    if (clear) clear.addEventListener('click', function () {
+      pandaMsgs = [{ who: 'panda', zh: PANDA_WELCOME }];
+      pandaSaveChat();
+      renderPandaLog();
+      Sfx.pop();
+      toast('对话记录已清空');
+    });
+    var form = $('#pandaForm');
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var i = $('#pandaInput');
+      if (!i) return;
+      var v = i.value; i.value = '';
+      pandaAsk(v);
+    });
+    var log = $('#pandaLog');
+    if (log) log.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t && t.classList && t.classList.contains('pc-act')) closePandaChat();
+    });
+  })();
 
   /* ============ 熊猫可以拖着走：位置记在浏览器里，双击回左下角 ============ */
   var PANDA_KEY = 'sichuan-kitchen-panda-pos-v1';
+  var pandaReflow = null;          /* 由 initPandaDrag 赋值：按当前尺寸重新夹一次位置 */
   function pandaSavedPos() {
     try {
       var s = JSON.parse(localStorage.getItem(PANDA_KEY) || 'null');
@@ -2489,13 +3343,21 @@
   function initPandaDrag() {
     var box = $('#panda');
     if (!box) return;
+    /* 面板展开后整体变高，位置要按新尺寸再夹一次，否则会顶出屏幕底部 */
+    pandaReflow = function () {
+      var b = box.getBoundingClientRect();
+      var p = put(b.left, b.top);
+      remember(p);
+    };
     var EDGE = 8;                 /* 离屏幕边至少留一点，别拖出画外 */
     var suppressClickUntil = 0;   /* 拖完这一下别当成"点熊猫说话" */
     function clampXY(x, y) {
       var w = box.offsetWidth, h = box.offsetHeight;
+      var TOP_GUARD = 118;         /* 顶上这条留给导航和"返回"按钮，熊猫别停这儿（用户反馈它挡住了返回条） */
+      var yMax = Math.max(TOP_GUARD, window.innerHeight - h - EDGE);
       return {
         x: Math.max(EDGE, Math.min(window.innerWidth - w - EDGE, x)),
-        y: Math.max(EDGE, Math.min(window.innerHeight - h - EDGE, y))
+        y: Math.max(TOP_GUARD, Math.min(yMax, y))
       };
     }
     function put(x, y) {
@@ -2641,6 +3503,7 @@
   function cutPathFor(src) {
     if (!/assets\/img\//.test(src)) return '';
     var rel = src.slice(src.indexOf('assets/img/') + 'assets/img/'.length);
+    if (/[^\x00-\x7F]/.test(rel)) return '';     /* 带中文名的路径不可能有对应抠图，直接不换 */
     if (CUT_SET && CUT_SET.size && CUT_SET.has(rel)) return 'assets/img/cut/' + rel.replace(/\.[a-z]+$/i, '.png');
     var base = rel.replace(/^.*\//, '').replace(/\.[a-z]+$/i, '');
     return CUT_BY_NAME[base] || '';
@@ -2887,7 +3750,9 @@
     for (var i = 1; i <= 5; i++) dots += '<i class="heat-dot' + (i <= d.heat ? ' on' : '') + '"></i>';
     box.innerHTML = '<div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">' +
       '<div style="flex:1 1 330px;min-width:250px">' +
-      '<h2 class="h2" style="margin:0 0 2px">' + esc(d.name) + ' ' + speakBtn(d.name) + '</h2>' +
+      '<div class="dish-name-row">' +
+      '<h2 class="h2">' + esc(d.name) + ' ' + speakBtn(d.name) + '</h2>' +
+      '<a class="btn btn-sm story-link" href="#/story/' + d.id + '">📖 了解文化故事</a></div>' +
       pyLine(d.py) + enLine(d.en) +
       '<div class="dish-meta" style="margin-top:8px"><span class="heat-dots">' + dots + '</span>' +
       '<span>⏱ ' + d.minutes + ' 分钟</span>' +

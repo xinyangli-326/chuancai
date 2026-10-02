@@ -1363,6 +1363,19 @@ img[data-cut="1"].face-photo { padding: 6px; }
 .wheel-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr) !important; gap: 26px !important; align-items: center !important; }
 .wheel { max-width: 420px !important; margin: 0 auto !important; }
 .wheel { overflow: hidden !important; }
+/* 转动的只有彩色扇区这一层；标签层和中心圆静止不动，转盘转的时候字不会歪 */
+.wheel { background: none !important; }
+.wheel-disc {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(
+    #ffd9c2 0deg 30deg, #ffe7cf 30deg 60deg, #ffdfd0 60deg 90deg,
+    #ffeccd 90deg 120deg, #ffd3d3 120deg 150deg, #ffe0c3 150deg 180deg,
+    #ffd9c2 180deg 210deg, #ffe7cf 210deg 240deg, #ffdfd0 240deg 270deg,
+    #ffeccd 270deg 300deg, #ffd3d3 300deg 330deg, #ffe0c3 330deg 360deg);
+  transition: none;                 /* 转动由 JS 每帧设置，方便同时把文字反向摆正 */
+}
+/* 标签里的文字：外层 span 负责沿圆摆位，这层负责保持水平（JS 每帧写 rotate(-R)） */
+.wheel-labels .wl-txt { display: block; font-style: normal; will-change: transform; }
 .wheel-labels span {
   align-items: center !important;      /* 文字先落在盘心，再靠 transform 沿半径外移，12 个标签才会落在同一个圆上 */
   justify-content: center !important;
