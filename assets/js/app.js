@@ -350,7 +350,7 @@
     if (!D || !D.talk) return;
     var lines = D.talk.lines.map(function (l, i) {
       var me = l.who === 'student';
-      return '<div class="talk-row ' + (me ? 'is-student' : 'is-chef') + '" style="animation-delay:' + (140 + i * 105) + 'ms">' +
+      return '<div class="talk-row ' + (me ? 'is-student' : 'is-chef') + '" data-i="' + i + '">' +
         '<span class="talk-face" aria-hidden="true">' + (me ? '🧑‍🎓' : '👨‍🍳') + '</span>' +
         '<div class="talk-bubble">' +
         '<span class="talk-who">' + (me ? '学员' : '厨师') + '</span>' +
@@ -364,11 +364,15 @@
       '<h3 class="talk-hero-t">恭喜你完成了菜品制作！</h3>' +
       '<p class="talk-hero-s">' + esc(d.name) + ' 出锅啦 —— 让我们一起来学对话吧。</p></div>' +
       '<p class="talk-scene">📍 ' + esc(D.talk.scene) + '</p>' +
-      '<div class="talk-actions"><button class="btn btn-primary btn-sm" id="playAllTalk">▶️ 整段播放</button>' +
+      '<div class="talk-actions"><button class="btn btn-sm" id="playAllTalk">▶️ 整段播放</button>' +
       '<button class="btn btn-sm" id="stopTalk">⏹ 停止</button>' +
       '<span class="small muted" id="talkState"></span></div>' +
       '<div class="talk-list">' + lines + '</div>' +
-      '<div class="talk-foot"><button class="btn btn-primary" data-close="1">👍 学会了</button></div>');
+      '<div class="talk-nav"><span class="talk-progress" id="talkProgress"></span>' +
+      '<button class="btn btn-sm" id="talkAll">全部显示</button>' +
+      '<button class="btn btn-primary" id="talkNext">下一句 ›</button>' +
+      '<button class="btn btn-primary" id="talkDoneBtn" data-close="1" style="display:none">👍 学会了</button></div>' +
+      '<p class="talk-tip small muted">💡 点一下对话区域也会出现下一句；点 🔊 只念这一句。</p>');
     var card = $('.modal-card');
     if (card) card.classList.add('talk-modal');
     $('#playAllTalk').addEventListener('click', function () { playAllTalk(D.talk.lines); });
@@ -377,12 +381,49 @@
       try { speechSynthesis.cancel(); } catch (e) {}
       var st = $('#talkState'); if (st) st.textContent = '';
     });
+    bindTalkStep(card, D.talk.lines);
     if (celebrate) {
       confetti(110); Sfx.fanfare();
-      D.talk.lines.forEach(function (l, i) {          /* 气泡一条一条"啵"出来 */
-        setTimeout(function () { Sfx.bubble(); }, 140 + i * 105);
+      setTimeout(function () { Sfx.bubble(); }, 180);
+    }
+  }
+  /* 逐句显示：默认只出第一句，点一下（或点"下一句"）出下一句 */
+  var talkShown = 1;
+  function bindTalkStep(card, lines) {
+    if (!card) return;
+    talkShown = 1;
+    var list = card.querySelector('.talk-list');
+    function sync() {
+      Array.prototype.forEach.call(card.querySelectorAll('.talk-row'), function (r, i) {
+        r.classList.toggle('is-off', i >= talkShown);
+      });
+      var left = lines.length - talkShown;
+      var nx = card.querySelector('#talkNext'), al = card.querySelector('#talkAll'),
+        dn = card.querySelector('#talkDoneBtn'), pg = card.querySelector('#talkProgress');
+      if (nx) nx.style.display = left > 0 ? '' : 'none';
+      if (al) al.style.display = left > 0 ? '' : 'none';
+      if (dn) dn.style.display = left === 0 ? '' : 'none';
+      if (pg) pg.textContent = '已显示 ' + Math.min(talkShown, lines.length) + ' / ' + lines.length + ' 句';
+    }
+    function next() {
+      if (talkShown >= lines.length) return;
+      talkShown++;
+      sync();
+      Sfx.bubble();
+      var r = card.querySelectorAll('.talk-row')[talkShown - 1];
+      if (r && r.scrollIntoView) r.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+    card.querySelector('#talkNext').addEventListener('click', next);
+    card.querySelector('#talkAll').addEventListener('click', function () { talkShown = lines.length; sync(); Sfx.pop(); });
+    if (list) {
+      list.addEventListener('click', function (e) {
+        if (e.target.closest('[data-speak], .speak')) return;   /* 点小喇叭只朗读，不推进 */
+        next();
       });
     }
+    var pa = card.querySelector('#playAllTalk');
+    if (pa) pa.addEventListener('click', function () { talkShown = lines.length; sync(); }, true);
+    sync();
   }
   /* 整段播放：一轮一轮念（复用站里同一套语音合成设置） */
   var talkPlaying = false;
